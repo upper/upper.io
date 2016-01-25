@@ -1,0 +1,10 @@
+page:
+  brand: "upper.io"
+  head:
+    title: "upper.io/db for Go"
+  body:
+    menu_pull:
+      - { text: "Home", link: "/" }
+    scripts:
+      footer: |
+        /* Analytics */

@@ -1,0 +1,10 @@
+# Configuration file for Luminos.     https://menteslibres.net/luminos
+server:
+  bind: "0.0.0.0"
+  port: 9000
+  type: "standalone"
+
+hosts:
+  upper.io/db.v1: "/var/site/upper.io/v1"
+  upper.io/db.v2: "/var/site/upper.io/v2"
+  default: "/var/site/upper.io/default"
