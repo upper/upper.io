@@ -1,0 +1,72 @@
+# This is a Supfile, see https://github.com/pressly/sup
+#
+
+env:
+  NAME: unsafebox
+  HOST_PORT: 8080
+  CONTAINER_PORT: 8080
+  WORKDIR: /home/deploy/tmp/unsafebox
+
+networks:
+  prod:
+    hosts:
+      - deploy@demo.upper.io
+
+commands:
+  ping:
+    run: uname -a; date
+  check:
+    run: rm -rf $WORKDIR/$NAME && mkdir -p $WORKDIR/$NAME
+  base:
+    run: rm -rf /tmp/go-playground && mkdir -p /tmp/go-playground && cd /tmp/go-playground && git clone https://github.com/xiam/go-playground.git . && cd unsafebox && make docker
+  upload:
+    upload:
+      - src: ./
+        dst: $WORKDIR/$NAME
+  build:
+    run: cd $WORKDIR/$NAME && docker build -t $NAME .
+  image:
+    run: docker images | grep $NAME
+  stop:
+    run: docker stop $NAME || exit 0
+  rm:
+    run: docker rm $NAME || exit 0
+  start:
+    run: docker start $NAME || exit 0
+  run:
+    run: >
+      cd $WORKDIR/$NAME && docker run \
+        -d \
+        -p 127.0.0.1:$HOST_PORT:$CONTAINER_PORT \
+        --privileged \
+        --memory 1024Mb \
+        --memory-swap=0 \
+        --memory-swappiness=0 \
+        --name $NAME \
+        --ulimit nofile=128:256 \
+        --ulimit nproc=32 \
+        --restart=always \
+        -t $NAME
+  wait:
+    run: sleep 2
+  ps:
+    run: docker ps | grep $NAME
+  test:
+    run: curl --data 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A' "http://127.0.0.1:$HOST_PORT/compile?output=json"
+  logs:
+    run: docker logs $NAME
+
+targets:
+  deploy:
+    - ping
+    - check
+    - base
+    - upload
+    - build
+    - image
+    - stop
+    - rm
+    - run
+    - ps
+    - wait
+    - test

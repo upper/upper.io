@@ -1,0 +1,65 @@
+# This is a Supfile, see https://github.com/pressly/sup
+#
+
+env:
+  NAME: playground
+  HOST_PORT: 9002
+  CONTAINER_PORT: 3000
+  WORKDIR: /home/deploy/tmp/
+
+networks:
+  prod:
+    hosts:
+      - deploy@demo.upper.io
+
+commands:
+  ping:
+    run: uname -a; date
+  check:
+    run: rm -rf $WORKDIR/$NAME && mkdir -p $WORKDIR/$NAME
+  base:
+    run: rm -rf /tmp/go-playground && mkdir -p /tmp/go-playground && cd /tmp/go-playground && git clone https://github.com/xiam/go-playground.git . && cd webapp && export GOPATH=$HOME/go && go get -d ./... && go build -o app_linux_amd64 && docker build -t xiam/go-playground .
+  upload:
+    upload:
+      - src: ./
+        dst: $WORKDIR/$NAME
+  build:
+    run: cd $WORKDIR/$NAME && docker build -t $NAME .
+  image:
+    run: docker images | grep $NAME
+  stop:
+    run: docker stop $NAME || exit 0
+  rm:
+    run: docker rm $NAME || exit 0
+  start:
+    run: docker start $NAME || exit 0
+  run:
+    run: >
+      mkdir -p /home/deploy/data/playground && cd $WORKDIR/$NAME && docker run \
+        -d \
+        -v /home/deploy/data/playground:/var/data \
+        --restart=always \
+        --link unsafebox:unsafebox \
+        --name $NAME \
+        -p 127.0.0.1:$HOST_PORT:$CONTAINER_PORT \
+        -t $NAME
+  ps:
+    run: docker ps | grep $NAME
+  test:
+    run: curl --data 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A' "http://127.0.0.1:$HOST_PORT/compile"
+  logs:
+    run: docker logs $NAME
+
+targets:
+  deploy:
+    - ping
+    - check
+    - base
+    - upload
+    - build
+    - image
+    - stop
+    - rm
+    - run
+    - ps
+    - test
