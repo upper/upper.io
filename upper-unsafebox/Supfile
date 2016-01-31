@@ -48,7 +48,7 @@ commands:
         --restart=always \
         -t $NAME
   wait:
-    run: sleep 2
+    run: sleep 5
   ps:
     run: docker ps | grep $NAME
   test:
