@@ -13,8 +13,8 @@ docker:
 	docker build -t $(CONTAINER_IMAGE) .
 
 docker-run: docker
-	(docker stop $(CONTAINER_NAME) &>/dev/null || exit 0) && \
-	(docker rm $(CONTAINER_NAME) &>/dev/null || exit 0) && \
+	(docker stop $(CONTAINER_NAME) || exit 0) && \
+	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		-v $$PWD:/var/docs \

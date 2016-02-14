@@ -11,8 +11,8 @@ machines:
 	$(MAKE) docker docker-run -C upper-docs
 
 docker-run: docker machines
-	(docker stop $(CONTAINER_NAME) &>/dev/null || exit 0) && \
-	(docker rm $(CONTAINER_NAME) &>/dev/null || exit 0) && \
+	(docker stop $(CONTAINER_NAME) || exit 0) && \
+	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run -v $$PWD/conf.d:/etc/nginx/cond.d.t \
 		-d \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
@@ -28,3 +28,8 @@ docker-run: docker machines
 deploy-playground:
 	sup -f upper-playground/Supfile prod deploy && \
 	sup -f upper-unsafebox/Supfile prod deploy
+
+deploy:
+	sup prod deploy
+
+deploy-all: deploy-playground deploy

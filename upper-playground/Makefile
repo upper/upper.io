@@ -8,8 +8,8 @@ docker:
 
 docker-run: docker
 	mkdir -p data && \
-	(docker stop $(CONTAINER_NAME) &>/dev/null || exit 0) && \
-	(docker rm $(CONTAINER_NAME) &>/dev/null || exit 0) && \
+	(docker stop $(CONTAINER_NAME) || exit 0) && \
+	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \
 		-v $$PWD/data:/var/data \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
