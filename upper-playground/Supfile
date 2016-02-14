@@ -24,7 +24,7 @@ commands:
       - src: ./
         dst: $WORKDIR/$NAME
   build:
-    run: cd $WORKDIR/$NAME && docker build -t $NAME .
+    run: cd $WORKDIR/$NAME && make docker
   image:
     run: docker images | grep $NAME
   stop:
@@ -39,7 +39,7 @@ commands:
         -d \
         -v /home/deploy/data/playground:/var/data \
         --restart=always \
-        --link unsafebox:unsafebox \
+        --link upper-unsafebox:unsafebox \
         --name $NAME \
         -p 127.0.0.1:$HOST_PORT:$CONTAINER_PORT \
         -t $NAME
@@ -62,4 +62,5 @@ targets:
     - rm
     - run
     - ps
+    - logs
     - test

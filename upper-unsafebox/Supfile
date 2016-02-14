@@ -2,7 +2,8 @@
 #
 
 env:
-  NAME: unsafebox
+  NAME: upper-unsafebox
+  IMAGE: upper/unsafebox
   HOST_PORT: 8080
   CONTAINER_PORT: 8080
   WORKDIR: /home/deploy/tmp/unsafebox
@@ -24,7 +25,7 @@ commands:
       - src: ./
         dst: $WORKDIR/$NAME
   build:
-    run: cd $WORKDIR/$NAME && docker build -t $NAME .
+    run: cd $WORKDIR/$NAME && make docker
   image:
     run: docker images | grep $NAME
   stop:
@@ -46,7 +47,7 @@ commands:
         --ulimit nofile=128:256 \
         --ulimit nproc=32 \
         --restart=always \
-        -t $NAME
+        -t $IMAGE
   wait:
     run: sleep 5
   ps:
@@ -69,4 +70,5 @@ targets:
     - run
     - ps
     - wait
+    - logs
     - test

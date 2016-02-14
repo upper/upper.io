@@ -24,3 +24,7 @@ docker-run: docker machines
 	curl --silent "http://127.0.0.1/db.v2" -H "Host: upper.io" && \
 	curl --silent "http://127.0.0.1/db.v1" -H "Host: upper.io" && \
 	curl --silent "http://127.0.0.1" -H "Host: upper.io"
+
+deploy-playground:
+	sup -f upper-playground/Supfile prod deploy && \
+	sup -f upper-unsafebox/Supfile prod deploy
