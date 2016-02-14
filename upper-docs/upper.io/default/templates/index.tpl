@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <link href="https://fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
     <link href="{{ asset "/css/style.css" }}" rel="stylesheet" />
     <link href="{{ asset "/css/syntax.css" }}" rel="stylesheet">
     <title>
@@ -53,10 +53,10 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">The non-magical database mapper that stays out of your way.</p>
+              <p class="hero__description">The <b>upper.io</b> toolkit</p>
             </div>
             <div class="github">
-              <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the project at Github</a>
+              <a class="github__icon" target="_blank" href="https://github.com/upper">check it out at github.com/upper</a>
             </div>
           </div>
         </div>

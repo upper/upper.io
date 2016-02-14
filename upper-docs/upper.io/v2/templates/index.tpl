@@ -58,13 +58,14 @@
           {{ end }}
         </div>
         <div class="nav--adapters">
-          <span class="nav__trigger--adapters" id="adapters-menu-trigger">adapters</span>
+          <span class="nav__trigger--adapters" id="adapters-menu-trigger">tools</span>
           <ul id="adapters-menu">
             <li>{{ anchor "/postgresql" "PostgreSQL" }}</li>
             <li>{{ anchor "/mysql" "MySQL" }}</li>
             <li>{{ anchor "/sqlite" "SQLite" }}</li>
             <li>{{ anchor "/ql" "QL" }}</li>
             <li>{{ anchor "/mongo" "MongoDB" }}</li>
+            <li>{{ anchor "/builder" "SQL Builder" }}</li>
           </ul>
         </div>
       </nav>
@@ -80,7 +81,7 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">The non-magical database mapper that stays out of your way.</p>
+              <p class="hero__description">The non-magical database mapper that stays out of your way</p>
             </div>
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the project at Github</a>
@@ -124,7 +125,7 @@
                   {{ anchor "/getting-started" "Let's work"}} with databases
                   in a less tedious and more productive way.
                 </p>
-                <a href="{{ asset "/getting-started" }}">
+                <a href="{{ asset "/examples" }}">
                   <img class="feature__icon" src="{{ asset "images/figure-01.svg" }}" />
                 </a>
               </div>
@@ -144,21 +145,22 @@
                   Get your hands dirty and {{ anchor "/contribute" "contribute" }}
                   with code, examples and documentation.
                 </p>
-                <a href="{{ asset "/contribute" }}">
+                <a href="{{ asset "/examples" }}">
                   <img class="feature__icon" src="{{ asset "images/figure-03.svg" }}" />
                 </a>
               </div>
             </div>
-            <h2>A few examples</h2>
+            <h2>Playground</h2>
             <textarea class="go-playground-snippet" data-expanded="1" data-title="Live Example: Opening a database and listing table rows">{{ include "webroot/examples/open/main.go" }}</textarea>
             <textarea class="go-playground-snippet" data-title="Live Example: Same as above but using the SQL builder">{{ include "webroot/examples/builder/main.go" }}</textarea>
             <textarea class="go-playground-snippet" data-title="Live Example: Building a JOIN statement">{{ include "webroot/examples/join/main.go" }}</textarea>
             <p>
               We have plenty of {{ anchor "/examples" "code examples" }} you can continue looking at.
             </p>
-            <h2>Want to keep on learning?</h2>
+            <h2>Keep on learning</h2>
             <p>
-              The best way to keep on learning is by reading our {{ anchor "/getting-started" "getting started" }} page.
+              Want more details? continue with our
+              {{ anchor "/getting-started" "getting started" }} page.
             </p>
           {{ else }}
 

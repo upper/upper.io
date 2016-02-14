@@ -642,5 +642,5 @@ It would be awesome if you want to fix an error or add a new example, please
 refer to the [contributions][3] to learn how to do so.
 
 [1]: /db.v2/getting-started
-[2]: /builder/examples
+[2]: /db.v2/builder
 [3]: /db.v2/contribute

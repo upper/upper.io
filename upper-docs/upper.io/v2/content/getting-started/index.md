@@ -1,6 +1,8 @@
 # upper.io/db.v2
 
+<center>
 ![upper.io/db.v2 package](/db.v2/res/general.png)
+</center>
 
 The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
 with different data sources using *adapters* that wrap mature database drivers.
@@ -16,34 +18,42 @@ import(
 databases and provides partial support (CRUD, no transactions) for
 [MongoDB][7].
 
+The main purpose of `db` is to abstract common database operations while
+providing means for advanced database features, nothing else.
+
 ## Introduction
 
-### What's the idea behind `upper.io/db.v2`?
+### What's the idea behind `db`?
 
 `db` centers around the concept of sets. A collection (or table) represents a
 set that contains data items (or rows).
 
+<center>
 ![Database](/db.v2/res/database.png)
+</center>
 
-In the following example we load the `people` slice with all the elements from
-the "people" collection whose "name" field (or column) equals the value "Max".
+See code examples and patterns at our [examples](/db.v2/examples) page.
 
 ### Differences from v1
 
-1. v2 has a query builder.
-1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are now functions.
+1. `v2` comes with a SQL query builder.
+1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are functions instead of
+   structs.
 1. `db.Session.Collection()` only accepts one table.
 1. JOIN capabilities where removed from `Find()` (in favour of `Builder()`).
 
-### How to install v2?
+## Installation
 
-Use `go get` to pull the package:
+The `upper.io/db.v2` package depends on the [Go compiler and tools][2] and it's
+compatible with Go 1.4 and above.
 
-```go
-go get -v upper.io/db.v2
+Use `go get` to get or install `db`:
+
+```sh
+go get -v -u upper.io/db.v2
 ```
 
-If the above command does not work for some reason, you can also pull the
+If the above command does not work for some reason, you can always pull the
 source directly from GitHub:
 
 ```sh
@@ -55,127 +65,14 @@ cd $UPPERIO_V2 && git checkout v2
 go build && go install
 ```
 
-### Code example
-
-```go
-var people []Person
-
-col, err = sess.Collection("people")
-...
-
-res = col.Find(db.Cond{"name": "Max"})
-err = res.All(&people)
-...
-```
-
-If we only wanted one result, we could have used `res.One()` instead:
-
-```go
-var person Person
-
-col, err = sess.Collection("people")
-...
-
-res = col.Find(db.Cond{"name": "Max"})
-err = res.All(&person)
-...
-```
-
-In the above example, we use `sess.Collection()` to get a collection reference
-and then the `Find()` method on `col` to filter out the results we want; this
-creates a result set `res` which we can use to map results into an slice (with
-`All()`) or into a single struct (with `One()`).
-
-The result res points to all the rows from the "people" table that match
-whatever conditions were passed to `db.Collection.Find()`. This result set is
-not only useful for getting and mapping data from permanent storage, but to
-update or delete all the items in the subset as well.
-
-```go
-res = col.Find(db.Cond{"name": "Jhon"})
-err = res.Update(db.M{"name": "John"})
-...
-err = res.Remove()
-...
-```
-
-![Collections](/db.v2/res/collection.png)
-
-A result set cannot be used to add an item to the collection, because a it can
-only define a subset of rows that already exists. If you wanted to add a row to
-the collection you can use the `Append()` method on it:
-
-```go
-person = Person{
-  Name:     "Harper",
-  LastName: "Lee",
-}
-nid, err = col.Append(person)
-...
-```
-
-If the table supports automatic indexes, then the `nid` returned by `Append()`
-would be set to the value of the newly added index. The `nid` is actually an
-`interface{}` type, so you'll probably need to cast it:
-
-```go
-rid, err = col.Append(person)
-...
-id, _ = nid.(int64)
-```
-
-The simple CRUD operations described above may come in handy for getting and
-saving data from different databases, but what if you wanted to use custom
-queries on SQL databases? It is also easy, you can just use the same SQL
-builder that powers `db`:
-
-```go
-bob = sess.Builder()
-...
-
-q = bob.Select("a.name").From("accounts a").
-  Join("profile p").On("a.profile_id = p.id")
-
-var accounts []Account
-err = q.Iterator().All(&accounts)
-...
-```
-
-If you think the SQL builder methods are not flexible enough you can also use
-raw SQL:
-
-```go
-bob = sess.Builder()
-...
-
-q = bob.Query("SELECT * FROM accounts WHERE id = ?", 5)
-
-var account Account
-err = q.Iterator().One(&account)
-```
-
-Please note that SQL builder is only supported on SQL databases.
-
-As you can see `db` offers you a range of tools that are designed to make
-working with databases less tedious and more productive.
-
-## Installation
-
-The `upper.io/db.v2` package depends on the [Go compiler and tools][2] and it's
-compatible with Go 1.1 and above.
-
-Use `go get` to download `db`:
-
-```sh
-go get -v -u upper.io/db.v2
-```
-
 ## Database adapters
 
 The `db` package provides basic functions and interfaces but you'll also need a
 **database adapter** in order to actually communicate with a database.
 
+<center>
 ![Adapters](/db.v2/res/adapters.png)
+</center>
 
 Here's the list of currently supported adapters, make sure to read the
 instructions from the specific adapter for installation instructions:
@@ -189,6 +86,10 @@ instructions from the specific adapter for installation instructions:
 ## Quick start
 
 ### Mapping tables to structs
+
+<center>
+![Collections](/db.v2/res/collection.png)
+</center>
 
 Mapping a table to a struct is easy, you only have to add the `db` tag next to
 an **exported field** definition and provide options if you need them:
@@ -364,7 +265,7 @@ cond = db.Cond{
 }
 ```
 
-### Composed conditions: db.Or and db.And
+### Composing conditions: db.Or and db.And
 
 The `db.Or()` function takes one or more `db.Cond{}` maps and joins them under
 the OR disjunction:
@@ -510,10 +411,6 @@ transaction or to discard it completely.
 
 Once the transaction is commited or rolled back, the transaction will no longer
 accept more commands.
-
-## Examples
-
-See code examples and patterns at our [examples](/db.v2/examples) page.
 
 ## Tips and tricks
 
