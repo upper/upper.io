@@ -1,22 +1,25 @@
-IMAGE_NAME ?= upper/unsafebox
+CONTAINER_IMAGE ?= upper/unsafebox
+CONTAINER_NAME ?= upper-unsafebox
+CONTAINER_PORT ?= 8080
+HOST_PORT ?= 8080
 
 docker:
-	docker build -t $(IMAGE_NAME) .
+	docker build -t $(CONTAINER_IMAGE) .
 
 docker-run: docker
-	(docker stop upper-unsafebox &>/dev/null || exit 0) && \
-	(docker rm upper-unsafebox &>/dev/null || exit 0) && \
+	(docker stop $(CONTAINER_NAME) &>/dev/null || exit 0) && \
+	(docker rm $(CONTAINER_NAME) &>/dev/null || exit 0) && \
 	docker run \
 		-d \
-		-p 8080:8080 \
+		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		--privileged \
 		--memory 1024Mb \
 		--memory-swap 0 \
 		--memory-swappiness=0 \
-		--name upper-unsafebox \
+		--name $(CONTAINER_NAME) \
 		--ulimit nofile=256:512 \
 		--ulimit nproc=128 \
-		-t upper/unsafebox
+		-t $(CONTAINER_IMAGE)
 
 deploy:
 	sup prod deploy

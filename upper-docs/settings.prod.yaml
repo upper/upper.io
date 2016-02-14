@@ -5,6 +5,6 @@ server:
   type: "standalone"
 
 hosts:
-  upper.io/db.v1: "/var/site/upper.io/v1"
-  upper.io/db.v2: "/var/site/upper.io/v2"
-  default: "/var/site/upper.io/default"
+  /db.v1: "/var/docs/upper.io/v1"
+  /db.v2: "/var/docs/upper.io/v2"
+  default: "/var/docs/upper.io/default"

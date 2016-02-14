@@ -1,7 +1,16 @@
+HOST_PORT ?= 9001
+CONTAINER_PORT ?= 9001
+CONTAINER_NAME ?= upper-vanity
+CONTAINER_IMAGE ?= upper/vanity
+
 docker:
-	docker build -t upper/vanity .
+	docker build -t $(CONTAINER_IMAGE) .
 
 docker-run: docker
-	(docker stop upper-vanity &> /dev/null || exit 0) && \
-	(docker rm upper-vanity &> /dev/null || exit 0) && \
-	docker run -d -p 9001:9001 --name upper-vanity -t upper/vanity
+	(docker stop $(CONTAINER_NAME) &> /dev/null || exit 0) && \
+	(docker rm $(CONTAINER_NAME) &> /dev/null || exit 0) && \
+	docker run \
+		-d \
+		-p $(HOST_PORT):$(CONTAINER_PORT) \
+		--name $(CONTAINER_NAME) \
+		-t $(CONTAINER_IMAGE)

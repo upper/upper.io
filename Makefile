@@ -1,16 +1,26 @@
+CONTAINER_PORT ?= 80
+HOST_PORT ?= 80
+CONTAINER_NAME ?= upper.io
+CONTAINER_IMAGE ?= upper/upper.io
+
 docker:
-	docker build -t upper/upper.io .
+	docker build -t $(CONTAINER_IMAGE) .
+
 machines:
-	(cd upper-vanity && make docker-run) && \
-	(cd upper-unsafebox && make docker-run) && \
-	(cd upper-site && make docker-run) && \
-	(cd upper-playground && make docker-run)
-docker-run: machines
-	(docker stop upper.io &>/dev/null || exit 0) && \
-	(docker rm upper.io &>/dev/null || exit 0) && \
+	$(MAKE) docker docker-run -C upper-vanity && \
+	$(MAKE) docker docker-run -C upper-docs
+
+docker-run: docker machines
+	(docker stop $(CONTAINER_NAME) &>/dev/null || exit 0) && \
+	(docker rm $(CONTAINER_NAME) &>/dev/null || exit 0) && \
 	docker run -v $$PWD/conf.d:/etc/nginx/cond.d.t \
 		-d \
-		-p 80:80 \
+		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		--link upper-vanity:upper-vanity \
-		--link upper-site:upper-site \
-		--name upper.io -t upper/upper.io
+		--link upper-docs:upper-docs \
+		--name $(CONTAINER_NAME) \
+		-t $(CONTAINER_IMAGE) && \
+	sleep 5 && \
+	curl --silent "http://127.0.0.1/db.v2" -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db.v1" -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1" -H "Host: upper.io"
