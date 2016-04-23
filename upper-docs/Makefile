@@ -4,10 +4,13 @@ CONTAINER_NAME ?= upper-docs
 CONTAINER_IMAGE ?= upper/docs
 
 deps:
-	go get -d -v menteslibres.net/luminos
+	go get -v menteslibres.net/luminos
 
-run:
-	luminos -c settings-local.yaml run
+run: deps
+	if [ ! -f settings.yaml ]; then  \
+		cp settings.test.yaml settings.yaml; \
+	fi && \
+	luminos -c settings.yaml run
 
 docker:
 	docker build -t $(CONTAINER_IMAGE) .

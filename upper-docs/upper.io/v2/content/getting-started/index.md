@@ -1,16 +1,12 @@
 # upper.io/db.v2
 
-<center>
-![upper.io/db.v2 package](/db.v2/res/general.png)
-</center>
-
 The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
 with different data sources using *adapters* that wrap mature database drivers.
 
 ```go
 import(
-  "upper.io/db.v2"             // main package
-  "upper.io/db.v2/postgresql"  // adapter for PostgreSQL
+  "upper.io/db.v2"             // Core package
+  "upper.io/db.v2/postgresql"  // PostgreSQL adapter
 )
 ```
 
@@ -18,29 +14,129 @@ import(
 databases and provides partial support (CRUD, no transactions) for
 [MongoDB][7].
 
-The main purpose of `db` is to abstract common database operations while
-providing means for advanced database features, nothing else.
+<center>
+![upper.io/db.v2 package](/db.v2/res/general.png)
+</center>
 
-## Introduction
+The main purpose of `db` is to abstract common database operations and let
+users perform advanced operations directly, nothing else.
 
-### What's the idea behind `db`?
-
-`db` centers around the concept of sets. A collection (or table) represents a
-set that contains data items (or rows).
+## Key concepts
 
 <center>
 ![Database](/db.v2/res/database.png)
 </center>
 
-See code examples and patterns at our [examples](/db.v2/examples) page.
+A database connection is known as **session**:
 
-### Differences from v1
+```
+import "upper.io/db.v2/postgresql" // The PostgreSQL adapter
+...
 
-1. `v2` comes with a SQL query builder.
-1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are functions instead of
-   structs.
-1. `db.Session.Collection()` only accepts one table.
-1. JOIN capabilities where removed from `Find()` (in favour of `Builder()`).
+settings = postgresql.ConnectionURL{...} // Connection settings
+
+sess, err = postgresql.Open(settings) // Stablishing a connection
+...
+```
+
+Sessions can be used to get table references, known as **collections**:
+
+```
+people = sess.Collection("people")
+```
+
+Collections provide the `Find()` method, which can be used to define a subset
+of items (`db.Result`):
+
+```go
+// Adds a person to the "people" table/collection
+err = people.Insert(person)
+...
+
+var marias []Person
+res = people.Find("name", "María")  // The subset of people named "María"
+err = res.All(&marias)
+...
+
+err = res.Update(...) // Updates the whole subset
+...
+
+var john Person
+err = people.Find("name", "John").One(&john) // A person named John
+...
+
+// Deleting old articles
+err = sess.Collection("article").
+  Find("date_created < ? and draft = ?", oneWeekAgo, true).
+  Remove()
+...
+```
+
+The figure below ilustrates the collection, item, result and `Find()` concepts:
+
+<center>
+![Collections](/db.v2/res/collection.png)
+</center>
+
+Note that `db.Result` has no `Insert()` method, the `Insert()` method belongs to the
+collection:
+
+```go
+// Just inserts and returns the id interface{}
+id, err = article.Insert(myNewArticle)
+...
+
+err = article.InsertReturning(&myNewArticle)
+```
+
+Some databases support transactions:
+
+```go
+tx, err = sess.Transaction()
+
+// Transactions are just like any other session
+err = tx.Collection("wallet").Insert(charge)
+...
+
+// Except that operations can be commited or rolled back
+err = tx.Rollback()
+...
+```
+
+Sessions also have a built-in SQLish query builder that gives more freedom than
+the sets while keeping manual SQL concatenation at bay.
+
+```go
+q = sess.SelectAllFrom("people").Where("name = ?", "María")
+err = q.Iterator().All(&marias)
+```
+
+Advanced SQL commands should not be over-thinked, you can just feed them to the
+session as you please. We're not going to try to abstract them as that might
+lessen their powers.
+
+```go
+sqlRes, err = sess.Exec("CREATE TABLE ...")
+...
+
+// Note that the ? placeholder is automatically expanded into whatever the
+// database expects.
+sqlRows, err = tx.Query("SELECT * FROM (SELECT ... UNION ...) WHERE id > ?", 9)
+
+// sqlRows is an *sql.Rows object, so you can use Scan() on it
+err = sqlRows.Scan(&a, &b, ...)
+
+// Or you could create and iterator to help you with mapping fields into
+// a struct
+import "upper.io/db.v2/builder"
+...
+
+iter = builder.NewIterator(sqlRows)
+err = iter.All(&item)
+```
+
+You may see more code examples and patterns at our [examples](/db.v2/examples)
+page.
 
 ## Installation
 
@@ -65,44 +161,51 @@ cd $UPPERIO_V2 && git checkout v2
 go build && go install
 ```
 
-## Database adapters
+### Differences from v1
 
-The `db` package provides basic functions and interfaces but you'll also need a
-**database adapter** in order to actually communicate with a database.
+1. `v2` comes with a SQL query builder.
+1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are functions instead of
+   structs.
+1. `db.Session.Collection()` only accepts one table.
+1. JOIN capabilities where removed from `Find()` (in favour of the built-in query builder).
 
-<center>
-![Adapters](/db.v2/res/adapters.png)
-</center>
+### Supported databases
 
 Here's the list of currently supported adapters, make sure to read the
 instructions from the specific adapter for installation instructions:
 
-* [MySQL](/db.v2/mysql/)
+* [MySQL](/db.v2/mysql)
 * [MongoDB](/db.v2/mongo)
 * [PostgreSQL](/db.v2/postgresql)
 * [QL](/db.v2/ql)
-* [SQLite](/db.v2/sqlite/)
+* [SQLite](/db.v2/sqlite)
 
-## Quick start
+## Basic usage
+
+In order to use `db` efficiently you can follow some recommended patterns:
+
+1. Use Go structs to describe data models. You may want to use one struct to
+   describe a table.
+1. Try to stick to sets.
+1. When in doubt, use SQL.
 
 ### Mapping tables to structs
 
-<center>
-![Collections](/db.v2/res/collection.png)
-</center>
-
-Mapping a table to a struct is easy, you only have to add the `db` tag next to
-an **exported field** definition and provide options if you need them:
+Add a `db` struct tag next to an **exported field** to map that field to a
+table column:
 
 ```go
 type Person struct {
-  ID       uint64 `db:"id,omitempty"` // use `omitempty` to let the database set the value.
+  ID       uint64 `db:"id,omitempty"` // Use `omitempty` to prevent
+                                      // the adapter from sending
+                                      // this value if it's zero.
   Name     string `db:"name"`
   LastName string `db:"last_name"`
 }
 ```
 
-You can mix `db` tags with other tags, such as those used to map JSON:
+You can safely mix `db` struct tags with other struct tags, such as those used
+to map JSON:
 
 ```go
 type Person struct {
@@ -113,63 +216,59 @@ type Person struct {
 }
 ```
 
-If you don't provide explicit mappings, `db` will try to use the field name
-(case-sensitive), but you can also set `-` as the name of the field to skip it:
+If you want the adapter to ignore a field
+completely, set `-` as the name of the field:
 
 ```go
 type Person struct {
   ...
-  Token    string `db:"-"` // ignore this field completely.
+  Token    string `db:"-"` // The adapter will skip this field.
 }
 ```
 
+Note that if you don't provide explicit mappings the adapter will try to use
+the field name and this is a case-sensitive lookup.
+
 ### Setting up a database session
 
-Import both the `upper.io/db.v2` and the adapter packages into your application:
+Import the adapter package into your application:
 
 ```go
 import (
-  "upper.io/db.v2"
-  "upper.io/db.v2/postgresql" // example adapter package
+  "upper.io/db.v2/postgresql" // PostgreSQL package
 )
 ```
 
-All adapters include a `ConnectionURL` function that you can use to create a
-DSN:
+All adapters include a `ConnectionURL` struct that you can use to create a DSN:
 
 ```go
 var settings = postgresql.ConnectionURL{
   User:     "john",
   Password: "p4ss",
-  Address:  db.Host("localhost"),
+  Address:  "10.0.0.99",
   Database: "myprojectdb",
 }
 ```
 
-With a DSN you can create a database session:
+You can use the DSN to create a database session:
 
 ```go
-sess, err = db.Open(postgresql.Adapter, settings)
+sess, err = postgresql.Open(settings)
 ...
 ```
 
-You can use any `db.Database` methods on `sess`, such as `Collection()`; that
-one will get you a collection reference.
+This `sess` variable is a `db.Database` type. See [all available db.Database methods](TODO)
+
+One important `db.Database` method is `Collection()`, use it to get a
+collection reference.
 
 ```go
-usersCol, err = sess.Collection("users")
+users, err = sess.Collection("users") // A reference to the users table.
 ...
 ```
 
-The `C()` method does the same as `Collection()` but panics if the collection
-does not exists:
-
-```go
-res = sess.C("users").Find()
-...
-```
-
-Once you're done with the database session, you must use `Close()` to close it:
+Once you're done with the database session, you must use the `Close()` method
+on it to close and free all associated resources:
 
 ```go
 err = sess.Close()
@@ -187,24 +286,15 @@ person := Person{
   LastName: "Lamarr",
 }
 
-peopleCol, err = sess.Collection("people")
+people  = sess.Collection("people")
 ...
 
-id, err = peopleCol.Append(person)
+id, err = people.Insert(person)
 ...
+
+// chaining work as expected:
+id, err = sess.Collection("people").Insert(person)
 ```
-
-If you're absolutely sure the collection exists and you don't fear a panic in
-case it doesn't, you could also use the `C()` method and chain `db.Collection`
-methods to it:
-
-```go
-id, err = sess.C("people").Append(person)
-...
-```
-
-The recommened way however is to use `Collection()` and manage errors by
-yourself.
 
 ### Defining a result set with `Find()`
 
@@ -212,53 +302,67 @@ You can use `Find()` on a collection reference to get a result set from that
 collection.
 
 ```go
-res = sess.C("people").Find()
-```
+// Find() with no conditions is a reference to all items
+// on the collection:
+res = sess.Collection("people").Find()
+...
 
-`Find()` accepts conditions that you can describe with the `db.Cond{}` map:
-
-```go
-res = sess.C("people").Find(db.Cond{
+// You can use a `db.Cond` map to reduce the subset of
+// items that will be queried:
+res = sess.Collection("people").Find(db.Cond{
   "id": 25,
 })
+
+// On SQL databases a string-like syntax is also accepted:
+res = sess.Collection("people").Find("id", 25)
+
+// Equality is the default operator, but it's easy to use
+// different operators:
+res = sess.Collection("people").Find("id >", 29)
+
+// Use the `?` placeholder to map arguments by position:
+res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)
+
+// Or the And/Or methods if you prefer:
+res = sess.Collection("people").Find("id >", 20).And("id <", 39)
+
+res = sess.Collection("people").Find("id", 20).Or("id", 21)
+
+// If the table has a primary key, you can look up by that
+// key by providing it as sole argument:
+res = sess.Collection("people").Find(20)
 ```
+
+`db.Collection.Find()` returns a `db.Result` See [all available db.Result methods](TODO)
 
 ### Simple conditions: db.Cond{}
 
-`db.Cond{}` is a map with `string` keys and `interface{}` values, the keys
-represent columns and the values represent, yes! values.
-
-By default `db.Cond{}` expresses an equality between columns and values:
+`db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
+by default `db.Cond` expresses an equality between columns and values:
 
 ```go
 cond = db.Cond{
-  "id": 36, // id equals 36
+  "id": 36, // id = 36
 }
 ```
 
-But you can also add special operators next to the column to change the
-equality relation for something else:
+As with `Find()`, you can also add operators next to the column name to change
+the equality into something else:
 
 ```go
 cond = db.Cond{
-  "id >": 36, // id greater than 36
+  "id >=": 36, // id >= 36
 }
-```
 
-Besides basic operators, you can also use special operators that may only work
-on certain databases, such as `LIKE` on SQL databases:
-
-```go
 cond = db.Cond{
   "name LIKE": "Pete%", // SQL: name LIKE 'Pete%'
 }
 ```
 
-You can create a `db.Cond{}` map with more than one key-value pair, that is
-interpreted like you want both conditions to be met:
+Note that `db.Cond` is a just map and it accepts multiple keys:
 
 ```go
-// name = 'John' AND "last_name" = 'Smi%'
+// name = 'John' AND last_name = 'Smi%'
 cond = db.Cond{
   "name": "John",
   "last_name LIKE": "Smi%",
@@ -287,10 +391,22 @@ db.And(
   db.Cond{"age >": 21},
   db.Cond{"age <": 28},
 )
+
+// Which is the same as:
+db.Cond{
+  "age >": 21,
+  "age <": 28,
+}
+
+// Perhaps db.And is more useful in situations like:
+db.And(
+  db.Cond{"name": "john"},
+  db.Cond{"name": "jhon"},
+)
 ```
 
-Both `db.Or()` and `db.And()` can take other `db.Or()` and `db.And()`
-statements as well:
+Both `db.Or()` and `db.And()` can take other `db.Or()` and `db.And()` nested
+values:
 
 ```go
 // (
@@ -298,7 +414,6 @@ statements as well:
 //   AND
 //   (name = 'Joanna' OR name = 'John' OR name = 'Jhon')
 // )
-
 db.And(
   db.And(
     db.Cond{"age >": 21},
@@ -320,29 +435,34 @@ Use the `Count()` method to get the number of items in the result set:
 ```go
 res = col.Find(...)
 ...
+
 c, err = res.Count()
 ...
+
+fmt.Printf("There are %d items", c)
 
 ```
 
 ### Options for limiting and sorting results
 
-You can limit the results you want to walk over using the `Skip()` and
-`Limit()` methods:
+You can limit the results you want to walk over using the `Limit()` and
+`Skip()` methods of `db.Result`:
 
 ```go
 res = col.Find(...)
 ...
+
 err = res.Skip(2).Limit(8).All(&accounts)
 ...
 ```
 
-Or you can sort them:
+Use the `Sort()` method to order them:
 
 ```go
 res = col.Find(...)
 ...
-err = res.Sort("-last_name").All(&accounts) // sort by last_name descending order
+
+err = res.Sort("-last_name").All(&accounts) // Sort by last_name descending order
 ...
 ```
 
@@ -357,18 +477,31 @@ The `database/sql` package provides some special types
 ([NullBool](http://golang.org/pkg/database/sql/#NullBool),
 [NullFloat64](http://golang.org/pkg/database/sql/#NullBool),
 [NullInt64](http://golang.org/pkg/database/sql/#NullInt64) and
-[NullString](http://golang.org/pkg/database/sql/#NullString)) that can be used
-to represent values than could be `NULL` at some point.
+[NullString](http://golang.org/pkg/database/sql/#NullString)) which can be used
+to represent values than could be `NULL`.
 
 SQL adapters support those special types with no additional effort:
 
 ```go
 type TestType struct {
   ...
-  salary sql.NullInt64
+  Salary sql.NullInt64 `db:"salary"`
   ...
 }
 ```
+
+Another way of using null values is by using pointers on field values:
+
+```go
+type TestType struct {
+  ...
+  FirstName *string `db:"first_name"`
+  ...
+}
+```
+
+In the above struct, the `FirstName` pointer would be `nil` when no value was
+present on the table. Use with care.
 
 ### The Marshaler and Unmarshaler interfaces
 
@@ -388,59 +521,73 @@ type Unmarshaler interface {
 This comes in very handy when dealing with custom field types that `db` does
 not how to convert.
 
+
+```go
+type LatLong struct {
+  Lat  float64
+  Long float64
+}
+
+func (ll LatLong) MarshalDB() (interface{}, error) {
+  // Encode ll before saving it to the database.
+  return encodeLatLng(ll), nil
+}
+
+func (ll *LatLong) UnmarshalDB(v interface{}) (error) {
+  // Decode the encoded value v into the custom type.
+  *ll = decodeLatLng(fmt.Sprintf("%v", v))
+  return nil
+}
+
+type Point struct {
+  ...
+  LL LatLong `db:"ll,omitempty"`
+  ...
+}
+```
+
 ## Transactions
 
-It is very easy to group operations under a transaction, just use the
-`Transaction()` method on a session:
+Use the `Transaction()` method on a session to create a session context:
 
 ```go
 tx, err = sess.Transaction()
 ...
-tx.C("accounts").Append(account)
+
+err = tx.Collection("accounts").Insert(account)
 ...
-res = tx.C("people").Find(...)
+
+res = tx.Collection("people").Find(...)
 ...
+
+
 err = tx.Commit()
 ...
 
 ```
 
-The returned `tx` value is identical to `db.Session`, except that it also has
-the `Commit()` and `Rollback()` methods that can be used to execute the
-transaction or to discard it completely.
+The returned `tx` value is a `db.Transaction` type, which is identical to a
+regular `db.Session`, except that it also has the `Commit()` and `Rollback()`
+methods which can be used to execute the transaction or to discard it
+completely.
 
-Once the transaction is commited or rolled back, the transaction will no longer
-accept more commands.
+Once the transaction is commited or rolled back, the transaction will close
+itself and won't be able to accept more commands.
 
 ## Tips and tricks
 
 ### Logging
 
-You can force `upper.io/db.v2` to print SQL statements and errors to standard
-output by using the `UPPERIO_DB_DEBUG` environment variable:
+You can force the adapter to print SQL statements and errors to standard output
+by using the `UPPERIO_DB_DEBUG` environment variable:
 
 ```console
 UPPERIO_DB_DEBUG=1 ./go-program
 ```
 
-You can also use this environment variable when running tests.
-
-```console
-cd $GOPATH/src/upper.io/db.v2/sqlite
-UPPERIO_DB_DEBUG=1 go test
-...
-2014/06/22 05:15:20
-  SQL: SELECT "tbl_name" FROM "sqlite_master" WHERE ("type" = 'table')
-
-2014/06/22 05:15:20
-  SQL: SELECT "tbl_name" FROM "sqlite_master" WHERE ("type" = ? AND "tbl_name" = ?)
-  ARG: [table artist]
-...
-```
-
 ### Working with the underlying driver
 
-Many situations will require you to use methods that are specific to the
+Some situations will require you to use methods that are specific to the
 underlying driver, for example, if you're in the need of using the
 [mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method you
 can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it with
@@ -454,12 +601,9 @@ err = drv.Ping()
 This is another example using `db.Database.Driver()` with a SQL adapter:
 
 ```go
-drv = sess.Driver().(*sql.DB)
+drv = sess.Driver().(*sql.DB) // You need to cast the driver to the appropiare type.
 rows, err = drv.Query("SELECT name FROM users WHERE age = ?", age)
 ```
-
-If you're in the need of using raw SQL you may want to try with the SQL builder
-first.
 
 ## License
 

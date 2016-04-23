@@ -81,7 +81,7 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">The non-magical database mapper that stays out of your way</p>
+              <p class="hero__description">A non-magical database mapper that stays out of your way</p>
             </div>
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the project at Github</a>
