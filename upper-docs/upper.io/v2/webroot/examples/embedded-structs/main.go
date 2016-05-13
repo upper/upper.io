@@ -7,42 +7,41 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Person
+// Person represents a person with a name.
 type Person struct {
 	FirstName string `db:"first_name"`
 	LastName  string `db:"last_name"`
 }
 
-// Author
+// Author represents a person that is an author.
 type Author struct {
 	ID     int `db:"id"`
 	Person `db:",inline"`
 }
 
-// Employee
+// Employee represents a person that is an employee.
 type Employee struct {
 	ID     int `db:"id"`
 	Person `db:",inline"`
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
 	var res db.Result
 
-	res = sess.C("authors").Find().Sort("last_name").Limit(5)
+	res = sess.Collection("authors").Find().Sort("last_name").Limit(5)
 
 	var authors []Author
 	if err := res.All(&authors); err != nil {
@@ -58,7 +57,7 @@ func main() {
 		)
 	}
 
-	res = sess.C("employees").Find().Sort("last_name").Limit(5)
+	res = sess.Collection("employees").Find().Sort("last_name").Limit(5)
 
 	var employees []Author
 	if err := res.All(&employees); err != nil {

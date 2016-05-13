@@ -7,7 +7,7 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Book
+// Book represents a book.
 type Book struct {
 	ID        int    `db:"id"`
 	Title     string `db:"title"`
@@ -15,14 +15,14 @@ type Book struct {
 	SubjectID int    `db:"subject_id"`
 }
 
-// Author
+// Author represents an author.
 type Author struct {
 	ID        int    `db:"id"`
 	LastName  string `db:"last_name"`
 	FirstName string `db:"first_name"`
 }
 
-// Subject
+// Subject represents a subject.
 type Subject struct {
 	ID       int    `db:"id"`
 	Subject  string `db:"subject"`
@@ -30,21 +30,18 @@ type Subject struct {
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
-
-	b := sess.Builder()
 
 	type joinResult struct {
 		// Note that the ID field is ambiguous, that's why we need this field.
@@ -54,7 +51,7 @@ func main() {
 		Subject `db:",inline"`
 	}
 
-	req := b.Select(
+	req := sess.Select(
 		"b.id AS book_id", // See ID field on joinResult type.
 		db.Raw("b.*"),
 		db.Raw("a.*"),

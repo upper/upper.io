@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"            // Imports the main db package.
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
@@ -16,34 +15,28 @@ type Book struct {
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
-	b := sess.Builder()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	req := b.SelectAllFrom("books").OrderBy("id")
-	iter := req.Iterator()
+	req := sess.SelectAllFrom("books").OrderBy("id")
 
 	var books []Book
+	iter := req.Iterator()
 	if err := iter.All(&books); err != nil {
 		log.Fatal(err)
 	}
 
+	log.Printf("A list of books:")
 	for _, book := range books {
 		log.Printf("%#v\n", book)
 	}

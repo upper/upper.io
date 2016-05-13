@@ -7,28 +7,27 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Employee
+// Employee represents an employee.
 type Employee struct {
 	ID       int    `db:"id,omitempty"`
 	LastName string `db:"last_name"`
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
-	req := sess.C("employees").Find().Sort("last_name")
+	req := sess.Collection("employees").Find().Sort("last_name")
 
 	log.Println("A list of employees:")
 

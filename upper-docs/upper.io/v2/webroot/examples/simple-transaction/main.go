@@ -3,23 +3,21 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"            // Imports the main db package.
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
 	tx, err := sess.Transaction()
@@ -30,13 +28,13 @@ func main() {
 	// You can simply exchange sess by tx.
 	var total uint64
 
-	if total, err = tx.C("books").Find().Count(); err != nil {
+	if total, err = tx.Collection("books").Find().Count(); err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("total: %d", total)
 
 	// This won't work in our testing sandbox, you'll have to try it out by yourself.
-	// if err = tx.C("books").Find().Remove(); err != nil {
+	// if err = tx.Collection("books").Find().Remove(); err != nil {
 	//   log.Fatal(err)
 	// }
 
@@ -45,9 +43,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if total, err = sess.C("books").Find().Count(); err != nil {
+	if total, err = sess.Collection("books").Find().Count(); err != nil {
 		log.Fatal(err)
 	}
 	log.Printf("total after rolling back: %d", total)
-
 }

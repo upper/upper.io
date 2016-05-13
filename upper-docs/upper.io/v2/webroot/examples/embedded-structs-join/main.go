@@ -7,7 +7,7 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Book
+// Book represents a book.
 type Book struct {
 	ID        int    `db:"id"`
 	Title     string `db:"title"`
@@ -15,14 +15,14 @@ type Book struct {
 	SubjectID int    `db:"subject_id"`
 }
 
-// Author
+// Author represents the author of a book.
 type Author struct {
 	ID        int    `db:"id"`
 	LastName  string `db:"last_name"`
 	FirstName string `db:"first_name"`
 }
 
-// BookAuthor
+// BookAuthor represents join data from books and authors.
 type BookAuthor struct {
 	// Both Author and Book have and ID column, we need this to tell the ID of
 	// the book from that of the author.
@@ -33,23 +33,20 @@ type BookAuthor struct {
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
-	b := sess.Builder()
-
-	req := b.Select(
+	req := sess.Select(
 		"b.id AS book_id",
 		db.Raw("b.*"),
 		db.Raw("a.*"),

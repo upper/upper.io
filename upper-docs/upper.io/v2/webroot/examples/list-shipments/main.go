@@ -8,7 +8,7 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Shipment
+// Shipment represents a shipment registry.
 type Shipment struct {
 	ID         int       `db:"id,omitempty"`
 	CustomerID int       `db:"customer_id"`
@@ -17,24 +17,23 @@ type Shipment struct {
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
 	since := time.Date(2001, time.September, 1, 0, 0, 0, 0, time.Local)
 	until := time.Date(2001, time.October, 1, 0, 0, 0, 0, time.Local).Add(time.Second * -1)
 
-	req := sess.C("shipments").Find().
+	req := sess.Collection("shipments").Find().
 		Where("ship_date > ? AND ship_date < ?", since, until).
 		Sort("ship_date")
 

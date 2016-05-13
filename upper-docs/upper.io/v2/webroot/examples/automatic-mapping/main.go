@@ -7,42 +7,41 @@ import (
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
-// Stock
+// Stock represents items in stock.
 type Stock struct {
-	ISBN  string
-	Cost  float64
-	Real  float64
-	Stock int
+	ISBN   string  `db:"isbn"`
+	Cost   float64 `db:"cost"`
+	Retail float64 `db:"retail"`
+	Stock  int     `db:"stock"`
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`, // Database name.
-	Address:  db.ParseAddress(`demo.upper.io`),
-	User:     `demouser`, // Database username.
-	Password: `demop4ss`, // Database password.
+	Database: `booktown`,
+	Host:     `demo.upper.io`,
+	User:     `demouser`,
+	Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := db.Open("postgresql", settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	defer sess.Close()
 
-	req := sess.C("stock").Find()
+	req := sess.Collection("stock").Find()
 
-	log.Println("Stock:")
-
+	log.Println("Items in stock:")
 	for {
-		var stock Stock
-		err := req.Next(&stock)
+		var item Stock
+		err := req.Next(&item)
 		if err != nil {
 			if err == db.ErrNoMoreRows {
-				break
+				break // This error means that we read all rows from the cursor.
 			}
+			// Other errors are not expected.
 			log.Fatal(err)
 		}
-		log.Println(stock)
+		log.Printf("%#v", item)
 	}
 }
