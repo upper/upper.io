@@ -200,26 +200,13 @@ res = col.Find(...)
 ...
 ```
 
-`Collection()` returns an error if the collection does not exist or if it can
-not be read from some reason.
-
-### Using the `C()` method
-
-The `db.Session.C()` method is like `db.Session.Collection()` except that it caches
-the table reference and panics if the collection does not exist. Use with care.
-
-```go
-res = sess.C("accounts").Find(...)
-...
-```
-
 ## Creating a result set
 
 Use the `db.Collection.Find()` method on a collection reference to create a
 result set:
 
 ```go
-col, err = sess.C("accounts")
+col, err = sess.Collection("accounts")
 ...
 
 // All rows on "accounts"
@@ -234,8 +221,7 @@ res = col.Find("id = ?", 11)
 
 ## Conditions
 
-The `db.Cond{}` map can be used to express simple conditions to add constraints
-to result sets:
+The `db.Cond{}` map can be used to add constraints to result sets:
 
 ```go
 // Rows that match "id = 5"
@@ -265,7 +251,7 @@ res = col.Find(db.Cond{"id": []int{1, 2, 3, 4}})
 res = col.Find(db.Cond{"id NOT IN": []int{1, 2, 3, 4}})
 
 // SQL: "last_name" IS NULL
-res = col.Find(db.Cond{"last_name IS": nil})
+res = col.Find(db.Cond{"last_name": nil})
 
 // SQL: "last_name" IS NOT NULL
 res = col.Find(db.Cond{"last_name IS NOT": nil})
@@ -323,7 +309,7 @@ total, err := res.Count()
 
 ## Inserting an element into the collection
 
-Use the `Append()` method on a collection reference to insert an new row:
+Use the `Insert()` method on a collection reference to insert an new row:
 
 ```go
 account := Account{
@@ -333,7 +319,7 @@ account := Account{
   ...
 }
 
-newID, err = col.Append(account)
+newID, err = col.Insert(account)
 ...
 
 log.Printf("Created element with ID %d", newID.(uint64))
@@ -342,7 +328,7 @@ log.Printf("Created element with ID %d", newID.(uint64))
 In some cases using a map could be more convenient:
 
 ```go
-newID, err = col.Append(map[string]interface{}{
+newID, err = col.Insert(map[string]interface{}{
   "name":      "Elizabeth",
   "last_name": "Smith",
   ...,
@@ -370,18 +356,18 @@ var customers map[string]interface{}
 err = res.All(&customers)
 ```
 
-You can use `Limit()` and `Skip()` to adjust the number of results to be
+You can use `Limit()` and `Offset()` to adjust the number of results to be
 passed:
 
 ```
 // LIMIT 5 OFFSET 2
-err = res.Limit(5).Skip(2).All(&customers)
+err = res.Limit(5).Offset(2).All(&customers)
 ```
 
-And `Sort()` to define ordering:
+And `OrderBy()` to define ordering:
 
 ```
-err = res.Limit(5).Skip(2).Sort("name").All(&customers)
+err = res.Limit(5).Offset(2).OrderBy("name").All(&customers)
 ```
 
 Note that there is no need to `Close()` the result set when using `All()` as it
@@ -403,7 +389,7 @@ err = res.One(&account)
 All the other options for `All()` work with `One()`:
 
 ```
-err = res.Skip(2).Sort("-name").One(&account)
+err = res.Offset(2).OrderBy("-name").One(&account)
 ```
 
 As with `All()` there is also no need to `Close()` the result set when using
@@ -420,7 +406,7 @@ wasting a lot of memory you can also fetch one by one using `Next()` on a
 result set:
 
 ```go
-res := sess.C("customers").Find().Sort("last_name")
+res := sess.Collection("customers").Find().OrderBy("last_name")
 defer res.Close()
 
 for {
@@ -504,20 +490,20 @@ err = res.Update(map[string]interface{}{
 
 ## Deleting a result set
 
-Use `Remove()` on a result set to remove all the elements that match the
+Use `Delete()` on a result set to remove all the elements that match the
 conditions given to `Find()`.
 
 ```go
 res = col.Find("id", 4)
-err = res.Remove()
+err = res.Delete()
 ...
 
 res = col.Find("id >", 8)
-err = res.Remove()
+err = res.Delete()
 ...
 
 res = col.Find("id IN", []int{1, 2, 3, 4})
-err = res.Remove()
+err = res.Delete()
 ...
 ```
 
@@ -534,10 +520,10 @@ tx, err := sess.Transaction()
 Use `tx` as you would normally use `sess`:
 
 ```go
-_, err = tx.C("accounts").Append(...)
+_, err = tx.Collection("accounts").Insert(...)
 ...
 
-res = tx.C("accounts").Find(...)
+res = tx.Collection("accounts").Find(...)
 
 err = res.Update(...)
 ...
@@ -561,23 +547,18 @@ the transaction gets closed and it's no longer valid.
 
 ## The SQL builder
 
-`db` comes with a very powerful query builder, use the `Builder()` on a
-database session to get a builder reference:
+The `Find()` method on a collection provides compatibility across SQL and NoSQL
+databases, but that might feel short in some situations. That's the reason why
+SQL adapters also provide a powerful query builder:
 
 ```go
-b := sess.Builder()
-```
-
-Builder provides a new set of methods that work on SQL databases:
-
-```go
-q := b.SelectAllFrom("accounts")
+q := sess.SelectAllFrom("accounts")
 ...
 
-q := b.Select("id", "last_name").From("accounts")
+q := sess.Select("id", "last_name").From("accounts")
 ...
 
-q := b.SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
+q := sess.SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
 ...
 ```
 
@@ -592,7 +573,7 @@ err = q.All(&accounts)
 Using the query builder you can express complex queries:
 
 ```go
-q = b.Select("id", "name").From("accounts").
+q = sess.Select("id", "name").From("accounts").
   Where("last_name = ?", "Smith").
   OrderBy("name").Limit(10)
 ```
@@ -600,11 +581,11 @@ q = b.Select("id", "name").From("accounts").
 Even SQL-specific features, like joins, are supported (still depends on the database, though):
 
 ```go
-q = b.Select("a.name").From("accounts AS a").
+q = sess.Select("a.name").From("accounts AS a").
   Join("profiles AS p").
   On("p.account_id = a.id")
 
-q = b.Select("name").From("accounts").
+q = sess.Select("name").From("accounts").
   Join("owners").
   Using("employee_id")
 ```
@@ -613,20 +594,20 @@ Sometimes the builder won't be able to represent complex queries, if this
 happens it may be more effective to use plain SQL:
 
 ```go
-rows, err = b.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
 ...
 
-row, err = b.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
 ...
 
-res, err = b.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
 Mapping results from raw queries is also really easy:
 
 ```go
-rows, err = b.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 var accounts []Account
 iter := sqlbuilder.NewIterator(rows)

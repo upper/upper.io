@@ -15,3 +15,6 @@ docker-run: docker
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		--name $(CONTAINER_NAME) \
 		-t $(CONTAINER_IMAGE)
+
+deploy:
+	sup prod deploy

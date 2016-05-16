@@ -1,25 +1,14 @@
-# builder
+# The SQL builder
 
-`builder` is a [Go][1] package that provides tools for generating SQL
-statements for different databases using Go expressions.
-
-The `builder` package is the backbone of `db`.
-
-## Creating a builder
-
-Get a SQL builder using the `Builder()` method on a `db.Database` object.
-
-```go
-b = sess.Builder()
-...
-```
+The SQL builder provided by SQL adapters is the perfect tool when you need more
+than a simple compatibility later.
 
 ## SELECT
 
-Use the `Select()` method on a buider to begin a SELECT statement:
+Use the `Select()` method on a session to begin a SELECT statement:
 
 ```go
-q = b.Select("id", "name") // select from where?
+q = sess.Select("id", "name") // select from where?
 ```
 
 If you compiled the select statement at this point it would look like `SELECT
@@ -27,18 +16,18 @@ If you compiled the select statement at this point it would look like `SELECT
 table to select from:
 
 ```go
-q = b.Select("id", "name").From("accounts")
+q = sess.Select("id", "name").From("accounts")
 ```
 
 Now have a complete query that can be compiled and executed into valid SQL:
 
 ```
 var accounts []Account
-q = b.Select("id", "name").From("accounts")
+q = sess.Select("id", "name").From("accounts")
 
-// Iterator() executes the query and returns a builder.Iterator that
-// can be used to dump the query results into a slice.
-err = q.Iterator().All(&accounts)
+// All() executes the query, maps the rows into an slice or
+// struct or map and returns an error.
+err = q.All(&accounts)
 ...
 ```
 
@@ -47,20 +36,22 @@ You can also `One()` instead of `All()` to map only one result:
 ```go
 var account Account
 
-err = q.Iterator().One(&account)
+err = q.One(&account)
 ...
 ```
 
-`builder.Iterator` provides a `Next()` method that you can use to iterate over
-large sets of result:
+You can also use the `Iterator()` method instead of `All()` or `One()` to get a
+`builder.Iterator` and iterate over large sets of results:
 
 ```go
+iter := q.Iterator()
+
 var account Account
 
-for rows.Next(&account) {
+for iter.Next(&account) {
   ...
 }
-err = rows.Err() // in case of errors
+err = iter.Err() // in case of errors
 ...
 ```
 
@@ -68,9 +59,9 @@ To select all the columns instead of specific ones, you can use the
 `SelectAllFrom()` method:
 
 ```go
-q = b.SelectAllFrom("accounts")
+q = sess.SelectAllFrom("accounts")
 
-err = q.Iterator().All(&accounts)
+err = q.All(&accounts)
 ...
 ```
 
@@ -81,7 +72,7 @@ which is equivalent to `q.Select().From("accounts")`.
 The `InsertInto()` method begins an INSERT statement.
 
 ```go
-q = b.InsertInto("people").Columns("name").Values("John")
+q = sess.InsertInto("people").Columns("name").Values("John")
 
 err = q.Exec()
 ...
@@ -95,7 +86,7 @@ account := Account{
   ...
 }
 
-q = b.InsertInto("people").Values(account)
+q = sess.InsertInto("people").Values(account)
 
 err = q.Exec()
 ...
@@ -106,7 +97,7 @@ err = q.Exec()
 The `Update()` method takes a table name and begins an UPDATE statement:
 
 ```go
-q = b.Update("people").Set("name", "John").Where("id = ?", 5)
+q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
 
 err = q.Exec()
 ...
@@ -116,7 +107,7 @@ You can update many columns at once by providing column-value pairs to `Set()`:
 
 
 ```go
-q = b.Update("people").Set(
+q = sess.Update("people").Set(
   "name", "John",
   "last_name", "Smith",
 ).Where("id = ?", 5)
@@ -129,7 +120,7 @@ You don't always have to provide column-value pairs, `Set()` also accepts maps
 or structs:
 
 ```go
-q = b.Update("people").Set(map[string]interface{}{
+q = sess.Update("people").Set(map[string]interface{}{
   "name": "John",
   "last_name": "Smith",
 }).Where("id = ?", 5)
@@ -143,7 +134,7 @@ err = q.Exec()
 You can begin a DELETE statement with the `DeleteFrom()` method:
 
 ```go
-q = bob.DeleteFrom("accounts").Where("id", 5)
+q = sess.DeleteFrom("accounts").Where("id", 5)
 
 err = q.Exec()
 ...
@@ -155,12 +146,12 @@ The `Join()` method is part of `builder.Selector`, it extends the functionalty
 of `builder.Selector` to express SELECT statements that use JOINs.
 
 ```go
-q = bob.Select("a.name").From("accounts AS a").
+q = sess.Select("a.name").From("accounts AS a").
   Join("profiles AS p").
   On("p.account_id = a.id")
 ...
 
-q = bob.Select("name").From("accounts").
+q = sess.Select("name").From("accounts").
   Join("owners").
   Using("employee_id")
 ...
@@ -171,7 +162,7 @@ In addition to `Join()` you can also use `FullJoin()`, `CrossJoin()`,
 
 ```
 var results map[string]interface{}
-err = q.Iterator().All(&results)
+err = q.All(&results)
 ```
 
 ## Raw SQL
@@ -180,11 +171,11 @@ If the builder does not provide you with enough flexibility to create complex
 SQL queries, you can always use plain SQL:
 
 ```go
-rows, err = b.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
 ...
-row, err = b.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
 ...
-res, err = b.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
@@ -192,7 +183,7 @@ res, err = b.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 variable:
 
 ```go
-rows, err = b.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
@@ -209,7 +200,7 @@ be chained easily to the `Selector`, `Deleter` and `Updater` interfaces:
 Let's suppose we have a `Selector`:
 
 ```go
-q = b.SelectAllFrom("accounts")
+q = sess.SelectAllFrom("accounts")
 ```
 
 We can use the `Where()` method to add conditions to the above query. How about
@@ -275,7 +266,6 @@ q.Where(db.Or(
 ))
 ```
 
-`builder` is the perfect tool when you need more than simple CRUD.
 
 [1]: https://golang.org
 [2]: https://upper.io/db.v2

@@ -86,6 +86,9 @@
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the project at Github</a>
             </div>
+            <p class="pressly text-center hidden-extra-small">Proudly sponsored by
+              <a href="https://www.pressly.com" target="_blank"><img width="150" class="vertical-middle logo-pressly" src="{{ asset "images/pressly-logo.svg?1" }}" /></a>
+            </p>
           </div>
         </div>
       {{ end }}
@@ -115,9 +118,6 @@
 
         <div class="container">
           {{ if eq .CurrentPage.URL "/" }}
-            <p class="pressly text-center hidden-extra-small">Proudly sponsored by
-              <a href="https://www.pressly.com" target="_blank"><img class="vertical-middle logo-pressly" src="{{ asset "images/pressly.png" }}" /></a>
-            </p>
             <div class="features grid-3">
               <div class="feature">
                 <h2 class="feature__title">{{ anchor "/getting-started" "Getting started" }}</h2>
@@ -125,7 +125,7 @@
                   {{ anchor "/getting-started" "Let's work"}} with databases
                   in a less tedious and more productive way.
                 </p>
-                <a href="{{ asset "/examples" }}">
+                <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-01.svg" }}" />
                 </a>
               </div>
@@ -135,7 +135,7 @@
                   Learn how to implement common patterns with our
                   {{ anchor "/examples" "code examples" }}
                 </p>
-                <a href="{{ asset "/examples" }}">
+                <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-02.svg" }}" />
                 </a>
               </div>
@@ -145,7 +145,7 @@
                   Get your hands dirty and {{ anchor "/contribute" "contribute" }}
                   with code, examples and documentation.
                 </p>
-                <a href="{{ asset "/examples" }}">
+                <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-03.svg" }}" />
                 </a>
               </div>

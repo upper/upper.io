@@ -659,14 +659,22 @@ main {
       max-width: 100%; }
 
   .pressly {
-    margin: 1.5em 0 3em; }
+    /* margin: 1.5em 0 3em; } */
+    font-family: "Raleway";
+    font-size: 10pt;
+    color: #fff;
+    top: 0px;
+    right: 10px;
+    position: absolute; }
 
   .logo-pressly {
     margin-left: 10px; }
 
   .feature {
     position: relative;
-    padding-top:  8.75em; }
+    /* x-padding-top:  8.75em; } */
+    }
+
 
   .feature__icon {
     position: absolute;
