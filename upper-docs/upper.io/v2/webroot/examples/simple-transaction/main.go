@@ -20,7 +20,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	tx, err := sess.Transaction()
+	tx, err := sess.NewTransaction()
 	if err != nil {
 		log.Fatal(err)
 	}

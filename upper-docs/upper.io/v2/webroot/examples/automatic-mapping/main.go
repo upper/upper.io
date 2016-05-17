@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"            // Imports the main db package.
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
@@ -32,16 +31,8 @@ func main() {
 	req := sess.Collection("stock").Find()
 
 	log.Println("Items in stock:")
-	for {
-		var item Stock
-		err := req.Next(&item)
-		if err != nil {
-			if err == db.ErrNoMoreRows {
-				break // This error means that we read all rows from the cursor.
-			}
-			// Other errors are not expected.
-			log.Fatal(err)
-		}
+	var item Stock
+	for req.Next(&item) {
 		log.Printf("%#v", item)
 	}
 }

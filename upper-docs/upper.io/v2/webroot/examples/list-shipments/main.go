@@ -4,7 +4,6 @@ import (
 	"log"
 	"time"
 
-	"upper.io/db.v2"            // Imports the main db package.
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
@@ -39,15 +38,8 @@ func main() {
 
 	log.Printf("Shipments between %v and %v:\n", since, until)
 
-	for {
-		var shipment Shipment
-		err := req.Next(&shipment)
-		if err != nil {
-			if err == db.ErrNoMoreRows {
-				break
-			}
-			log.Fatal(err)
-		}
+	var shipment Shipment
+	for req.Next(&shipment) {
 		log.Printf("When: %v, ISBN: %s\n", shipment.ShipDate, shipment.ISBN)
 	}
 }

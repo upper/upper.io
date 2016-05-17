@@ -407,15 +407,8 @@ result set:
 res := sess.Collection("customers").Find().OrderBy("last_name")
 defer res.Close()
 
-for {
-  var customer Customer
-  if err := res.Next(&customer); err != nil {
-    if err != db.ErrNoMoreRows {
-      log.Fatal(err)
-    }
-    // Loop until db.ErrNoMoreRows is returned.
-    break
-  }
+var customer Customer
+for res.Next(&customer) {
   log.Printf("%d: %s, %s\n", customer.ID, customer.LastName, customer.FirstName)
 }
 ```

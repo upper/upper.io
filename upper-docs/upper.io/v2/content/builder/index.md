@@ -74,15 +74,16 @@ for iter.Next(&account) {
   ...
 }
 
-err = iter.Err() // in case of errors
+err = iter.Err()
 ...
 ```
 
-In case you need to exit the iterator before completing its loop, use
-`iter.Close()` to free the iterator's resources:
+Iterators are automatically closed at the end of the `Next()`-based loop, but
+in case you need to exit the iterator before the loop is completed use
+`iter.Close()`:
 
 ```
-for iter.Nex() {
+for iter.Next() {
   if somethingHappened() {
     iter.Close()
     break

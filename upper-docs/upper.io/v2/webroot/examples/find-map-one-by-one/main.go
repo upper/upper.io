@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"
 	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
 )
 
@@ -33,15 +32,8 @@ func main() {
 
 	log.Println("Our customers:")
 
-	for {
-		var customer Customer
-		if err := res.Next(&customer); err != nil {
-			if err != db.ErrNoMoreRows {
-				log.Fatal(err)
-			}
-			break
-		}
+	var customer Customer
+	for res.Next(&customer) {
 		log.Printf("%d: %s, %s\n", customer.ID, customer.LastName, customer.FirstName)
 	}
-
 }

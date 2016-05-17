@@ -28,7 +28,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	req := sess.SelectAllFrom("books").OrderBy("id")
+	req := sess.SelectFrom("books").OrderBy("id")
 
 	var books []Book
 	iter := req.Iterator()
