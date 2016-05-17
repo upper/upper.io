@@ -21,7 +21,7 @@ databases and provides partial support (CRUD, no transactions) for
 </center>
 
 A database connection is known as **session**. You can create a session by
-importing the adapter package and using the Open function from it:
+importing the adapter package and using the `Open()` function that it provides:
 
 ```
 import "upper.io/db.v2/postgresql" // The PostgreSQL adapter
@@ -107,8 +107,8 @@ err = tx.Rollback()
 ...
 ```
 
-Sessions also have a built-in SQLish query builder that gives more freedom than
-the sets while keeping manual SQL concatenation at bay.
+Sessions also have a built-in SQLish [query builder](/db.v2/builder) that gives
+more freedom than the sets while keeping manual SQL concatenation at bay.
 
 ```go
 q = sess.SelectFrom("people").Where("name = ?", "María")
@@ -556,8 +556,8 @@ present on the table. Use with care.
 
 ### The Marshaler and Unmarshaler interfaces
 
-`db` defines two special interfaces that can be used to marshal fields before
-saving to the database and unmarshal them when retrieving from it:
+`db` defines two special interfaces that can be used to marshal struct fields
+before saving them the database and unmarshal them when retrieving from it:
 
 ```go
 type Marshaler interface {
@@ -569,8 +569,8 @@ type Unmarshaler interface {
 }
 ```
 
-This comes in very handy when dealing with custom field types that `db` does
-not how to convert.
+This comes in very handy when dealing with custom struct field types that `db`
+does not know how to convert.
 
 
 ```go
