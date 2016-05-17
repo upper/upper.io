@@ -1,75 +1,101 @@
 # The SQL builder
 
-The SQL builder provided by SQL adapters is the perfect tool when you need more
-than a simple compatibility later.
+SQL adapters  such as `postgresql`, `mysql`, `ql` and `sqlite` provide special
+methods for building queries that require more control than what `Find()`
+provides.
 
-## SELECT
+## Select statement
 
-Use the `Select()` method on a session to begin a SELECT statement:
+Use the `Select()` method on a session to begin a SELECT statement (a
+`Selector`):
 
 ```go
-q = sess.Select("id", "name") // select from where?
+q = sess.Select("id", "name")
 ```
 
 If you compiled the select statement at this point it would look like `SELECT
-"id", "name";` which is kind of incomplete, you still need to specify which
-table to select from:
+"id", "name";` which is kind of an incomplete query, you still need to specify
+which table to select from, use the `From()` method for that:
 
 ```go
 q = sess.Select("id", "name").From("accounts")
 ```
 
-Now have a complete query that can be compiled and executed into valid SQL:
+Now you have a complete query that can be compiled into valid SQL:
 
 ```
 var accounts []Account
 q = sess.Select("id", "name").From("accounts")
 
-// All() executes the query, maps the rows into an slice or
-// struct or map and returns an error.
+```
+
+Use the `All()` method on a query to execute it and map all the resulting rows
+into a slice of structs or maps:
+
+```go
+// All() executes the query and maps the resulting rows into an slice of
+// structs or maps.
 err = q.All(&accounts)
 ...
 ```
 
-You can also `One()` instead of `All()` to map only one result:
+If you're only interested in one result, use `One()` instead of `All()` and
+provide a single pointer to struct or map:
 
 ```go
 var account Account
-
 err = q.One(&account)
 ...
 ```
 
-You can also use the `Iterator()` method instead of `All()` or `One()` to get a
-`builder.Iterator` and iterate over large sets of results:
+To select all the columns instead of specific ones, you can use the
+`SelectFrom()` method:
+
+```go
+q = sess.SelectFrom("accounts") // SELECT * FROM accounts
+
+err = q.All(&accounts)
+...
+
+// Which is basically equivalent to
+// q = sess.Select().From("accounts")
+```
+
+
+Using `All()` comes with a cost: it requires to allocate a large slice to dump
+all queried results.  Sometimes it's more efficient to get results one by one
+using an iterator:
 
 ```go
 iter := q.Iterator()
 
 var account Account
-
 for iter.Next(&account) {
   ...
 }
+
 err = iter.Err() // in case of errors
 ...
 ```
 
-To select all the columns instead of specific ones, you can use the
-`SelectAllFrom()` method:
+In case you need to exit the iterator before completing its loop, use
+`iter.Close()` to free the iterator's resources:
 
-```go
-q = sess.SelectAllFrom("accounts")
-
-err = q.All(&accounts)
-...
+```
+for iter.Nex() {
+  if somethingHappened() {
+    iter.Close()
+    break
+  }
+}
 ```
 
-which is equivalent to `q.Select().From("accounts")`.
+You have to decide whether you want to use `All()`, `One()` or an `Iterator`
+depending on your specific needs.
 
-## INSERT
+## Insert statement
 
-The `InsertInto()` method begins an INSERT statement.
+The `InsertInto()` method begins an INSERT statement (an `Inserter`).
 
 ```go
 q = sess.InsertInto("people").Columns("name").Values("John")
@@ -78,8 +104,8 @@ err = q.Exec()
 ...
 ```
 
-You can omit the `Columns()` method pass a map or a struct to `Values()`
-directly:
+You don't have to use the `Columns()` method, if you pass a map or a struct,
+you can omit it completely:
 
 ```go
 account := Account{
@@ -92,9 +118,10 @@ err = q.Exec()
 ...
 ```
 
-## UPDATE
+## Update statement
 
-The `Update()` method takes a table name and begins an UPDATE statement:
+The `Update()` method takes a table name and begins an UPDATE statement (an
+`Updater`):
 
 ```go
 q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
@@ -129,9 +156,9 @@ err = q.Exec()
 ...
 ```
 
-## DELETE
+## Delete statement
 
-You can begin a DELETE statement with the `DeleteFrom()` method:
+You can begin a DELETE statement with the `DeleteFrom()` method (a `Deleter`):
 
 ```go
 q = sess.DeleteFrom("accounts").Where("id", 5)
@@ -140,10 +167,10 @@ err = q.Exec()
 ...
 ```
 
-## Joins
+## Select statement and joins
 
-The `Join()` method is part of `builder.Selector`, it extends the functionalty
-of `builder.Selector` to express SELECT statements that use JOINs.
+The `Join()` method is part of `Selector`, you can use it to represent SELECT
+statements that use JOINs.
 
 ```go
 q = sess.Select("a.name").From("accounts AS a").
@@ -160,11 +187,6 @@ q = sess.Select("name").From("accounts").
 In addition to `Join()` you can also use `FullJoin()`, `CrossJoin()`,
 `RightJoin()` and `LeftJoin()`.
 
-```
-var results map[string]interface{}
-err = q.All(&results)
-```
-
 ## Raw SQL
 
 If the builder does not provide you with enough flexibility to create complex
@@ -173,38 +195,51 @@ SQL queries, you can always use plain SQL:
 ```go
 rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
 ...
+
 row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
 ...
+
 res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
-`Query` returns a `*sql.Rows` object that you can use to map the results into a
-variable:
+The `Query` method returns a `*sql.Rows` object and of course you can do
+whatever you would normally do with it:
+
+```
+err = rows.Scan(&id, &name)
+...
+```
+
+If you don't want to use `Scan` directly, you could always create an iterator
+using any `*sql.Rows` value:
 
 ```go
+import "upper.io/db.v2/builder"
+...
+
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
-iter := sqlbuilder.NewIterator(rows)
+iter := builder.NewIterator(rows)
 err = iter.All(&accounts)
 ...
 ```
 
-## Conditions
+## More on conditions
 
-The `Where()` method can be used to define conditions on a statement and it can
-be chained easily to the `Selector`, `Deleter` and `Updater` interfaces:
+The `Where()` method can be used to define conditions on a `Selector`,
+`Deleter` or `Updater` interfaces.
 
-Let's suppose we have a `Selector`:
+For instance, let's suppose we have a `Selector`:
 
 ```go
-q = sess.SelectAllFrom("accounts")
+q = sess.SelectFrom("accounts")
 ```
 
 We can use the `Where()` method to add conditions to the above query. How about
-constraining the results to the rows that match `id = 5`?:
+constraining the results only to rows that match `id = 5`?:
 
 ```go
 q.Where("id = ?", 5)
@@ -215,18 +250,18 @@ sanitize arguments and prevent SQL injections. You can use as many arguments as
 you need as long as you provide a value for each one of them:
 
 ```go
-q.Where("id = ? OR id = ?", 5, 4)
+q.Where("id = ? OR id = ?", 5, 4) // Two place holders and two values.
 ```
 
-The above condition could be rewritten into:
-
+The above condition is a list of ORs and sometimes thing like that can be
+rewritten into things like this:
 
 ```go
-q.Where("id IN ?", []int{5,4})
+q.Where("id IN ?", []int{5,4}) // id IN (5, 4)
 ```
 
-And in fact, we can drop the `?` at the end if we only want to test an
-equalility:
+Placeholders are not always necessary, if you're looking for the equality and
+you're only going to provide one argument, you could drop the `?` at the end:
 
 ```go
 q.Where("id", 5)
@@ -246,7 +281,7 @@ q.Where("id > ? AND id < ?", 5, 10)
 ```
 
 You can also use `db.Cond` to define conditions for `Where()` just like you
-would with `db` when using `Find()`:
+would normally do when using `Find()`:
 
 ```go
 // ...WHERE "id" > 5
@@ -266,6 +301,12 @@ q.Where(db.Or(
 ))
 ```
 
+Remember that if you want to use `db.Cond` you'll need to import
+`upper.io/db.v2` into your app:
+
+```go
+import "upper.io/db.v2"
+```
 
 [1]: https://golang.org
 [2]: https://upper.io/db.v2

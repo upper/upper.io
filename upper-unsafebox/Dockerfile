@@ -11,7 +11,7 @@ RUN useradd -ms /bin/bash sandbox
 
 ENV GOPATH /go
 ENV UPPERPATH $GOPATH/src/upper.io/db.v2
-ENV REVISION 9fe67d80d35a600a512e2227fd2701fe5b546f33
+ENV REVISION 628dd6fd295209928d63d21522f3f368faf06291
 
 RUN mkdir -p $UPPERPATH && git clone https://github.com/upper/db.git $UPPERPATH
 RUN cd $UPPERPATH && git checkout $REVISION && go get -v ./...

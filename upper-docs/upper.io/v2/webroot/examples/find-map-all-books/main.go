@@ -30,7 +30,7 @@ func main() {
 	defer sess.Close()
 
 	var books []Book
-	if err := sess.Collection("books").Find().Sort("title").All(&books); err != nil {
+	if err := sess.Collection("books").Find().OrderBy("title").All(&books); err != nil {
 		log.Fatal(err)
 	}
 

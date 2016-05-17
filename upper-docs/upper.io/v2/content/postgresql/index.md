@@ -20,56 +20,61 @@ The `postgresql.ConnectionURL{}` struct is defined as follows:
 type ConnectionURL struct {
   User     string
   Password string
-  Address  db.Address
+  Host     string
   Database string
   Options  map[string]string
 }
 ```
 
-The `db.Address` interface can be satisfied by the `db.Host()`, `db.HostPort()`
-or `db.Socket()` functions.
-
-Alternatively, a `postgresql.ParseURL()` function is provided to convert a
-string into a `postgresql.ConnectionURL`:
+Pass the `postgresql.ConnectionURL` value as argument for `postgresql.Open()`
+to create a `postgresql.Database` session.
 
 ```go
-// ParseURL parses s into a ConnectionURL struct.
-postgresql.ParseURL(s string) (ConnectionURL, error)
+settings = postgresql.ConnectionURL{
+  ...
+}
+
+sess, err = postgresql.Open(settings)
+...
 ```
 
-You may use a `postgresql.ConnectionURL` value as argument for `db.Open()`.
+A `postgresql.ParseURL()` function is provided to convert a DSN into a
+`postgresql.ConnectionURL`:
+
+```go
+// ParseURL parses a DSN into a ConnectionURL struct.
+postgresql.ParseURL(dsn string) (ConnectionURL, error)
+```
 
 ## Usage
 
-To use this adapter, import `upper.io/db.v2` and the `upper.io/db.v2/postgresql`
-packages.
+Import the `upper.io/db.v2/postgresql` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2"
   "upper.io/db.v2/postgresql"
 )
 ```
 
-Then, you can use the `db.Open()` method to connect to a PostgreSQL server:
+Then, you can use the `postgresql.Open()` method to create a session:
 
 ```go
 var settings = postgresql.ConnectionURL{
-  Address:    db.Host("localhost"), // PostgreSQL server IP or name.
+  Host:       "localhost",          // PostgreSQL server IP or name.
   Database:   "peanuts",            // Database name.
   User:       "cbrown",             // Optional user name.
   Password:   "snoopy",             // Optional user password.
 }
 
-sess, err = db.Open(postgresql.Adapter, settings)
+sess, err = postgresql.Open(settings)
 ```
 
 ## Example
 
-The following SQL statement creates a table with "name" and "born"
+The following SQL statement creates a `birthday` table with `name` and `born`
 columns.
 
 ```sql
@@ -82,14 +87,14 @@ CREATE TABLE "birthday" (
 );
 ```
 
-Use the `psql` command line tool to create the birthday table on the
-upperio_tests database.
+Use the `psql` command line tool to create the birthday table into the
+`upperio_tests` database.
 
 ```
 cat example.sql | PGPASSWORD=upperio psql -Uupperio upperio_tests
 ```
 
-The Go code below will add some rows to the "birthday" table and then will
+The Go code below will add some rows to the `birthday` table and it then will
 print the same rows that were inserted.
 
 ```go
@@ -101,22 +106,23 @@ import (
   "fmt"
   "log"
   "time"
-  "upper.io/db.v2"              // Imports the main db package.
-  _ "upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+
+  "upper.io/db.v2/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
-  Database: `upperio_tests`,                            // Database name.
-  Address:   postgresql.Socket(`/var/run/postgresql/`), // Using unix sockets.
-  User:     `upperio`,                                  // Database username.
-  Password: `upperio`,                                  // Database password.
+  Database: `upperio_tests`,
+  Host:     `localhost,`
+  User:     `upperio`,
+  Password: `upperio`,
 }
 
 type Birthday struct {
-  // Maps the "Name" property to the "name" column
+  // Name maps the "Name" property to the "name" column
   // of the "birthday" table.
   Name string `db:"name"`
-  // Maps the "Born" property to the "born" column
+
+  // Born maps the "Born" property to the "born" column
   // of the "birthday" table.
   Born time.Time `db:"born"`
 }
@@ -124,68 +130,55 @@ type Birthday struct {
 func main() {
 
   // Attemping to establish a connection to the database.
-  sess, err := db.Open(postgresql.Adapter, settings)
-
+  sess, err := postgresql.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
   }
-
-  // Remember to close the database session.
-  defer sess.Close()
+  defer sess.Close() // Remember to close the database session.
 
   // Pointing to the "birthday" table.
-  birthdayCollection, err := sess.Collection("birthday")
-
-  if err != nil {
-    log.Fatalf("sess.Collection(): %q\n", err)
-  }
+  birthdayCollection := sess.Collection("birthday")
 
   // Attempt to remove existing rows (if any).
   err = birthdayCollection.Truncate()
-
   if err != nil {
     log.Fatalf("Truncate(): %q\n", err)
   }
 
   // Inserting some rows into the "birthday" table.
-
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Hayao Miyazaki",
     Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.UTC),
   })
 
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Nobuo Uematsu",
     Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.UTC),
   })
 
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Hironobu Sakaguchi",
     Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.UTC),
   })
 
   // Let's query for the results we've just inserted.
-  var res db.Result
+  res := birthdayCollection.Find()
 
-  res = birthdayCollection.Find()
+  // Query all results and fill the birthdays variable with them.
+  var birthdays []Birthday
 
-  var birthday []Birthday
-
-  // Query all results and fill the birthday variable with them.
-  err = res.All(&birthday)
-
+  err = res.All(&birthdays)
   if err != nil {
     log.Fatalf("res.All(): %q\n", err)
   }
 
   // Printing to stdout.
-  for _, birthday := range birthday {
+  for _, birthday := range birthdays {
     fmt.Printf("%s was born in %s.\n",
       birthday.Name,
       birthday.Born.Format("January 2, 2006"),
     )
   }
-
 }
 ```
 
@@ -207,21 +200,18 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use que query builder for any complex SQL query:
+You can use the [query builder](/db.v2/builder) for any complex SQL query:
 
 ```go
-q := b.Select(
+q := sess.Select(
     "p.id",
     "p.title AD publication_title",
     "a.name AS artist_name",
   ).From("artists AS a", "publication AS p").
   Where("a.id = p.author_id")
 
-iter := q.Iterator()
-
 var publications []Publication
-
-if err = iter.All(&publications); err != nil {
+if err = q.All(&publications); err != nil {
   log.Fatal(err)
 }
 ```
@@ -253,8 +243,8 @@ Otherwise, you'll end up with an error like this:
 ERROR:  duplicate key violates unique constraint "id"
 ```
 
-In order for the ID to be returned by `db.Collection.Append()`, the `SERIAL` field
-must be set as `PRIMARY KEY`.
+In order for the ID to be returned by `db.Collection.Insert()`, the `SERIAL`
+field must be set as `PRIMARY KEY` too.
 
 ### Using `db.Raw` and `db.Func`
 

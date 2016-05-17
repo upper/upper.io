@@ -34,7 +34,7 @@ func main() {
 	log.Printf("total: %d", total)
 
 	// This won't work in our testing sandbox, you'll have to try it out by yourself.
-	// if err = tx.Collection("books").Find().Remove(); err != nil {
+	// if err = tx.Collection("books").Find().Delete(); err != nil {
 	//   log.Fatal(err)
 	// }
 

@@ -35,7 +35,7 @@ func main() {
 
 	req := sess.Collection("shipments").Find().
 		Where("ship_date > ? AND ship_date < ?", since, until).
-		Sort("ship_date")
+		OrderBy("ship_date")
 
 	log.Printf("Shipments between %v and %v:\n", since, until)
 

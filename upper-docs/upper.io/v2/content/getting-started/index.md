@@ -4,7 +4,7 @@ The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
 with different data sources using *adapters* that wrap mature database drivers.
 
 The main purpose of `db` is to abstract common database operations and
-encourage users perform advanced operations directly.
+encourage users perform advanced operations directly with the database.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
 databases and provides partial support (CRUD, no transactions) for
@@ -87,15 +87,16 @@ id, err = article.Insert(myNewArticle)
 err = article.InsertReturning(&myNewArticle)
 ```
 
-Basically, result sets can be created with `col.Find()`, a result set provides
-tools for updating (`res.Update(value)`) and deleting items (`res.Delete()`),
-and new items can be inserted into the collection with `col.Insert()`.
+Result sets of inserted items can be created with `col.Find()`, a result set
+provides tools for updating (`res.Update(value)`) and deleting items
+(`res.Delete()`). Note that new items cannot be inserted into a result, they
+must be inserted into the collection with `col.Insert()`.
 
 Apart from the above CRUD functionality, some databases also support
 transactions:
 
 ```go
-tx, err = sess.Transaction()
+tx, err = sess.NewTransaction()
 
 // Transactions are just like any other session
 err = tx.Collection("wallet").Insert(charge)
@@ -110,8 +111,8 @@ Sessions also have a built-in SQLish query builder that gives more freedom than
 the sets while keeping manual SQL concatenation at bay.
 
 ```go
-q = sess.SelectAllFrom("people").Where("name = ?", "María")
-err = q.Iterator().All(&marias)
+q = sess.SelectFrom("people").Where("name = ?", "María")
+err = q.All(&marias)
 ```
 
 Advanced SQL commands should not be over-thinked or forced to fit into the
@@ -273,7 +274,7 @@ One important `db.Database` method is `Collection()`, use it to get a
 collection reference.
 
 ```go
-users, err = sess.Collection("users") // A reference to the users table.
+users = sess.Collection("users") // A reference to the users table.
 ...
 ```
 

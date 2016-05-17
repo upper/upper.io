@@ -27,7 +27,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	req := sess.Collection("employees").Find().Sort("last_name")
+	req := sess.Collection("employees").Find().OrderBy("last_name")
 
 	log.Println("A list of employees:")
 

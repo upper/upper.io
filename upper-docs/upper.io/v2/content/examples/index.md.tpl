@@ -64,13 +64,13 @@ Into different structs that share the same column names, like these:
 
 ```go
 type Author struct {
-  ID     int `db:"id"`
-  Person `db:",inline"` // Embedded Person
+  ID     int  `db:"id"`
+  Person      `db:",inline"` // Embedded Person
 }
 
 type Employee struct {
-  ID     int `db:"id"`
-  Person `db:",inline"` // Embedded Person
+  ID     int  `db:"id"`
+  Person      `db:",inline"` // Embedded Person
 }
 ```
 
@@ -125,21 +125,20 @@ type BookAuthor struct {
 ```go
 import (
   ...
-  "upper.io/db.v2"            // Imports the main db package.
-  "upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+  "upper.io/db.v2/postgresql"
   ...
 )
 
 // This ConnectionURL defines how to connect to this database.
 var settings = postgresql.ConnectionURL{
-  Database: `booktown`, // Database name.
-  Address:  db.ParseAddress(`demo.upper.io`),
-  User:     `demouser`, // Database username.
-  Password: `demop4ss`, // Database password.
+  Database: `booktown`,
+  Host:     `localhost`,
+  User:     `demouser`,
+  Password: `demop4ss`,
 }
 
 ...
-sess, err := db.Open("postgresql", settings)
+sess, err := postgresql.Open(settings)
 ...
 
 log.Println("Now you're connected to the database!")
@@ -158,7 +157,6 @@ use it to connect to a database:
 ```go
 import (
   ...
-  "upper.io/db.v2"            // Imports the main db package.
   "upper.io/db.v2/postgresql" // Imports the postgresql adapter.
   ...
 )
@@ -168,7 +166,7 @@ const connectDSN = `postgres://demouser:demop4ss@demo.upper.io/booktown`
 settings, err := postgresql.ParseURL(connectDSN)
 ...
 
-sess, err := db.Open("postgresql", settings)
+sess, err := postgresql.Open(settings)
 ...
 
 log.Println("Now you're connected to the database!")
@@ -216,7 +214,7 @@ res = col.Find()
 res = col.Find(db.Cond{"id": 11})
 
 // Same as above, but shorter and only for SQL databases.
-res = col.Find("id = ?", 11)
+res = col.Find("id", 11)
 ```
 
 ## Conditions
@@ -433,7 +431,7 @@ have to `Close()` the result set after finishing using it.
 
 ## Updating a result set
 
-Update rows by using the `db.Result.Update()` method.
+Update rows by using the `Update()` method on a `Result`.
 
 ```go
 var account Account
@@ -509,11 +507,11 @@ err = res.Delete()
 
 ## Transactions
 
-Request a transaction session with the `Transaction()` method on a normal
+Request a transaction session with the `NewTransaction()` method on a normal
 database session:
 
 ```go
-tx, err := sess.Transaction()
+tx, err := sess.NewTransaction()
 ...
 ```
 
@@ -562,7 +560,7 @@ q := sess.SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
 ...
 ```
 
-And some of the convenient methods we expect from `db`:
+A query also has the `All()` and `One()` methods from `Result`:
 
 ```go
 var accounts []Account
@@ -604,7 +602,7 @@ res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
-Mapping results from raw queries is also really easy:
+Mapping results from raw queries is also pretty easy:
 
 ```go
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")

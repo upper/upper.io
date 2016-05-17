@@ -35,49 +35,47 @@ The `mongo.ConnectionURL{}` struct is defined as follows:
 type ConnectionURL struct {
   User     string
   Password string
-  Address  db.Address
+  Host     string
   Database string
   Options  map[string]string
 }
 ```
 
-The `db.Address` interface can be satisfied by the `db.Host()`, `db.HostPort()`
-or `db.Cluster()` functions.
+Pass the `mongo.ConnectionURL` value as argument for `mongo.Open()`
+to create a `mongo.Database` session.
 
-Alternatively, a `mongo.ParseURL()` function is provided:
+A `mongo.ParseURL()` function is provided to convert a DSN into a
+`mongo.ConnectionURL`:
 
 ```go
 // ParseURL parses s into a ConnectionURL struct.
 mongo.ParseURL(s string) (ConnectionURL, error)
 ```
 
-You may use `mongo.ConnectionURL` as argument for `db.Open()`.
-
 ## Usage
 
-To use this adapter, import `upper.io/db.v2` and the `upper.io/db.v2/mongo` packages.
+Import the `upper.io/db.v2/mongo` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2"
   "upper.io/db.v2/mongo"
 )
 ```
 
-Then, you can use the `db.Open()` method to connect to a MongoDB server:
+Then, you can use the `mongo.Open()` method to create a session:
 
 ```go
 var settings = mongo.ConnectionURL{
-  Address:  db.Host("localhost"), // MongoDB hostname.
-  Database: "peanuts",            // Database name.
-  User:     "cbrown",             // Optional user name.
-  Password: "snoopy",             // Optional user password.
+  Host:       "localhost",          // PostgreSQL server IP or name.
+  Database:   "peanuts",            // Database name.
+  User:       "cbrown",             // Optional user name.
+  Password:   "snoopy",             // Optional user password.
 }
 
-sess, err = db.Open(mongo.Adapter, settings)
+sess, err = mongo.Open(settings)
 ```
 
 ## Example
@@ -95,13 +93,12 @@ import (
   "log"
   "time"
 
-  "upper.io/db.v2"         // Imports the main db package.
-  "upper.io/db.v2/mongo"   // Imports the mongo adapter.
+  "upper.io/db.v2/mongo"
 )
 
 var settings = mongo.ConnectionURL{
-  Database: `upperio_tests`,        // Database name.
-  Address:   db.Host("127.0.0.1"),  // Host's IP.
+  Database:  `upperio_tests`,
+  Host:      `127.0.0.1`,
 }
 
 type Birthday struct {
@@ -116,32 +113,21 @@ type Birthday struct {
 func main() {
 
   // Attemping to establish a connection to the database.
-  sess, err := db.Open(mongo.Adapter, settings)
-
+  sess, err := mongo.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
   }
-
-  // Remember to close the database session.
-  defer sess.Close()
+  defer sess.Close() // Remember to close the database session.
 
   // Pointing to the "birthday" table.
-  birthdayCollection, err := sess.Collection("birthday")
+  birthdayCollection := sess.Collection("birthday")
 
+  err = birthdayCollection.Truncate()
   if err != nil {
-    if err != db.ErrCollectionDoesNotExists {
-      log.Fatalf("Could not use collection: %q\n", err)
-    }
-  } else {
-    err = birthdayCollection.Truncate()
-
-    if err != nil {
-      log.Fatalf("Truncate(): %q\n", err)
-    }
+    log.Fatalf("Truncate(): %q\n", err)
   }
 
   // Inserting some rows into the "birthday" table.
-
   birthdayCollection.Append(Birthday{
     Name: "Hayao Miyazaki",
     Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.UTC),
@@ -158,15 +144,12 @@ func main() {
   })
 
   // Let's query for the results we've just inserted.
-  var res db.Result
-
-  res = birthdayCollection.Find()
-
-  var birthday []Birthday
+  res := birthdayCollection.Find()
 
   // Query all results and fill the birthday variable with them.
-  err = res.All(&birthday)
+  var birthday []Birthday
 
+  err = res.All(&birthday)
   if err != nil {
     log.Fatalf("res.All(): %q\n", err)
   }
@@ -179,7 +162,6 @@ func main() {
       birthday.Born.Format("January 2, 2006"),
     )
   }
-
 }
 ```
 
@@ -195,24 +177,6 @@ Expected output:
 Hayao Miyazaki was born in January 5, 1941.
 Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
-```
-
-## Custom ID Setter
-
-This driver implements the [IDSetter][5] interface but it also implements the
-more specific [mongo.ObjectIdIDSetter][6] that you can use with an struct like this:
-
-```go
-type artistWithObjectIdKey struct {
-  id   bson.ObjectId
-  Name string
-}
-
-// This SetID() will be called after a successful Append().
-func (artist *artistWithObjectIdKey) SetID(id bson.ObjectId) error {
-  artist.id = id
-  return nil
-}
 ```
 
 [1]: http://labix.org/v2/mgo

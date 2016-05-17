@@ -5,7 +5,7 @@ The `sqlite` adapter for the [SQLite3][3] wraps the
 
 ## Installation
 
-This package uses cgo, so in order to compile and install it you'll also need a
+This package uses [cgo][4], so in order to compile and install it you'll also need a
 C compiler, such as `gcc`:
 
 ```
@@ -46,43 +46,52 @@ type ConnectionURL struct {
 }
 ```
 
-Alternatively, a `sqlite.ParseURL()` function is provided to convert
-a string into a `sqlite.ConnectionURL`:
+Pass the `sqlite.ConnectionURL` value as argument for `sqlite.Open()`
+to create a `sqlite.Database` session.
 
 ```go
-// ParseURL parses s into a ConnectionURL struct.
-sqlite.ParseURL(s string) (ConnectionURL, error)
+settings = sqlite.ConnectionURL{
+  ...
+}
+
+sess, err = sqlite.Open(settings)
+...
 ```
 
-You may use `sqlite.ConnectionURL` as argument for `db.Open()`.
+A `sqlite.ParseURL()` function is provided to convert a DSN into a
+`sqlite.ConnectionURL`:
+
+```go
+// ParseURL parses a DSN into a ConnectionURL struct.
+sqlite.ParseURL(dsn string) (ConnectionURL, error)
+```
 
 ## Usage
 
-To use this adapter, import `upper.io/db.v2` and the `upper.io/db.v2/sqlite` packages.
+Import the `upper.io/db.v2/sqlite` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2"
   "upper.io/db.v2/sqlite"
 )
 ```
 
-Then, you can use the `db.Open()` method to open a SQLite3 database file:
+Then, you can use the `sqlite.Open()` method to open a SQLite3 database file:
 
 ```go
 var settings = sqlite.ConnectionURL{
   Database: `/path/to/example.db`, // Path to a sqlite3 database file.
 }
 
-sess, err = db.Open(sqlite.Adapter, settings)
+sess, err = sqlite.Open(settings)
 ```
 
 ## Example
 
-The following SQL statement creates a table with "name" and "born"
+The following SQL statement creates a table with `name` and `born`
 columns.
 
 ```sql
@@ -116,8 +125,7 @@ import (
   "fmt"
   "log"
   "time"
-  "upper.io/db.v2"          // Imports the main db package.
-  "upper.io/db.v2/sqlite"   // Imports the sqlite adapter.
+  "upper.io/db.v2/sqlite"
 )
 
 var settings = sqlite.ConnectionURL{
@@ -136,31 +144,22 @@ type Birthday struct {
 func main() {
 
   // Attemping to open the "example.db" database file.
-  sess, err := db.Open(sqlite.Adapter, settings)
-
+  sess, err := sqlite.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
   }
-
-  // Remember to close the database session.
-  defer sess.Close()
+  defer sess.Close() // Remember to close the database session.
 
   // Pointing to the "birthday" table.
-  birthdayCollection, err := sess.Collection("birthday")
-
-  if err != nil {
-    log.Fatalf("sess.Collection(): %q\n", err)
-  }
+  birthdayCollection := sess.Collection("birthday")
 
   // Attempt to remove existing rows (if any).
   err = birthdayCollection.Truncate()
-
   if err != nil {
     log.Fatalf("Truncate(): %q\n", err)
   }
 
   // Inserting some rows into the "birthday" table.
-
   birthdayCollection.Append(Birthday{
     Name: "Hayao Miyazaki",
     Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
@@ -177,15 +176,12 @@ func main() {
   })
 
   // Let's query for the results we've just inserted.
-  var res db.Result
-
-  res = birthdayCollection.Find()
-
-  var birthday []Birthday
+  res := birthdayCollection.Find()
 
   // Query all results and fill the birthday variable with them.
-  err = res.All(&birthday)
+  var birthdays []Birthday
 
+  err = res.All(&birthdays)
   if err != nil {
     log.Fatalf("res.All(): %q\n", err)
   }
@@ -218,7 +214,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use que query builder for any complex SQL query:
+You can use the [query builder](/db.v2/builder) for any complex SQL query:
 
 ```go
 q := b.Select(
@@ -228,11 +224,8 @@ q := b.Select(
   ).From("artists AS a", "publication AS p").
   Where("a.id = p.author_id")
 
-iter := q.Iterator()
-
 var publications []Publication
-
-if err = iter.All(&publications); err != nil {
+if err = q.All(&publications); err != nil {
   log.Fatal(err)
 }
 ```
@@ -279,3 +272,4 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 [1]: https://github.com/mattn/go-sqlite3
 [2]: http://golang.org/doc/effective_go.html#blank
 [3]: http://www.sqlite.org/
+[4]: https://golang.org/cmd/cgo/

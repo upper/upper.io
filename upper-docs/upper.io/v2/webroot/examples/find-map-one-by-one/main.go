@@ -28,7 +28,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	res := sess.Collection("customers").Find().Sort("last_name")
+	res := sess.Collection("customers").Find().OrderBy("last_name")
 	defer res.Close()
 
 	log.Println("Our customers:")

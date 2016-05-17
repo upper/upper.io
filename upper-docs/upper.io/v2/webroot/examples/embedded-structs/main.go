@@ -41,7 +41,7 @@ func main() {
 
 	var res db.Result
 
-	res = sess.Collection("authors").Find().Sort("last_name").Limit(5)
+	res = sess.Collection("authors").Find().OrderBy("last_name").Limit(5)
 
 	var authors []Author
 	if err := res.All(&authors); err != nil {
@@ -57,7 +57,7 @@ func main() {
 		)
 	}
 
-	res = sess.Collection("employees").Find().Sort("last_name").Limit(5)
+	res = sess.Collection("employees").Find().OrderBy("last_name").Limit(5)
 
 	var employees []Author
 	if err := res.All(&employees); err != nil {
