@@ -4,10 +4,10 @@ import (
 	"log"
 
 	"database/sql"
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v2/postgresql"
 )
 
-// Employee represents an employee.
+// Employee defines the mapping between the "employees" table and Go.
 type Employee struct {
 	ID        int            `db:"id,omitempty"`
 	LastName  string         `db:"last_name"`
@@ -28,13 +28,14 @@ func main() {
 	}
 	defer sess.Close()
 
-	// We have one employee with a NULL name.
+	// Check if we have any employee with a NULL name.
 	req := sess.Collection("employees").Find().Where("first_name IS NULL")
 
 	var employee Employee
 	if err := req.One(&employee); err != nil {
-		log.Fatal(err)
+		log.Printf("All employees have a first name!")
+		return
 	}
 
-	log.Printf("Employee #%d %q has no name (%#v).", employee.ID, employee.LastName, employee)
+	log.Printf("The employee #%d %q has no name (%#v).", employee.ID, employee.LastName, employee)
 }

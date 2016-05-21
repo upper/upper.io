@@ -13,6 +13,7 @@
 
     <link href="{{ asset "/css/style.css" }}" rel="stylesheet" />
     <link href="{{ asset "/css/syntax.css" }}" rel="stylesheet">
+    <link href="{{ asset "/css/play.css" }}" rel="stylesheet">
     <title>
       {{ if .IsHome }}
         {{ setting "page/head/title" }}
@@ -66,6 +67,7 @@
             <li>{{ anchor "/ql" "QL" }}</li>
             <li>{{ anchor "/mongo" "MongoDB" }}</li>
             <li>{{ anchor "/builder" "SQL Builder" }}</li>
+            <li><a href="/db.v1">db.v1</a></li>
           </ul>
         </div>
       </nav>
@@ -81,10 +83,10 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">A non-magical database mapper that stays out of your way</p>
+              <p class="hero__description">A non-opinionated database access layer for Go</p>
             </div>
             <div class="github">
-              <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the project at Github</a>
+              <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the code at Github</a>
             </div>
             <p class="pressly text-center hidden-extra-small">Proudly sponsored by
               <a href="https://www.pressly.com" target="_blank"><img width="150" class="vertical-middle logo-pressly" src="{{ asset "images/pressly-logo.svg?1" }}" /></a>
@@ -120,20 +122,19 @@
           {{ if eq .CurrentPage.URL "/" }}
             <div class="features grid-3">
               <div class="feature">
-                <h2 class="feature__title">{{ anchor "/getting-started" "Getting started" }}</h2>
+                <h2 class="feature__title">{{ anchor "/getting-started" "Get started" }}</h2>
                 <p class="feature__description">
-                  {{ anchor "/getting-started" "Let's work"}} with databases
-                  in a less tedious and more productive way.
+                  {{ anchor "/getting-started" "Start here"}} if you want to
+                  <b>learn the basics</b> behind the <code>db</code> concept.
                 </p>
                 <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-01.svg" }}" />
                 </a>
               </div>
               <div class="feature">
-                <h2 class="feature__title">{{ anchor "/examples" "Code examples" }}</h2>
+                <h2 class="feature__title">{{ anchor "/examples" "Play" }}</h2>
                 <p class="feature__description">
-                  Learn how to implement common patterns with our
-                  {{ anchor "/examples" "code examples" }}
+                  See how to implement {{ anchor "/examples" "common patterns" }} and learn with <b>live examples</b>.
                 </p>
                 <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-02.svg" }}" />
@@ -143,24 +144,18 @@
                 <h2 class="feature__title">{{ anchor "/contribute" "Contribute" }}</h2>
                 <p class="feature__description">
                   Get your hands dirty and {{ anchor "/contribute" "contribute" }}
-                  with code, examples and documentation.
+                  with <b>code</b>, <b>examples</b> and <b>documentation</b>.
                 </p>
                 <a href="{{ asset "/examples" }}" class="hidden">
                   <img class="feature__icon" src="{{ asset "images/figure-03.svg" }}" />
                 </a>
               </div>
             </div>
-            <h2>Playground</h2>
-            <textarea class="go-playground-snippet" data-expanded="1" data-title="Live Example: Opening a database and listing table rows">{{ include "webroot/examples/open/main.go" }}</textarea>
-            <textarea class="go-playground-snippet" data-title="Live Example: Same as above but using the SQL builder">{{ include "webroot/examples/builder/main.go" }}</textarea>
-            <textarea class="go-playground-snippet" data-title="Live Example: Building a JOIN statement">{{ include "webroot/examples/join/main.go" }}</textarea>
+            <h2>See a demo</h2>
+            Check these <b>live examples</b> out, modify them and run them from within your browser!
+            <textarea class="go-playground-snippet" data-expanded="1" data-title="Live example: Retrieve a list of books">{{ include "webroot/examples/find-map-all-books/main.go" }}</textarea>
             <p>
-              We have plenty of {{ anchor "/examples" "code examples" }} you can continue looking at.
-            </p>
-            <h2>Keep on learning</h2>
-            <p>
-              Want more details? continue with our
-              {{ anchor "/getting-started" "getting started" }} page.
+              Thanks for giving <code>db</code> a try! See more {{ anchor "/examples" "examples" }} or <b>{{ anchor "/getting-started" "get started" }}</b>.
             </p>
           {{ else }}
 

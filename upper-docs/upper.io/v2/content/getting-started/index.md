@@ -4,7 +4,8 @@ The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
 with different data sources using *adapters* that wrap mature database drivers.
 
 The main purpose of `db` is to abstract common database operations and
-encourage users perform advanced operations directly with the database.
+encourage users perform advanced operations directly using the underlying
+driver.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
 databases and provides partial support (CRUD, no transactions) for
@@ -21,7 +22,8 @@ databases and provides partial support (CRUD, no transactions) for
 </center>
 
 A database connection is known as **session**. You can create a session by
-importing the adapter package and using the `Open()` function that it provides:
+importing the adapter package and using the `Open()` function that every
+adapter provides:
 
 ```
 import "upper.io/db.v2/postgresql" // The PostgreSQL adapter
@@ -44,7 +46,7 @@ define a subset of items, this is known as a **result set**:
 
 ```go
 // Adds a person to the "people" table/collection
-err = people.Insert(person)
+id, err = people.Insert(person)
 ...
 
 var marias []Person
@@ -87,10 +89,11 @@ id, err = article.Insert(myNewArticle)
 err = article.InsertReturning(&myNewArticle)
 ```
 
-Result sets of inserted items can be created with `col.Find()`, a result set
-provides tools for updating (`res.Update(value)`) and deleting items
-(`res.Delete()`). Note that new items cannot be inserted into a result, they
-must be inserted into the collection with `col.Insert()`.
+Result sets can be created with `col.Find()`, a result set provides tools for
+updating (`res.Update(value)`) and deleting items (`res.Delete()`).
+
+Note that items cannot be inserted into a result set, they must be inserted
+into the collection using `col.Insert()`.
 
 Apart from the above CRUD functionality, some databases also support
 transactions:
@@ -99,7 +102,7 @@ transactions:
 tx, err = sess.NewTransaction()
 
 // Transactions are just like any other session
-err = tx.Collection("wallet").Insert(charge)
+id, err = tx.Collection("wallet").Insert(charge)
 ...
 
 // Except that operations can be commited or rolled back
@@ -261,14 +264,15 @@ var settings = postgresql.ConnectionURL{
 fmt.Printf("DSN: %s", settings) // settings.String() is a DSN
 ```
 
-You can use the `settings` value to create a database session:
+You can use the `settings` value to create a database session by passing it to
+the `Open()` function of your adapter:
 
 ```go
 sess, err = postgresql.Open(settings)
 ...
 ```
 
-This `sess` variable is a `db.Database` type. See [all available db.Database methods](TODO)
+This `sess` variable is a `db.Database` type.
 
 One important `db.Database` method is `Collection()`, use it to get a
 collection reference.
@@ -350,9 +354,9 @@ res = sess.Collection("people").Find("id", 20).Or("id", 21)
 res = sess.Collection("people").Find(20)
 ```
 
-`db.Collection.Find()` returns a `db.Result` See [all available db.Result methods](TODO)
+`db.Collection.Find()` returns a result set reference, or `db.Result`.
 
-### Simple conditions: db.Cond{}
+### Addins constraints
 
 `db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
 by default `db.Cond` expresses an equality between columns and values:
@@ -597,20 +601,69 @@ type Point struct {
 }
 ```
 
+## Advanced usage
+
+The basic collection/result won't be appropriate for some situations, when this
+happens, you can use `db` as a simple bridge between SQL queries and Go types.
+
+SQL adapters come with a [SQL builder](/db.v2/builder), try it and see if it
+fits your needs:
+
+```go
+q = sess.Select("name").From("accounts").
+  Join("owners").
+  Using("employee_id")
+...
+
+err = q.All(&accounts)
+...
+```
+
+If the SQL builder is not able to express what you want, you can use hand-made
+SQL queries directly:
+
+```go
+rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+...
+
+row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+...
+
+res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+...
+```
+
+SQL queries like the above can also be mapped to Go structs by using an
+iterator:
+
+```go
+import "upper.io/db.v2/builder"
+...
+
+rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+...
+
+var accounts []Account
+iter := builder.NewIterator(rows)
+err = iter.All(&accounts)
+...
+```
+
+See [SQL builder](/db.v2/builder).
+
 ## Transactions
 
-Use the `NewTransaction()` method on a session to create a session context:
+Use the `NewTransaction()` method on a session to create a transaction context:
 
 ```go
 tx, err = sess.NewTransaction()
 ...
 
-err = tx.Collection("accounts").Insert(account)
+id, err = tx.Collection("accounts").Insert(account)
 ...
 
 res = tx.Collection("people").Find(...)
 ...
-
 
 err = tx.Commit()
 ...

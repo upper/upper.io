@@ -14,8 +14,8 @@ q = sess.Select("id", "name")
 ```
 
 If you compiled the select statement at this point it would look like `SELECT
-"id", "name";` which is kind of an incomplete query, you still need to specify
-which table to select from, use the `From()` method for that:
+"id", "name";` which is an incomplete SQL query, you still need to specify
+which table to select from, chain the `From()` method to do that:
 
 ```go
 q = sess.Select("id", "name").From("accounts")
@@ -27,10 +27,12 @@ Now you have a complete query that can be compiled into valid SQL:
 var accounts []Account
 q = sess.Select("id", "name").From("accounts")
 
+fmt.Println(q) // SELECT id, name FROM accounts
 ```
 
-Use the `All()` method on a query to execute it and map all the resulting rows
-into a slice of structs or maps:
+This query is wired to the database session, but it's not compiled nor executed
+unless you require data from it, use the `All()` method on a query to execute
+it and map all the resulting rows into a slice of structs or maps:
 
 ```go
 // All() executes the query and maps the resulting rows into an slice of
@@ -62,15 +64,16 @@ err = q.All(&accounts)
 ```
 
 
-Using `All()` comes with a cost: it requires to allocate a large slice to dump
-all queried results.  Sometimes it's more efficient to get results one by one
-using an iterator:
+Using `All()` comes with a cost: it requires to allocate a slice to dump all
+the queried results. If you're working with large datasets that could be
+expensive, it's probably more efficient to get results one by one using an
+iterator:
 
 ```go
 iter := q.Iterator()
 
 var account Account
-for iter.Next(&account) {
+for q.Next(&account) {
   ...
 }
 
@@ -94,14 +97,14 @@ for iter.Next() {
 You have to decide whether you want to use `All()`, `One()` or an `Iterator`
 depending on your specific needs.
 
-## Insert statement
+## INSERT statement
 
 The `InsertInto()` method begins an INSERT statement (an `Inserter`).
 
 ```go
 q = sess.InsertInto("people").Columns("name").Values("John")
 
-err = q.Exec()
+res, err = q.Exec()
 ...
 ```
 
@@ -115,11 +118,11 @@ account := Account{
 
 q = sess.InsertInto("people").Values(account)
 
-err = q.Exec()
+res, err = q.Exec() // res is a sql.Result
 ...
 ```
 
-## Update statement
+## UPDATE statement
 
 The `Update()` method takes a table name and begins an UPDATE statement (an
 `Updater`):
@@ -127,7 +130,7 @@ The `Update()` method takes a table name and begins an UPDATE statement (an
 ```go
 q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
 
-err = q.Exec()
+res, err = q.Exec()
 ...
 ```
 
@@ -140,7 +143,7 @@ q = sess.Update("people").Set(
   "last_name", "Smith",
 ).Where("id = ?", 5)
 
-err = q.Exec()
+res, err = q.Exec()
 ...
 ```
 
@@ -153,24 +156,24 @@ q = sess.Update("people").Set(map[string]interface{}{
   "last_name": "Smith",
 }).Where("id = ?", 5)
 
-err = q.Exec()
+res, err = q.Exec()
 ...
 ```
 
-## Delete statement
+## DELETE statement
 
 You can begin a DELETE statement with the `DeleteFrom()` method (a `Deleter`):
 
 ```go
 q = sess.DeleteFrom("accounts").Where("id", 5)
 
-err = q.Exec()
+res, err = q.Exec()
 ...
 ```
 
-## Select statement and joins
+## SELECT statement and joins
 
-The `Join()` method is part of `Selector`, you can use it to represent SELECT
+The `Join()` method is part of a `Selector`, you can use it to represent SELECT
 statements that use JOINs.
 
 ```go
@@ -254,7 +257,7 @@ you need as long as you provide a value for each one of them:
 q.Where("id = ? OR id = ?", 5, 4) // Two place holders and two values.
 ```
 
-The above condition is a list of ORs and sometimes thing like that can be
+The above condition is a list of ORs and sometimes things like that can be
 rewritten into things like this:
 
 ```go

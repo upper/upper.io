@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"            // Imports the main db package.
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v2" // We need this to use db.Raw
+	"upper.io/db.v2/postgresql"
 )
 
 // Book represents a book.
@@ -25,7 +25,7 @@ type Author struct {
 // BookAuthor represents join data from books and authors.
 type BookAuthor struct {
 	// Both Author and Book have and ID column, we need this to tell the ID of
-	// the book from that of the author.
+	// the book from the ID of the author.
 	BookID int `db:"book_id"`
 
 	Author `db:",inline"`
@@ -54,11 +54,8 @@ func main() {
 		Join("authors a").On("b.author_id = a.id").
 		OrderBy("b.title")
 
-	iter := req.Iterator()
-
 	var books []BookAuthor
-
-	if err := iter.All(&books); err != nil {
+	if err := req.All(&books); err != nil {
 		log.Fatal(err)
 	}
 
