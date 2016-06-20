@@ -6,5 +6,5 @@ ENTRYPOINT [ \
   "/bin/vanity", \
   "-addr",        ":9001", \
   "-repo-root",   "https://github.com/upper", \
-  "-vanity-root", "http://upper.io" \
+  "-vanity-root", "https://upper.io" \
 ]

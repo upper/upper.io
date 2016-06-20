@@ -214,7 +214,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/builder) for any complex SQL query:
+You can use the [query builder](/db.v2/sqlbuilder) for any complex SQL query:
 
 ```go
 q := b.Select(

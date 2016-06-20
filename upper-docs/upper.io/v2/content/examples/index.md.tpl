@@ -249,7 +249,7 @@ newID, err = col.Insert(map[string]interface{}{
 ### Inserting elements with the SQL builder
 
 If you rather not use collections, you can also use a SQLish syntax
-to [insert](/db.v2/builder#insert-statement) elements:
+to [insert](/db.v2/sqlbuilder#insert-statement) elements:
 
 ```
 q = sess.InsertInto("people").Columns("name").Values("John")
@@ -259,7 +259,7 @@ res, err = q.Exec() // res is a sql.Result
 ```
 
 This SQLish syntax is only available on SQL adapters. See [INSERT
-statement](/db.v2/builder#insert-statement).
+statement](/db.v2/sqlbuilder#insert-statement).
 
 ## Result sets
 
@@ -447,7 +447,7 @@ err = res.Update(map[string]interface{}{
 
 ### Updating with the SQL builder
 
-See [UPDATE statement](/db.v2/builder#update-statement):
+See [UPDATE statement](/db.v2/sqlbuilder#update-statement):
 
 ```
 q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
@@ -478,7 +478,7 @@ err = res.Delete()
 
 ### Deleting with the SQL builder
 
-See [DELETE statement](/db.v2/builder#delete-statement):
+See [DELETE statement](/db.v2/sqlbuilder#delete-statement):
 
 ```go
 q = sess.DeleteFrom("accounts").Where("id", 5)
@@ -704,5 +704,5 @@ iter.All(&accounts)
 See [builder examples][2] to learn how to master the SQL query builder.
 
 [1]: /db.v2/getting-started
-[2]: /db.v2/builder
+[2]: /db.v2/sqlbuilder
 [3]: /db.v2/contribute

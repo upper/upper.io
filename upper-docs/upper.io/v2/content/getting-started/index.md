@@ -110,7 +110,7 @@ err = tx.Rollback()
 ...
 ```
 
-Sessions also have a built-in SQLish [query builder](/db.v2/builder) that gives
+Sessions also have a built-in SQLish [query builder](/db.v2/sqlbuilder) that gives
 more freedom than the sets while keeping manual SQL concatenation at bay.
 
 ```go
@@ -137,8 +137,8 @@ err = sqlRows.Scan(&a, &b, ...)
 // Or you could create and iterator to help you with mapping fields into
 // a struct
 
-// Just make sure you're importing the `builder` package:
-import "upper.io/db.v2/builder"
+// Just make sure you're importing the `sqlbuilder` package:
+import "upper.io/db.v2/sqlbuilder"
 ...
 
 // And create a new Iterator with any *sql.Rows object:
@@ -240,6 +240,23 @@ type Person struct {
 
 Note that if you don't provide explicit mappings the adapter will try to use
 the field name with a case-sensitive lookup.
+
+### Other mappings: Using JSON on PostgreSQL
+
+The `postgresql` adapter supports saving and retrieving JSON data when using
+[JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html), if
+you want to try this out, make sure your column is of `jsonb` type and that
+you're using the `jsonb` option when mapping your field:
+
+```go
+type Person struct {
+  ...
+  Properties  []string                `db:"properties,jsonb"`
+  Meta        map[string]interface{}  `db:"meta,jsonb"`
+}
+```
+
+JSON types area supported on PostgreSQL 9.4+.
 
 ### Setting up a database session
 
@@ -606,7 +623,7 @@ type Point struct {
 The basic collection/result won't be appropriate for some situations, when this
 happens, you can use `db` as a simple bridge between SQL queries and Go types.
 
-SQL adapters come with a [SQL builder](/db.v2/builder), try it and see if it
+SQL adapters come with a [SQL builder](/db.v2/sqlbuilder), try it and see if it
 fits your needs:
 
 ```go
@@ -637,7 +654,7 @@ SQL queries like the above can also be mapped to Go structs by using an
 iterator:
 
 ```go
-import "upper.io/db.v2/builder"
+import "upper.io/db.v2/sqlbuilder"
 ...
 
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
@@ -649,7 +666,7 @@ err = iter.All(&accounts)
 ...
 ```
 
-See [SQL builder](/db.v2/builder).
+See [SQL builder](/db.v2/sqlbuilder).
 
 ## Transactions
 
@@ -738,8 +755,8 @@ The MIT license:
 
 [1]: https://golang.org
 [2]: https://golang.org/doc/install
-[3]: http://www.mysql.com/
-[4]: http://www.postgresql.org/
-[5]: http://www.sqlite.org/
-[6]: https://github.com/cznic/ql
-[7]: http://www.mongodb.org/
+[3]: /db.v2/mysql
+[4]: /db.v2/postgresql
+[5]: /db.v2/sqlite
+[6]: /db.v2/ql
+[7]: /db.v2/mongo

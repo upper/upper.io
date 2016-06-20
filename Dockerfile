@@ -4,7 +4,7 @@ ADD bin/ /usr/sbin/
 
 RUN configure-nginx.sh
 
-VOLUME ["/var/log/nginx", "/etc/nginx/conf.d.t"]
+VOLUME ["/var/log/nginx", "/etc/nginx/conf.d.t", "/etc/private"]
 
 EXPOSE 80 443
 WORKDIR /etc/nginx

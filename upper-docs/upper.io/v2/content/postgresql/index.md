@@ -198,9 +198,27 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ## Unique adapter features
 
+### JSON types
+
+The `postgresql` adapter supports saving and retrieving JSON data when using
+[JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html).
+
+Make sure your column is of `jsonb` type and that you're using the `jsonb`
+option when mapping your field:
+
+```
+type Person struct {
+  ...
+  Properties  []string                `db:"properties,jsonb"`
+  Meta        map[string]interface{}  `db:"meta,jsonb"`
+}
+```
+
+JSON types area supported on PostgreSQL 9.4+.
+
 ### SQL builder
 
-You can use the [query builder](/db.v2/builder) for any complex SQL query:
+You can use the [query builder](/db.v2/sqlbuilder) for any complex SQL query:
 
 ```go
 q := sess.Select(

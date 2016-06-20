@@ -66,7 +66,7 @@
             <li>{{ anchor "/sqlite" "SQLite" }}</li>
             <li>{{ anchor "/ql" "QL" }}</li>
             <li>{{ anchor "/mongo" "MongoDB" }}</li>
-            <li>{{ anchor "/builder" "SQL Builder" }}</li>
+            <li>{{ anchor "/sqlbuilder" "SQL Builder" }}</li>
             <li><a href="/db.v1">db.v1</a></li>
           </ul>
         </div>
@@ -83,7 +83,7 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">A non-opinionated database access layer for Go</p>
+              <p class="hero__description">It’s not an ORM, just a productive data access layer for Go</p>
             </div>
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the code at Github</a>
