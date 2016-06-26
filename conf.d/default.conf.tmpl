@@ -1,13 +1,34 @@
 server {
-  server_name beta.upper.io;
+  listen 443;
+  ssl_protocols TLSv1;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
+
+  ssl on;
+  ssl_certificate /etc/private/upper.io/site.crt;
+  ssl_certificate_key /etc/private/upper.io/site.key;
+
+  server_name upper.io;
 
   location / {
-		rewrite ^/db/(.*)$ /db.v1/$1 redirect;
-		rewrite ^/db$ /db.v1/ redirect;
-		rewrite ^/$ /db.v2/ redirect;
+    set $pass 0;
+    if ($arg_go-get = 1) {
+      set $pass 1;
+    }
+    if ($request_uri ~ git-upload-pack) {
+      set $pass 1;
+    }
+    if ($pass = 1) {
+      return 404;
+    }
+
+    rewrite ^/db/(.*)$ /db.v1/$1 redirect;
+    rewrite ^/db$ /db.v1/ redirect;
+    rewrite ^/$ /db.v2/ redirect;
 
     try_files =404 @vanity;
-		log_not_found off;
+    error_page 404 = @vanity;
+    log_not_found off;
   }
 
   location @vanity {
@@ -31,7 +52,7 @@ server {
     }
 
     error_page 404 = @fallback;
-		log_not_found off;
+    log_not_found off;
   }
 
   location @fallback {
@@ -43,76 +64,23 @@ server {
   }
 }
 
-# old docs
-server {
-	listen 443;
-
-	ssl on;
-	ssl_certificate /etc/private/upper.io/site.crt;
-	ssl_certificate_key /etc/private/upper.io/site.key;
-	ssl_protocols TLSv1;
-	ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-	ssl_prefer_server_ciphers on;
-
-	server_name upper.io;
-
-	location / {
-		# Pass control to vanity.
-		try_files =404 @vanity;
-	}
-
-	location @vanity {
-		proxy_set_header X-Real-IP  $remote_addr;
-		proxy_set_header Host $host;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    proxy_pass http://${UPPER_VANITY_PORT_9001_TCP_ADDR}:${UPPER_VANITY_PORT_9001_TCP_PORT};
-		proxy_intercept_errors on;
-		recursive_error_pages on;
-
-		set $pass 0;
-		if ($arg_go-get = 1) {
-			set $pass 1;
-		}
-		if ($request_uri ~ git-upload-pack) {
-			set $pass 1;
-		}
-		if ($pass = 0) {
-			return 404;
-		}
-
-		error_page 404 = @fallback;
-		log_not_found off;
-	}
-
-	location @fallback {
-    proxy_set_header X-Real-IP  $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    proxy_pass http://162.243.63.194:9099;
-	}
-}
-
 # ssl no-www redirect.
 server {
-	listen 443;
-	ssl_protocols TLSv1;
-	ssl_ciphers RC4:HIGH:!aNULL:!MD5;
-	ssl_prefer_server_ciphers on;
+  listen 443;
+  ssl_protocols TLSv1;
+  ssl_ciphers RC4:HIGH:!aNULL:!MD5;
+  ssl_prefer_server_ciphers on;
 
-	ssl on;
-	ssl_certificate /etc/private/upper.io/site.crt;
-	ssl_certificate_key /etc/private/upper.io/site.key;
+  ssl on;
+  ssl_certificate /etc/private/upper.io/site.crt;
+  ssl_certificate_key /etc/private/upper.io/site.key;
 
-	server_name www.upper.io;
-	# server_name www.upper.io beta.upper.io;
-	rewrite ^ https://upper.io permanent;
+  server_name www.upper.io beta.upper.io;
+  rewrite ^ https://upper.io permanent;
 }
 
 # no-www redirect
 server {
-	server_name www.upper.io upper.io;
-	# server_name www.upper.io upper.io beta.upper.io;
-	rewrite ^ https://upper.io$request_uri? permanent;
+  server_name www.upper.io upper.io beta.upper.io;
+  rewrite ^ https://upper.io$request_uri? permanent;
 }

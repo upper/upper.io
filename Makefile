@@ -28,9 +28,13 @@ docker-run: docker machines
 		-v /etc/private:/etc/private \
 		-t $(CONTAINER_IMAGE) && \
 	sleep 5 && \
-	curl --silent "http://127.0.0.1/db.v2" -H "Host: beta.upper.io" && \
-	curl --silent "http://127.0.0.1/db.v1" -H "Host: beta.upper.io" && \
-	curl --silent "http://127.0.0.1" -H "Host: beta.upper.io"
+	curl --silent "http://127.0.0.1/db.v2" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db.v1" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db.v2?go-get=1" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db.v1?go-get=1" -L -H "Host: upper.io" && \
+	curl --silent "http://127.0.0.1/db?go-get=1" -L -H "Host: upper.io"
 
 deploy-playground:
 	sup -f upper-playground/Supfile prod deploy && \
