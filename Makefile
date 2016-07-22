@@ -1,11 +1,13 @@
-CONTAINER_PORT ?= 80
-HOST_PORT ?= 80
+CONTAINER_PORT        ?= 80
+HOST_PORT             ?= 80
 
-CONTAINER_PORT_HTTPS ?= 443
-HOST_PORT_HTTPS ?= 443
+CONTAINER_PORT_HTTPS  ?= 443
+HOST_PORT_HTTPS       ?= 443
 
-CONTAINER_NAME ?= upper.io
-CONTAINER_IMAGE ?= upper/upper.io
+CONTAINER_NAME        ?= upper.io
+CONTAINER_IMAGE       ?= upper/upper.io
+
+PRIVATE_DIR           ?= /etc/private
 
 docker:
 	docker build -t $(CONTAINER_IMAGE) .
@@ -24,17 +26,19 @@ docker-run: docker machines
 		--link upper-vanity:upper-vanity \
 		--link upper-docs:upper-docs \
 		--name $(CONTAINER_NAME) \
-		-v $$PWD/conf.d:/etc/nginx/cond.d.t \
-		-v /etc/private:/etc/private \
+		-v $$PWD/conf.d:/etc/nginx/conf.d.t \
+		-v $$PWD/www:/var/www \
+		-v $(PRIVATE_DIR):/etc/private \
 		-t $(CONTAINER_IMAGE) && \
 	sleep 5 && \
-	curl --silent "http://127.0.0.1/db.v2" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1/db.v1" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1/db" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1/db.v2?go-get=1" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1/db.v1?go-get=1" -L -H "Host: upper.io" && \
-	curl --silent "http://127.0.0.1/db?go-get=1" -L -H "Host: upper.io"
+	(curl --silent -k "https://127.0.0.1/db.v2" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db.v1" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db" -H "Host: upper.io" | grep 302 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1" -H "Host: upper.io" | grep 302 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db.v2?go-get=1" -H "Host: upper.io" | grep tree/v2 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db.v1?go-get=1" -H "Host: upper.io" | grep tree/v1 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db?go-get=1" -H "Host: upper.io" | grep tree/v0.9 || exit 1)
+
 
 deploy-playground:
 	sup -f upper-playground/Supfile prod deploy && \

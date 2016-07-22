@@ -1,7 +1,7 @@
-HOST_PORT ?= 9000
-CONTAINER_PORT ?= 9000
-CONTAINER_NAME ?= upper-docs
-CONTAINER_IMAGE ?= upper/docs
+HOST_PORT        ?= 9000
+CONTAINER_PORT   ?= 9000
+CONTAINER_NAME   ?= upper-docs
+CONTAINER_IMAGE  ?= upper/docs
 
 deps:
 	go get -v menteslibres.net/luminos

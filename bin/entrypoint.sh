@@ -4,5 +4,5 @@
 
 set -eu
 
-render-templates.sh /etc/nginx/cond.d.t /etc/nginx/conf.d
+render-templates.sh /etc/nginx/conf.d.t /etc/nginx/conf.d
 exec $@

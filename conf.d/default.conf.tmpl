@@ -10,6 +10,8 @@ server {
 
   server_name upper.io;
 
+  root /var/www;
+
   location / {
     set $pass 0;
     if ($arg_go-get = 1) {
@@ -32,6 +34,7 @@ server {
   }
 
   location @vanity {
+
     proxy_set_header X-Real-IP  $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
