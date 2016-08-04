@@ -66,7 +66,7 @@
             <li>{{ anchor "/sqlite" "SQLite" }}</li>
             <li>{{ anchor "/ql" "QL" }}</li>
             <li>{{ anchor "/mongo" "MongoDB" }}</li>
-            <li>{{ anchor "/sqlbuilder" "SQL Builder" }}</li>
+            <li>{{ anchor "/lib/sqlbuilder" "SQL Builder" }}</li>
             <li><a href="/db.v1">db.v1</a></li>
           </ul>
         </div>
