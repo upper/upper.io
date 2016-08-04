@@ -218,7 +218,7 @@ JSON types area supported on PostgreSQL 9.4+.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/sqlbuilder) for any complex SQL query:
+You can use the [query builder](/db.v2/lib/sqlbuilder) for any complex SQL query:
 
 ```go
 q := sess.Select(

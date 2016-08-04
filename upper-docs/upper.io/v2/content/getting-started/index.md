@@ -99,7 +99,7 @@ Apart from the above CRUD functionality, some databases also support
 transactions:
 
 ```go
-tx, err = sess.NewTransaction()
+tx, err = sess.NewTx()
 
 // Transactions are just like any other session
 id, err = tx.Collection("wallet").Insert(charge)
@@ -110,7 +110,7 @@ err = tx.Rollback()
 ...
 ```
 
-Sessions also have a built-in SQLish [query builder](/db.v2/sqlbuilder) that gives
+Sessions also have a built-in SQLish [query builder](/db.v2/lib/sqlbuilder) that gives
 more freedom than the sets while keeping manual SQL concatenation at bay.
 
 ```go
@@ -138,11 +138,11 @@ err = sqlRows.Scan(&a, &b, ...)
 // a struct
 
 // Just make sure you're importing the `sqlbuilder` package:
-import "upper.io/db.v2/sqlbuilder"
+import "upper.io/db.v2/lib/sqlbuilder"
 ...
 
 // And create a new Iterator with any *sql.Rows object:
-iter = builder.NewIterator(sqlRows)
+iter = sqlbuilder.NewIterator(sqlRows)
 err = iter.All(&item)
 ```
 
@@ -623,7 +623,7 @@ type Point struct {
 The basic collection/result won't be appropriate for some situations, when this
 happens, you can use `db` as a simple bridge between SQL queries and Go types.
 
-SQL adapters come with a [SQL builder](/db.v2/sqlbuilder), try it and see if it
+SQL adapters come with a [SQL builder](/db.v2/lib/sqlbuilder), try it and see if it
 fits your needs:
 
 ```go
@@ -654,26 +654,26 @@ SQL queries like the above can also be mapped to Go structs by using an
 iterator:
 
 ```go
-import "upper.io/db.v2/sqlbuilder"
+import "upper.io/db.v2/lib/sqlbuilder"
 ...
 
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
-iter := builder.NewIterator(rows)
+iter := sqlbuilder.NewIterator(rows)
 err = iter.All(&accounts)
 ...
 ```
 
-See [SQL builder](/db.v2/sqlbuilder).
+See [SQL builder](/db.v2/lib/sqlbuilder).
 
 ## Transactions
 
-Use the `NewTransaction()` method on a session to create a transaction context:
+Use the `NewTx()` method on a session to create a transaction context:
 
 ```go
-tx, err = sess.NewTransaction()
+tx, err = sess.NewTx()
 ...
 
 id, err = tx.Collection("accounts").Insert(account)

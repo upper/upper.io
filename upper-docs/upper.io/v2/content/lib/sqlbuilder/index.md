@@ -219,14 +219,14 @@ If you don't want to use `Scan` directly, you could always create an iterator
 using any `*sql.Rows` value:
 
 ```go
-import "upper.io/db.v2/sqlbuilder"
+import "upper.io/db.v2/lib/sqlbuilder"
 ...
 
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
-iter := builder.NewIterator(rows)
+iter := sqlbuilder.NewIterator(rows)
 err = iter.All(&accounts)
 ...
 ```

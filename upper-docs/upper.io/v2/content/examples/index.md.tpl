@@ -249,7 +249,7 @@ newID, err = col.Insert(map[string]interface{}{
 ### Inserting elements with the SQL builder
 
 If you rather not use collections, you can also use a SQLish syntax
-to [insert](/db.v2/sqlbuilder#insert-statement) elements:
+to [insert](/db.v2/lib/sqlbuilder#insert-statement) elements:
 
 ```
 q = sess.InsertInto("people").Columns("name").Values("John")
@@ -259,7 +259,7 @@ res, err = q.Exec() // res is a sql.Result
 ```
 
 This SQLish syntax is only available on SQL adapters. See [INSERT
-statement](/db.v2/sqlbuilder#insert-statement).
+statement](/db.v2/lib/sqlbuilder#insert-statement).
 
 ## Result sets
 
@@ -447,7 +447,7 @@ err = res.Update(map[string]interface{}{
 
 ### Updating with the SQL builder
 
-See [UPDATE statement](/db.v2/sqlbuilder#update-statement):
+See [UPDATE statement](/db.v2/lib/sqlbuilder#update-statement):
 
 ```
 q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
@@ -478,7 +478,7 @@ err = res.Delete()
 
 ### Deleting with the SQL builder
 
-See [DELETE statement](/db.v2/sqlbuilder#delete-statement):
+See [DELETE statement](/db.v2/lib/sqlbuilder#delete-statement):
 
 ```go
 q = sess.DeleteFrom("accounts").Where("id", 5)
@@ -589,15 +589,51 @@ a bank operation in which you want to move money from one account to another
 without worrying about a power failure or a write error in the middle of a
 transaction that would create an inconsistency.
 
-Request a transaction context with the `NewTransaction()` method on a normal
-database session:
+You can create and use transaction blocks with the `Tx` method:
 
 ```go
-tx, err := sess.NewTransaction()
+import (
+  "log"
+  "upper.io/db.v2"
+  "upper.io/db.v2/lib/sqlbuilder"
+)
+
+func main() {
+  ...
+  err := sess.Tx(func(tx sqlbuilder.Tx) error {
+    // Use `tx` like you would normally use `sess`.
+    ...
+    id, err := tx.Collection("accounts").Insert(...)
+    if err != nil {
+      // Rollback the transaction by returning any error.
+      return err
+    }
+    ...
+    rows, err := tx.Query(...)
+    ...
+
+    ...
+    // Commit the transaction by returning nil.
+    return nil
+  })
+  if err != nil {
+    log.Fatal("Transaction failed: ", err)
+  }
+}
+```
+
+
+### Manual transactions
+
+Alternatively, you can also request a transaction context and manage it
+yourself using the `NewTx()` method:
+
+```go
+tx, err := sess.NewTx()
 ...
 ```
 
-And just use `tx` as you would normally use `sess`:
+Use `tx` as you would normally use `sess`:
 
 ```go
 id, err = tx.Collection("accounts").Insert(...)
@@ -610,8 +646,8 @@ err = res.Update(...)
 
 ```
 
-The difference between `sess` and `tx` is that, in order for you changes to be permanent, you'll have to
-use the `Commit()` method:
+Remember that in order for your changes to be permanent, you'll have to use the
+`Commit()` method:
 
 ```go
 err = tx.Commit() // or tx.Rollback()
@@ -704,5 +740,5 @@ iter.All(&accounts)
 See [builder examples][2] to learn how to master the SQL query builder.
 
 [1]: /db.v2/getting-started
-[2]: /db.v2/sqlbuilder
+[2]: /db.v2/lib/sqlbuilder
 [3]: /db.v2/contribute
