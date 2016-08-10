@@ -2,6 +2,10 @@
 
 > This project is kept for historical purposes, if you're new here you may want
 > to check out [upper.io/db.v2](/db.v2) instead.
+>
+> `db.v1` is deprecated and no new features will be added, only security issues
+> will be patched, we recommend you to [migrate from db.v1 to
+> db.v2](https://upper.io/db.v2/migrate-from-v1).
 
 ![upper.io/db.v1 package](/db.v1/res/general.png)
 

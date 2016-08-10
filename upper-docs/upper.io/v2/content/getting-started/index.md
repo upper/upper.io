@@ -3,9 +3,8 @@
 The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
 with different data sources using *adapters* that wrap mature database drivers.
 
-The main purpose of `db` is to abstract common database operations and
-encourage users perform advanced operations directly using the underlying
-driver.
+The main purpose of `db` is to abstract common database tasks (CRUD) and
+provide tools for users to perform advanced commands when required.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
 databases and provides partial support (CRUD, no transactions) for
@@ -14,6 +13,9 @@ databases and provides partial support (CRUD, no transactions) for
 <center>
 ![upper.io/db.v2 package](/db.v2/res/general.png)
 </center>
+
+Coming from v1? we have a [migration
+guide](https://upper.io/db.v2/migrate-from-v1) that may come in handy.
 
 ## Key concepts
 
