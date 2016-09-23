@@ -1,7 +1,7 @@
 page:
   brand: "upper.io"
   head:
-    title: "The upper.io/db.v2 ORM for Go"
+    title: "db.v2: Data access layer for Go"
   body:
     menu_pull:
       - { text: "Home", link: "/" }

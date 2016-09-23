@@ -21,6 +21,7 @@ docker-run: docker machines
 	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run \
 		-d \
+		--restart=always \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		-p $(HOST_PORT_HTTPS):$(CONTAINER_PORT_HTTPS) \
 		--link upper-vanity:upper-vanity \
@@ -35,14 +36,14 @@ docker-run: docker machines
 	(curl --silent -k "https://127.0.0.1/db.v1" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
 	(curl --silent -k "https://127.0.0.1/db" -H "Host: upper.io" | grep 302 || exit 1) && \
 	(curl --silent -k "https://127.0.0.1" -H "Host: upper.io" | grep 302 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db.v2?go-get=1" -H "Host: upper.io" | grep tree/v2 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db.v1?go-get=1" -H "Host: upper.io" | grep tree/v1 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db?go-get=1" -H "Host: upper.io" | grep tree/v0.9 || exit 1)
+	(curl --silent -k "https://127.0.0.1/db.v2?go-get=1" -H "Host: upper.io" | grep tree/2 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db.v1?go-get=1" -H "Host: upper.io" | grep tree/1 || exit 1) && \
+	(curl --silent -k "https://127.0.0.1/db?go-get=1" -H "Host: upper.io" | grep tree/master || exit 1)
 
 
 deploy-playground:
-	sup -f upper-playground/Supfile prod deploy && \
-	sup -f upper-unsafebox/Supfile prod deploy
+	sup -f upper-unsafebox/Supfile prod deploy && \
+	sup -f upper-playground/Supfile prod deploy
 
 deploy:
 	sup prod deploy

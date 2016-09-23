@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v2/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
@@ -13,7 +13,8 @@ var settings = postgresql.ConnectionURL{
 	Password: `demop4ss`,
 }
 
-// Book represents a book.
+// Book represents an element from the "books" table, column names are mapped
+// to Go values.
 type Book struct {
 	ID        uint   `db:"id"`
 	Title     string `db:"title"`
@@ -28,11 +29,18 @@ func main() {
 	}
 	defer sess.Close()
 
+	// Define a result set without passing a condition to Find(), this means we
+	// want to match all the elements on the books table.
+	res := sess.Collection("books").Find()
+
+	// We can use this res object later in different queries, here we'll use it
+	// to fetch all the books on our catalog in descending order.
 	var books []Book
-	if err := sess.Collection("books").Find().OrderBy("title").All(&books); err != nil {
+	if err := res.OrderBy("title DESC").All(&books); err != nil {
 		log.Fatal(err)
 	}
 
+	// The books slice has been populated!
 	log.Println("Books:")
 	for _, book := range books {
 		log.Printf("%q (ID: %d)\n", book.Title, book.ID)
