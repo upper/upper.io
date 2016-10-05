@@ -1,10 +1,11 @@
 # upper.io/db.v2
 
-The `upper.io/db.v2` package for [Go][1] provides a *common interface* to work
-with different data sources using *adapters* that wrap mature database drivers.
+`upper-db` provides a *common interface* to work with
+different data sources using *adapters* that wrap mature database drivers.
 
 The main purpose of `db` is to abstract common database tasks (CRUD) and
-provide tools for users to perform advanced commands when required.
+provide tools for [Go][1] developers to perform advanced queries when they need
+to.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
 databases and provides partial support (CRUD, no transactions) for
@@ -23,49 +24,74 @@ guide](https://upper.io/db.v2/migrate-from-v1) that may come in handy.
 ![Database](/db.v2/res/database.png)
 </center>
 
-A database connection is known as **session**. You can create a session by
-importing the adapter package and using the `Open()` function that every
-adapter provides:
+A database context is known as a **session**. You can create a session by
+importing the adapter package and using the `Open()` function that all adapters
+provide:
 
 ```
-import "upper.io/db.v2/postgresql" // The PostgreSQL adapter
-...
+import (
+  ...
+  "upper.io/db.v2/postgresql" // The PostgreSQL adapter
+  ...
+)
 
-settings = postgresql.ConnectionURL{...} // Connection settings
+// Connection settings.
+var settings = postgresql.ConnectionURL{
+  Host:     "127.0.0.1",
+  User:     "foo",
+  Password: "bar",
+}
 
-sess, err = postgresql.Open(settings) // Stablishing a connection
-...
+func main() {
+  sess, err := postgresql.Open(settings) // Open a connection.
+  ...
+}
 ```
 
-Sessions can be used to get table references, known as **collections**:
+The `Collection()` method of a session gives you a table reference, known as
+**collection**:
 
-```
+```go
+// The "people" table.
 people = sess.Collection("people")
 ```
 
-A collection reference provides the `Find()` method, which can be used to
-define a subset of items, this is known as a **result set**:
+A collection reference provides special methods to perform operations on the
+underlying table, such as `Find()` which can be used to define a subset of
+items that match given conditions, this is known as a **result set**:
 
 ```go
-// Adds a person to the "people" table/collection
-id, err = people.Insert(person)
-...
-
 var marias []Person
-res = people.Find("name", "María")  // The subset of people named "María"
+// SELECT * FROM people WHERE name = 'María'
+res = people.Find("name", "María")
 err = res.All(&marias)
 ...
+```
 
-// The Update() method modifies all items within the subset.
-err = res.Update(...)
+`Find()` returns a result set, which is like lazy query that gets compiled and
+executed only when a method is called on it.
+
+```go
+// All builds and executes a `SELECT * FROM ...` query.
+err = res.All(&marias)
+
+// One builds and executes a `SELECT * FROM ... LIMIT 1` query.
+err = res.One(&maria)
+```
+
+Besides querying data, you can perform other operations on `res`, such as
+updating all the items on the result set at once:
+
+```go
+// UPDATE people SET ... WHERE ...
+err = res.Update(newData)
 ...
+```
 
-// Result sets can be used to query only one element too:
-var john Person
-err = people.Find("name", "John").One(&john) // A person named John
-...
+Or deleting all matching items:
 
-// The Delete() method deletes all items within the subset.
+```go
+// DELETE FROM article WHERE ...
 err = sess.Collection("article").
   Find("date_created < ? and draft = ?", oneWeekAgo, true).
   Delete()
@@ -79,41 +105,9 @@ concepts:
 ![Collections](/db.v2/res/collection.png)
 </center>
 
-New items can be inserted into the collection by using `Insert()` or
-`InsertReturning()`:
-
-```go
-// Just inserts and returns the id interface{}:
-id, err = article.Insert(myNewArticle)
-...
-
-// Inserts and pulls the recently inserted item from the db:
-err = article.InsertReturning(&myNewArticle)
-```
-
-Result sets can be created with `col.Find()`, a result set provides tools for
-updating (`res.Update(value)`) and deleting items (`res.Delete()`).
-
-Note that items cannot be inserted into a result set, they must be inserted
-into the collection using `col.Insert()`.
-
-Apart from the above CRUD functionality, some databases also support
-transactions:
-
-```go
-tx, err = sess.NewTx()
-
-// Transactions are just like any other session
-id, err = tx.Collection("wallet").Insert(charge)
-...
-
-// Except that operations can be commited or rolled back
-err = tx.Rollback()
-...
-```
-
-Sessions also have a built-in SQLish [query builder](/db.v2/lib/sqlbuilder) that gives
-more freedom than the sets while keeping manual SQL concatenation at bay.
+Besides giving tools for collections and result sets, sessions also have a
+built-in SQLish [query builder](/db.v2/lib/sqlbuilder) that gives more freedom
+while keeping manual SQL writing at bay.
 
 ```go
 q = sess.SelectFrom("people").Where("name = ?", "María")
@@ -148,14 +142,12 @@ iter = sqlbuilder.NewIterator(sqlRows)
 err = iter.All(&item)
 ```
 
-See more code examples and patterns at our [examples](/db.v2/examples) page.
+See more code examples and patterns on our [examples](/db.v2/examples) page.
 
 ## Installation
 
 The `upper.io/db.v2` package depends on the [Go compiler and tools][2] and it's
 compatible with Go 1.4 and above.
-
-Use `go get` to get or install `db`:
 
 ```sh
 go get -v -u upper.io/db.v2
@@ -169,17 +161,9 @@ export UPPERIO_V2=$GOPATH/src/upper.io/db.v2
 rm -rf $UPPERIO_V2
 mkdir -p $UPPERIO_V2
 git clone https://github.com/upper/db.git $UPPERIO_V2
-cd $UPPERIO_V2 && git checkout v2
+cd $UPPERIO_V2
 go build && go install
 ```
-
-### Differences from db.v1
-
-1. `v2` comes with a SQL query builder.
-1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are functions instead of
-   structs.
-1. `db.Session.Collection()` only accepts one table.
-1. JOIN capabilities where removed from `Find()` (in favour of the built-in query builder).
 
 ### Supported databases
 
@@ -375,7 +359,7 @@ res = sess.Collection("people").Find(20)
 
 `db.Collection.Find()` returns a result set reference, or `db.Result`.
 
-### Addins constraints
+### Adding constraints
 
 `db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
 by default `db.Cond` expresses an equality between columns and values:

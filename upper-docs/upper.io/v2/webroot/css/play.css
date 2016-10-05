@@ -4,3 +4,16 @@
 .play a.run:visited {
   color: #e74039;
 }
+
+div.play .input textarea {
+  color: #888;
+}
+
+div.play .input:hover {
+  border: 1px solid #888;
+  color: #000;
+}
+
+div.play .input textarea:focus {
+  color: #000;
+}

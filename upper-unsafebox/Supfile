@@ -49,7 +49,7 @@ commands:
         --restart=always \
         -t $IMAGE
   wait:
-    run: sleep 5
+    run: sleep 10
   ps:
     run: docker ps | grep $NAME
   test:

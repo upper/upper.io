@@ -16,6 +16,14 @@ future.
 In order to help you migrating, the key differences between `v1` and `v2` are
 detailed here.
 
+## Differences from db.v1
+
+1. `v2` comes with a SQL query builder.
+1. `db.And()`, `db.Or()`, `db.Func()` and `db.Raw()` are functions instead of
+   structs.
+1. `db.Session.Collection()` only accepts one table.
+1. JOIN capabilities where removed from `Find()` (in favour of the built-in query builder).
+
 ## New import path
 
 The import path was changed from `upper.io/db` into `upper.io/db.v2`.
