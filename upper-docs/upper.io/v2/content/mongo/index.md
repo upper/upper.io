@@ -128,17 +128,17 @@ func main() {
   }
 
   // Inserting some rows into the "birthday" table.
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Hayao Miyazaki",
     Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.UTC),
   })
 
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Nobuo Uematsu",
     Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.UTC),
   })
 
-  birthdayCollection.Append(Birthday{
+  birthdayCollection.Insert(Birthday{
     Name: "Hironobu Sakaguchi",
     Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.UTC),
   })

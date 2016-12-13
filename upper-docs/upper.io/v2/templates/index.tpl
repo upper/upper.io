@@ -154,9 +154,9 @@
             </div>
 						<h2>Key features</h2>
             <ul>
-              <li>Provides a common result-oriented syntax for SQL and NoSQL databases</li>
               <li>Allows you to map query results into Go structs</li>
               <li>Lets you use plain SQL when you need to</li>
+              <li>Provides an (optional) set-oriented syntax that works on SQL and NoSQL databases</li>
               <li>That's all!</li>
             </ul>
             <h2>Try it!</h2>
