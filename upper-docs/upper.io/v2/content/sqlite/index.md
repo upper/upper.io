@@ -3,6 +3,15 @@
 The `sqlite` adapter for the [SQLite3][3] wraps the
 `github.com/mattn/go-sqlite3` driver written by [Yasuhiro Matsumoto][1].
 
+## Basic use
+
+This page showcases the particularities of the [SQLite][2] adapter, if you're
+new to upper-db, you should take a look at the [getting started][5] page first.
+
+After you're done with the introduction, reading through the [examples][6] is
+highly recommended.
+
+
 ## Installation
 
 This package uses [cgo][4], so in order to compile and install it you'll also need a
@@ -273,3 +282,5 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 [2]: http://golang.org/doc/effective_go.html#blank
 [3]: http://www.sqlite.org/
 [4]: https://golang.org/cmd/cgo/
+[5]: /db.v2/getting-started
+[6]: /db.v2/examples

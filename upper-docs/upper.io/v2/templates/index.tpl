@@ -83,7 +83,7 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">It’s not an ORM, just a productive data access layer for Go</p>
+              <p class="hero__description">It's not an ORM, just a productive data access layer for Go</p>
             </div>
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the code at Github</a>
@@ -154,9 +154,10 @@
             </div>
 						<h2>Key features</h2>
             <ul>
-              <li>Allows you to map query results into Go structs</li>
+              <li>Maps query results into Go structs</li>
               <li>Lets you use plain SQL when you need to</li>
-              <li>Provides an (optional) set-oriented syntax that works on SQL and NoSQL databases</li>
+              <li>Provides an (optional) set-oriented syntax that works the same on SQL and NoSQL databases</li>
+              <li>Easy syntax for transactions</li>
               <li>That's all!</li>
             </ul>
             <h2>Try it!</h2>

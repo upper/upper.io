@@ -1,10 +1,10 @@
 # upper.io/db.v2
 
-`upper-db` provides a *common interface* to work with
-different data sources using *adapters* that wrap mature database drivers.
+`upper-db` provides a *common interface* to work with different data sources
+using *adapters* that wrap mature database drivers.
 
 The main purpose of `db` is to abstract common database tasks (CRUD) and
-provide tools for [Go][1] developers to perform advanced queries when they need
+provide tools for [Go][1] developers to perform complex queries when they need
 to.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
@@ -79,7 +79,7 @@ err = res.All(&marias)
 err = res.One(&maria)
 ```
 
-Besides querying data, you can perform other operations on `res`, such as
+Besides querying data, you can also perform other operations on `res`, such as
 updating all the items on the result set at once:
 
 ```go
@@ -115,8 +115,8 @@ err = q.All(&marias)
 ```
 
 Advanced SQL commands should not be over-thinked or forced to fit into the
-collection / result set model, you can just feed them into the session as you
-please, whenever you need them:
+collection / result set syntax, if you feel like you need SQL then you can just
+feed queries into the session:
 
 ```go
 sqlRes, err = sess.Exec("CREATE TABLE ...") // sqlRes is a sql.Result
