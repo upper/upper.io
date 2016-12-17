@@ -7,4 +7,5 @@ server:
 hosts:
   /db.v1: "/var/docs/upper.io/v1"
   /db.v2: "/var/docs/upper.io/v2"
+  /db.v3: "/var/docs/upper.io/v3"
   default: "/var/docs/upper.io/default"
