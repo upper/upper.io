@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2" // We need this to use db.Raw
-	"upper.io/db.v2/postgresql"
+	"upper.io/db.v3" // We need this to use db.Raw
+	"upper.io/db.v3/postgresql"
 )
 
 // Book represents a book.

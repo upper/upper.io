@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v3/postgresql" // Imports the postgresql adapter.
 )
 
 // Shipment represents a shipment registry.

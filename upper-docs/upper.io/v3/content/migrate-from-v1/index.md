@@ -1,12 +1,12 @@
 # How to migrate from v1 to v2
 
-`db.v2` is incompatible with `db.v1`. In order not to break non versioned
+`db.v3` is incompatible with `db.v1`. In order not to break non versioned
 `db.v1` implementations, the old `upper.io/db` import path still points to the
 latest stable `v1`, but this is a temporary measure.
 
 If you want to stick with `v1`, please change your import paths to
 `upper.io/db.v1` you won't need to do any other modification, we'll keep stable
-versions without any breaking changes on `upper.io/db.v2` and `upper.io/db.v1`,
+versions without any breaking changes on `upper.io/db.v3` and `upper.io/db.v1`,
 but we may use `upper.io/db` for bleeding edge development at some point in the
 future.
 
@@ -26,12 +26,12 @@ detailed here.
 
 ## New import path
 
-The import path was changed from `upper.io/db` into `upper.io/db.v2`.
+The import path was changed from `upper.io/db` into `upper.io/db.v3`.
 
 ```go
 import (
   ...
-  "upper.io/db.v2"
+  "upper.io/db.v3"
   ...
 )
 ```
@@ -56,7 +56,7 @@ res = Find(db.Cond{"id": 1})
 
 ## Database.Collection()
 
-The [Database](https://godoc.org/upper.io/db.v2#Database) interface used to
+The [Database](https://godoc.org/upper.io/db.v3#Database) interface used to
 have a `C()` method, that method was replaced by `Collection()`, which does not
 return error anymore when the collection does not exist:
 
@@ -72,8 +72,8 @@ err := col.Find().All(&users)
 
 ## db.Func()
 
-[db.Func](https://godoc.org/upper.io/db.v2#Func) is now a function that returns
-a [db.Function](https://godoc.org/upper.io/db.v2#Function) interface:
+[db.Func](https://godoc.org/upper.io/db.v3#Func) is now a function that returns
+a [db.Function](https://godoc.org/upper.io/db.v3#Function) interface:
 
 ```go
 f := db.Func("MOD", 29, 9) // Before: db.Func{"MOD": []int{29, 9}}
@@ -83,8 +83,8 @@ f := db.Func("CONCAT", "abc", "def") // Before: db.Func{"CONCAT": []string{"abc"
 
 ## db.And() and db.Or()
 
-[db.And](https://godoc.org/upper.io/db.v2#And) is now a function that returns a
-[db.Intersection](https://godoc.org/upper.io/db.v2#Intersection) interface:
+[db.And](https://godoc.org/upper.io/db.v3#And) is now a function that returns a
+[db.Intersection](https://godoc.org/upper.io/db.v3#Intersection) interface:
 
 ```go
 // db.And used to be a struct:
@@ -112,8 +112,8 @@ cond.And(db.Cond{"b": 2})
 cond.And(db.Cond{"c": 3})
 ```
 
-[db.Or](https://godoc.org/upper.io/db.v2#Or) is now also a function that
-returns a [db.Union](https://godoc.org/upper.io/db.v2#Union) interface:
+[db.Or](https://godoc.org/upper.io/db.v3#Or) is now also a function that
+returns a [db.Union](https://godoc.org/upper.io/db.v3#Union) interface:
 
 ```go
 // db.Or used to be a struct:
@@ -142,13 +142,13 @@ cond.Or(db.Cond{"c": 3})
 ```
 
 Both `db.And` and `db.Or` can accept arguments that satisfy
-[db.Compound](https://godoc.org/upper.io/db.v2#Compound), which can be
+[db.Compound](https://godoc.org/upper.io/db.v3#Compound), which can be
 `db.Cond{}`, `db.Raw()` or the output from other `db.And()` or `db.Or()` calls.
 
 ## db.Raw()
 
-[db.Raw](https://godoc.org/upper.io/db.v2#Raw) is now a function that
-returns [db.RawValue](https://godoc.org/upper.io/db.v2#RawValue):
+[db.Raw](https://godoc.org/upper.io/db.v3#Raw) is now a function that
+returns [db.RawValue](https://godoc.org/upper.io/db.v3#RawValue):
 
 ```go
 db.Raw("SOUNDEX('Hello')") // Old: db.Raw{"SOUNDEX('Hello')"}
@@ -157,7 +157,7 @@ db.Raw("SOUNDEX('Hello')") // Old: db.Raw{"SOUNDEX('Hello')"}
 ## Result.Limit(int)
 
 The `Limit` method from the
-[db.Result](https://godoc.org/upper.io/db.v2#Result) interface now accepts int:
+[db.Result](https://godoc.org/upper.io/db.v3#Result) interface now accepts int:
 
 ```go
 res = Find().Limit(3) // Old: Find().Limit(uint(3))
@@ -166,7 +166,7 @@ res = Find().Limit(3) // Old: Find().Limit(uint(3))
 ## Result.Offset(int)
 
 The `Skip` method was renamed into `Offset`, it's still part of the
-[db.Result](https://godoc.org/upper.io/db.v2#Result) interface and it now
+[db.Result](https://godoc.org/upper.io/db.v3#Result) interface and it now
 accepts int:
 
 ```go
@@ -175,7 +175,7 @@ res = Find().Limit(3).Offset(5) // Old: Find().Limit(uint(3)).Skip(uint(5))
 
 ## Collection.Insert(item)
 
-The [Collection](https://godoc.org/upper.io/db.v2#Collection) interface used to
+The [Collection](https://godoc.org/upper.io/db.v3#Collection) interface used to
 have an `Append(item)` method, that method was renamed into `Insert(item)`.
 
 ```go
@@ -184,7 +184,7 @@ id, err = col.Insert(foo) // Old: col.Append(foo)
 
 ## Collection.InsertReturning(item)
 
-The [Collection](https://godoc.org/upper.io/db.v2#Collection) interface has a
+The [Collection](https://godoc.org/upper.io/db.v3#Collection) interface has a
 new method `InsertReturning(item)` which inserts the passed item and updates it with
 the actual value from the database. It is useful for auto values, like ID or
 automatic creation/modification dates.
@@ -196,7 +196,7 @@ err = col.InsertReturning(foo)
 
 ## Collection.Delete()
 
-The [Collection](https://godoc.org/upper.io/db.v2#Collection) interface used
+The [Collection](https://godoc.org/upper.io/db.v3#Collection) interface used
 to have a `Remove()` method, that method was renamed into `Delete()`:
 
 ```go
@@ -210,8 +210,8 @@ were used to map `*sql.Rows` into Go values, those functions do not exist
 anymore.
 
 This functionality is now provided by the
-[sqlbuilder](https://godoc.org/upper.io/db.v2/lib/sqlbuilder) package which
-provides the [Builder](https://godoc.org/upper.io/db.v2/lib/sqlbuilder#Builder)
+[sqlbuilder](https://godoc.org/upper.io/db.v3/lib/sqlbuilder) package which
+provides the [Builder](https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Builder)
 interface which is already integrated into regular SQL sessions:
 
 ```go
@@ -224,12 +224,12 @@ err = sess.Iterator("SELECT * FROM myTable").All(&myItems)
 ```
 
 You can also use
-[NewIterator](https://godoc.org/upper.io/db.v2/lib/sqlbuilder#NewIterator) on
+[NewIterator](https://godoc.org/upper.io/db.v3/lib/sqlbuilder#NewIterator) on
 `*sql.Rows` generated outside `db`:
 
 ```go
 import (
-  "upper.io/db.v2/lib/sqlbuilder"
+  "upper.io/db.v3/lib/sqlbuilder"
 )
 
 ...
@@ -240,19 +240,19 @@ err = sqlbuilder.NewIterator(rows).All(&myRows)
 
 The sqlbuilder offers powerful tools and more flexibility when working with
 advanced SQL commands, see more examples at
-[upper.io/db.v2/lib/sqlbuilder](https://upper.io/db.v2/lib/sqlbuilder).
+[upper.io/db.v3/lib/sqlbuilder](https://upper.io/db.v3/lib/sqlbuilder).
 
 ## Result.OrderBy()
 
-The [db.Result](https://godoc.org/upper.io/db.v2#Result) interface used
+The [db.Result](https://godoc.org/upper.io/db.v3#Result) interface used
 to have a `Sort()` method, that method was renamed into `OrderBy()`:
 
 ## Transactions
 
-The [db.Database](https://godoc.org/upper.io/db.v2#Database) interface used to
+The [db.Database](https://godoc.org/upper.io/db.v3#Database) interface used to
 have a `Transaction()` method, this functionality was removed from here and
 moved to
-[sqlbuilder.Database](https://godoc.org/upper.io/db.v2/lib/sqlbuilder#Database)
+[sqlbuilder.Database](https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Database)
 as the `NewTx()` method.
 
 ```go
@@ -271,7 +271,7 @@ function run within a transaction:
 
 ```go
 import (
-  "upper.io/db.v2/lib/sqlbuilder"
+  "upper.io/db.v3/lib/sqlbuilder"
 )
 
 err = sess.Tx(func(tx sqlbuilder.Tx) error {

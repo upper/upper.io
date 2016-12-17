@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2/lib/sqlbuilder"
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v3/lib/sqlbuilder"
+	"upper.io/db.v3/postgresql" // Imports the postgresql adapter.
 )
 
 var settings = postgresql.ConnectionURL{

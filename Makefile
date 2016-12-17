@@ -32,13 +32,15 @@ docker-run: docker machines
 		-v $(PRIVATE_DIR):/etc/private \
 		-t $(CONTAINER_IMAGE) && \
 	sleep 5 && \
-	(curl --silent -k "https://127.0.0.1/db.v2" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db.v1" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db" -H "Host: upper.io" | grep 302 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1" -H "Host: upper.io" | grep 302 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db.v2?go-get=1" -H "Host: upper.io" | grep tree/2 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db.v1?go-get=1" -H "Host: upper.io" | grep tree/1 || exit 1) && \
-	(curl --silent -k "https://127.0.0.1/db?go-get=1" -H "Host: upper.io" | grep tree/master || exit 1)
+	(curl --verbose -k "https://127.0.0.1/db.v3" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db.v2" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db.v1" -H "Host: upper.io" | grep DOCTYPE || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db" -H "Host: upper.io" | grep 302 || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1" -H "Host: upper.io" | grep 302 || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db.v3?go-get=1" -H "Host: upper.io" | grep tree/3 || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db.v2?go-get=1" -H "Host: upper.io" | grep tree/2 || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db.v1?go-get=1" -H "Host: upper.io" | grep tree/1 || exit 1) && \
+	(curl --verbose -k "https://127.0.0.1/db?go-get=1" -H "Host: upper.io" | grep tree/master || exit 1)
 
 
 deploy-playground:

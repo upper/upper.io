@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2"            // Imports the main db package.
-	"upper.io/db.v2/postgresql" // Imports the postgresql adapter.
+	"upper.io/db.v3"            // Imports the main db package.
+	"upper.io/db.v3/postgresql" // Imports the postgresql adapter.
 )
 
 // Person represents a person with a name.

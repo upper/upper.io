@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2/postgresql" // Import the postgresql adapter.
+	"upper.io/db.v3/postgresql" // Import the postgresql adapter.
 )
 
 // Describe the database you want to connect to.

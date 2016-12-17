@@ -17,7 +17,7 @@ highly recommended.
 Use `go get` to download and install the adapter:
 
 ```
-go get upper.io/db.v2/postgresql
+go get upper.io/db.v3/postgresql
 ```
 
 ## Setting up database access
@@ -57,14 +57,14 @@ postgresql.ParseURL(dsn string) (ConnectionURL, error)
 
 ## Usage
 
-Import the `upper.io/db.v2/postgresql` package into your application:
+Import the `upper.io/db.v3/postgresql` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2/postgresql"
+  "upper.io/db.v3/postgresql"
 )
 ```
 
@@ -116,7 +116,7 @@ import (
   "log"
   "time"
 
-  "upper.io/db.v2/postgresql"
+  "upper.io/db.v3/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
@@ -227,7 +227,7 @@ JSON types area supported on PostgreSQL 9.4+.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/lib/sqlbuilder) for any complex SQL query:
+You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
 ```go
 q := sess.Select(
@@ -293,5 +293,5 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 
 [1]: https://github.com/lib/pq
 [2]: http://www.postgresql.org/
-[3]: /db.v2/getting-started
-[4]: /db.v2/examples
+[3]: /db.v3/getting-started
+[4]: /db.v3/examples

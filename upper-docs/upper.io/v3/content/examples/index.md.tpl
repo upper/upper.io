@@ -129,7 +129,7 @@ parameters to open a database:
 ```go
 import (
   ...
-  "upper.io/db.v2/postgresql"
+  "upper.io/db.v3/postgresql"
   ...
 )
 
@@ -166,7 +166,7 @@ into a `ConnectionURL` struct and use it to connect to a database by using the
 ```go
 import (
   ...
-  "upper.io/db.v2/postgresql"
+  "upper.io/db.v3/postgresql"
   ...
 )
 
@@ -249,7 +249,7 @@ newID, err = col.Insert(map[string]interface{}{
 ### Inserting elements with the SQL builder
 
 If you rather not use collections, you can also use a SQLish syntax
-to [insert](/db.v2/lib/sqlbuilder#insert-statement) elements:
+to [insert](/db.v3/lib/sqlbuilder#insert-statement) elements:
 
 ```
 q = sess.InsertInto("people").Columns("name").Values("John")
@@ -259,7 +259,7 @@ res, err = q.Exec() // res is a sql.Result
 ```
 
 This SQLish syntax is only available on SQL adapters. See [INSERT
-statement](/db.v2/lib/sqlbuilder#insert-statement).
+statement](/db.v3/lib/sqlbuilder#insert-statement).
 
 ## Result sets
 
@@ -447,7 +447,7 @@ err = res.Update(map[string]interface{}{
 
 ### Updating with the SQL builder
 
-See [UPDATE statement](/db.v2/lib/sqlbuilder#update-statement):
+See [UPDATE statement](/db.v3/lib/sqlbuilder#update-statement):
 
 ```
 q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
@@ -478,7 +478,7 @@ err = res.Delete()
 
 ### Deleting with the SQL builder
 
-See [DELETE statement](/db.v2/lib/sqlbuilder#delete-statement):
+See [DELETE statement](/db.v3/lib/sqlbuilder#delete-statement):
 
 ```go
 q = sess.DeleteFrom("accounts").Where("id", 5)
@@ -594,8 +594,8 @@ You can create and use transaction blocks with the `Tx` method:
 ```go
 import (
   "log"
-  "upper.io/db.v2"
-  "upper.io/db.v2/lib/sqlbuilder"
+  "upper.io/db.v3"
+  "upper.io/db.v3/lib/sqlbuilder"
 )
 
 func main() {
@@ -801,6 +801,6 @@ iter.All(&accounts)
 
 See [builder examples][2] to learn how to master the SQL query builder.
 
-[1]: /db.v2/getting-started
-[2]: /db.v2/lib/sqlbuilder
-[3]: /db.v2/contribute
+[1]: /db.v3/getting-started
+[2]: /db.v3/lib/sqlbuilder
+[3]: /db.v3/contribute

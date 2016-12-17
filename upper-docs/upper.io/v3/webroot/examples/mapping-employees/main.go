@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v2/postgresql"
+	"upper.io/db.v3/postgresql"
 )
 
 // Employee defines the mapping between the "employees" table and Go.

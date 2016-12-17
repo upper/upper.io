@@ -133,7 +133,7 @@ pre {
   .nav--adapters ul {
     display: none; }
 
-.breadcrumb a[href="/db.v2/"] {
+.breadcrumb a[href="/db.v3/"] {
   position: relative;
   vertical-align: middle;
   margin-top: -3px;
@@ -148,7 +148,7 @@ pre {
   overflow: hidden;
   outline: none;
   display: inline-block; }
-  .breadcrumb a[href="/db.v2/"]:before {
+  .breadcrumb a[href="/db.v3/"]:before {
     content: "";
     position: absolute;
     top: 0;

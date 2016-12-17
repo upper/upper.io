@@ -16,7 +16,7 @@ highly recommended.
 Use `go get` to download and install the adapter:
 
 ```go
-go get upper.io/db.v2/ql
+go get upper.io/db.v3/ql
 ```
 
 ## Setting up database access
@@ -53,14 +53,14 @@ ql.ParseURL(dsn string) (ConnectionURL, error)
 
 ## Usage
 
-Import the `upper.io/db.v2/ql` package into your application:
+Import the `upper.io/db.v3/ql` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2/ql"
+  "upper.io/db.v3/ql"
 )
 ```
 
@@ -110,7 +110,7 @@ import (
   "fmt"
   "log"
   "time"
-  "upper.io/db.v2/ql"
+  "upper.io/db.v3/ql"
 )
 
 var settings = ql.ConnectionURL{
@@ -200,7 +200,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/lib/sqlbuilder) for any complex SQL query:
+You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
 ```go
 q := b.Select(
@@ -236,5 +236,5 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 
 [1]: https://github.com/cznic/ql
 [2]: http://golang.org/doc/effective_go.html#blank
-[3]: /db.v2/getting-started
-[4]: /db.v2/examples
+[3]: /db.v3/getting-started
+[4]: /db.v3/examples

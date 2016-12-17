@@ -40,7 +40,7 @@ Once `gcc` is installed, use `go get` to download, compile and install the
 sqlite adapter.
 
 ```
-go get upper.io/db.v2/sqlite
+go get upper.io/db.v3/sqlite
 ```
 
 ## Setting up database access
@@ -77,14 +77,14 @@ sqlite.ParseURL(dsn string) (ConnectionURL, error)
 
 ## Usage
 
-Import the `upper.io/db.v2/sqlite` package into your application:
+Import the `upper.io/db.v3/sqlite` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2/sqlite"
+  "upper.io/db.v3/sqlite"
 )
 ```
 
@@ -134,7 +134,7 @@ import (
   "fmt"
   "log"
   "time"
-  "upper.io/db.v2/sqlite"
+  "upper.io/db.v3/sqlite"
 )
 
 var settings = sqlite.ConnectionURL{
@@ -223,7 +223,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/lib/sqlbuilder) for any complex SQL query:
+You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
 ```go
 q := b.Select(
@@ -282,5 +282,5 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 [2]: http://golang.org/doc/effective_go.html#blank
 [3]: http://www.sqlite.org/
 [4]: https://golang.org/cmd/cgo/
-[5]: /db.v2/getting-started
-[6]: /db.v2/examples
+[5]: /db.v3/getting-started
+[6]: /db.v3/examples

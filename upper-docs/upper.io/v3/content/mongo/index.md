@@ -23,7 +23,7 @@ sudo apt-get install bzr -y
 After bazaar is installed, use `go get` to download and install the adapter.
 
 ```
-go get upper.io/db.v2/mongo
+go get upper.io/db.v3/mongo
 ```
 
 ## Setting up database access
@@ -54,14 +54,14 @@ mongo.ParseURL(s string) (ConnectionURL, error)
 
 ## Usage
 
-Import the `upper.io/db.v2/mongo` package into your application:
+Import the `upper.io/db.v3/mongo` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2/mongo"
+  "upper.io/db.v3/mongo"
 )
 ```
 
@@ -93,7 +93,7 @@ import (
   "log"
   "time"
 
-  "upper.io/db.v2/mongo"
+  "upper.io/db.v3/mongo"
 )
 
 var settings = mongo.ConnectionURL{
@@ -183,5 +183,5 @@ Hironobu Sakaguchi was born in November 25, 1962.
 [2]: http://bazaar.canonical.com/en/
 [3]: http://www.mongodb.org/
 [4]: http://labix.org/gobson
-[5]: http://godoc.org/upper.io/db.v2#IDSetter
-[6]: http://godoc.org/upper.io/db.v2/mongo#ObjectIdIDSetter
+[5]: http://godoc.org/upper.io/db.v3#IDSetter
+[6]: http://godoc.org/upper.io/db.v3/mongo#ObjectIdIDSetter

@@ -16,7 +16,7 @@ highly recommended.
 Use `go get` to download and install the adapter:
 
 ```
-go get upper.io/db.v2/mysql
+go get upper.io/db.v3/mysql
 ```
 
 ## Setting up database access
@@ -56,14 +56,14 @@ mysql.ParseURL(dsn string) (ConnectionURL, error)
 
 ## Usage
 
-Import the `upper.io/db.v2/mysql` package into your application:
+Import the `upper.io/db.v3/mysql` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v2/mysql"
+  "upper.io/db.v3/mysql"
 )
 ```
 
@@ -114,7 +114,7 @@ import (
   "fmt"
   "log"
   "time"
-  "upper.io/db.v2/mysql"   // Imports the mysql adapter.
+  "upper.io/db.v3/mysql"   // Imports the mysql adapter.
 )
 
 var settings = mysql.ConnectionURL{
@@ -207,7 +207,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ### SQL builder
 
-You can use the [query builder](/db.v2/lib/sqlbuilder) for any complex SQL query:
+You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
 ```go
 q := b.Select(
@@ -264,5 +264,5 @@ res = sess.Find().Select(db.Func("DISTINCT", "name"))
 
 [1]: https://github.com/go-sql-driver/mysql
 [2]: http://www.mysql.com
-[3]: /db.v2/getting-started
-[4]: /db.v2/examples
+[3]: /db.v3/getting-started
+[4]: /db.v3/examples

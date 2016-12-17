@@ -1,4 +1,4 @@
-# upper.io/db.v2
+# upper.io/db.v3
 
 `upper-db` provides a *common interface* to work with different data sources
 using *adapters* that wrap mature database drivers.
@@ -12,16 +12,16 @@ databases and provides partial support (CRUD, no transactions) for
 [MongoDB][7].
 
 <center>
-![upper.io/db.v2 package](/db.v2/res/general.png)
+![upper.io/db.v3 package](/db.v3/res/general.png)
 </center>
 
 Coming from v1? we have a [migration
-guide](https://upper.io/db.v2/migrate-from-v1) that may come in handy.
+guide](https://upper.io/db.v3/migrate-from-v1) that may come in handy.
 
 ## Key concepts
 
 <center>
-![Database](/db.v2/res/database.png)
+![Database](/db.v3/res/database.png)
 </center>
 
 A database context is known as a **session**. You can create a session by
@@ -31,7 +31,7 @@ provide:
 ```
 import (
   ...
-  "upper.io/db.v2/postgresql" // The PostgreSQL adapter
+  "upper.io/db.v3/postgresql" // The PostgreSQL adapter
   ...
 )
 
@@ -102,11 +102,11 @@ The figure below ilustrates the session, collection, `Find()` and result set
 concepts:
 
 <center>
-![Collections](/db.v2/res/collection.png)
+![Collections](/db.v3/res/collection.png)
 </center>
 
 Besides giving tools for collections and result sets, sessions also have a
-built-in SQLish [query builder](/db.v2/lib/sqlbuilder) that gives more freedom
+built-in SQLish [query builder](/db.v3/lib/sqlbuilder) that gives more freedom
 while keeping manual SQL writing at bay.
 
 ```go
@@ -134,7 +134,7 @@ err = sqlRows.Scan(&a, &b, ...)
 // a struct
 
 // Just make sure you're importing the `sqlbuilder` package:
-import "upper.io/db.v2/lib/sqlbuilder"
+import "upper.io/db.v3/lib/sqlbuilder"
 ...
 
 // And create a new Iterator with any *sql.Rows object:
@@ -142,22 +142,22 @@ iter = sqlbuilder.NewIterator(sqlRows)
 err = iter.All(&item)
 ```
 
-See more code examples and patterns on our [examples](/db.v2/examples) page.
+See more code examples and patterns on our [examples](/db.v3/examples) page.
 
 ## Installation
 
-The `upper.io/db.v2` package depends on the [Go compiler and tools][2] and it's
+The `upper.io/db.v3` package depends on the [Go compiler and tools][2] and it's
 compatible with Go 1.4 and above.
 
 ```sh
-go get -v -u upper.io/db.v2
+go get -v -u upper.io/db.v3
 ```
 
 If the above command does not work for some reason, you can always pull the
 source directly from GitHub:
 
 ```sh
-export UPPERIO_V2=$GOPATH/src/upper.io/db.v2
+export UPPERIO_V2=$GOPATH/src/upper.io/db.v3
 rm -rf $UPPERIO_V2
 mkdir -p $UPPERIO_V2
 git clone https://github.com/upper/db.git $UPPERIO_V2
@@ -170,11 +170,11 @@ go build && go install
 Here's the list of currently supported adapters, make sure to read the
 instructions from the specific adapter for installation instructions:
 
-* [MySQL](/db.v2/mysql)
-* [MongoDB](/db.v2/mongo)
-* [PostgreSQL](/db.v2/postgresql)
-* [QL](/db.v2/ql)
-* [SQLite](/db.v2/sqlite)
+* [MySQL](/db.v3/mysql)
+* [MongoDB](/db.v3/mongo)
+* [PostgreSQL](/db.v3/postgresql)
+* [QL](/db.v3/ql)
+* [SQLite](/db.v3/sqlite)
 
 ## Basic usage
 
@@ -250,7 +250,7 @@ Import the adapter package into your application:
 
 ```go
 import (
-  "upper.io/db.v2/postgresql" // PostgreSQL package
+  "upper.io/db.v3/postgresql" // PostgreSQL package
 )
 ```
 
@@ -609,7 +609,7 @@ type Point struct {
 The basic collection/result won't be appropriate for some situations, when this
 happens, you can use `db` as a simple bridge between SQL queries and Go types.
 
-SQL adapters come with a [SQL builder](/db.v2/lib/sqlbuilder), try it and see if it
+SQL adapters come with a [SQL builder](/db.v3/lib/sqlbuilder), try it and see if it
 fits your needs:
 
 ```go
@@ -640,7 +640,7 @@ SQL queries like the above can also be mapped to Go structs by using an
 iterator:
 
 ```go
-import "upper.io/db.v2/lib/sqlbuilder"
+import "upper.io/db.v3/lib/sqlbuilder"
 ...
 
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
@@ -652,7 +652,7 @@ err = iter.All(&accounts)
 ...
 ```
 
-See [SQL builder](/db.v2/lib/sqlbuilder).
+See [SQL builder](/db.v3/lib/sqlbuilder).
 
 ## Transactions
 
@@ -741,8 +741,8 @@ The MIT license:
 
 [1]: https://golang.org
 [2]: https://golang.org/doc/install
-[3]: /db.v2/mysql
-[4]: /db.v2/postgresql
-[5]: /db.v2/sqlite
-[6]: /db.v2/ql
-[7]: /db.v2/mongo
+[3]: /db.v3/mysql
+[4]: /db.v3/postgresql
+[5]: /db.v3/sqlite
+[6]: /db.v3/ql
+[7]: /db.v3/mongo
