@@ -4,8 +4,8 @@
 using *adapters* that wrap mature database drivers.
 
 The main purpose of `db` is to abstract common database tasks (CRUD) and
-provide tools for [Go][1] developers to perform complex queries when they need
-to.
+provide tools for [Go 1.8+][1] developers to perform complex queries when they
+need to.
 
 `db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
 databases and provides partial support (CRUD, no transactions) for
@@ -15,8 +15,8 @@ databases and provides partial support (CRUD, no transactions) for
 ![upper.io/db.v3 package](/db.v3/res/general.png)
 </center>
 
-Coming from v1? we have a [migration
-guide](https://upper.io/db.v3/migrate-from-v1) that may come in handy.
+Coming from v2? we have a [migration
+guide](https://upper.io/db.v3/migrate-from-v2) that may come in handy.
 
 ## Key concepts
 
@@ -110,7 +110,8 @@ built-in SQLish [query builder](/db.v3/lib/sqlbuilder) that gives more freedom
 while keeping manual SQL writing at bay.
 
 ```go
-q = sess.SelectFrom("people").Where("name = ?", "María")
+q = sess.SelectFrom("people")
+  .Where("name = ?", "María")
 err = q.All(&marias)
 ```
 
@@ -157,11 +158,11 @@ If the above command does not work for some reason, you can always pull the
 source directly from GitHub:
 
 ```sh
-export UPPERIO_V2=$GOPATH/src/upper.io/db.v3
-rm -rf $UPPERIO_V2
-mkdir -p $UPPERIO_V2
-git clone https://github.com/upper/db.git $UPPERIO_V2
-cd $UPPERIO_V2
+export UPPERIO_V3=$GOPATH/src/upper.io/db.v3
+rm -rf $UPPERIO_V3
+mkdir -p $UPPERIO_V3
+git clone https://github.com/upper/db.git $UPPERIO_V3
+cd $UPPERIO_V3
 go build && go install
 ```
 

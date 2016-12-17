@@ -67,7 +67,6 @@
             <li>{{ anchor "/ql" "QL" }}</li>
             <li>{{ anchor "/mongo" "MongoDB" }}</li>
             <li>{{ anchor "/lib/sqlbuilder" "SQL Builder" }}</li>
-            <li><a href="/db.v1">db.v1</a></li>
           </ul>
         </div>
       </nav>
@@ -157,7 +156,7 @@
               <li>Maps query results into Go structs</li>
               <li>Lets you use plain SQL when you need to</li>
               <li>Provides an (optional) set-oriented syntax that works the same on SQL and NoSQL databases</li>
-              <li>Easy syntax for transactions</li>
+              <li>Supports Go 1.8's database/sql features</li>
               <li>That's all!</li>
             </ul>
             <h2>Try it!</h2>

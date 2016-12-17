@@ -15,8 +15,9 @@ databases and provides partial support (CRUD, no transactions) for
 ![upper.io/db.v2 package](/db.v2/res/general.png)
 </center>
 
-Coming from v1? we have a [migration
-guide](https://upper.io/db.v2/migrate-from-v1) that may come in handy.
+Living on the edge? We're preparing a new `db.v3` release for Go1.8+, see [v3's
+site](/db.v3) or check out our [v2 to v3 migration
+guide](https://upper.io/db.v3/migrate-from-v2)
 
 ## Key concepts
 
