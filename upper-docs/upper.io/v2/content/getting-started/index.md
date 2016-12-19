@@ -17,7 +17,7 @@ databases and provides partial support (CRUD, no transactions) for
 
 Living on the edge? We're preparing a new `db.v3` release for Go1.8+, see [v3's
 site](/db.v3) or check out our [v2 to v3 migration
-guide](https://upper.io/db.v3/migrate-from-v2)
+guide](https://upper.io/db.v3/migrate-from-v2).
 
 ## Key concepts
 

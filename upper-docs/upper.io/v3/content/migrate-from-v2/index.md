@@ -1,5 +1,8 @@
 # How to migrate from v2 to v3
 
+WARNING: `db.v3` is not finished yet, the contents of this document may change
+without previous notice.
+
 ## Differences from db.v2
 
 ### Go1.8+

@@ -1,5 +1,8 @@
 # upper.io/db.v3
 
+WARNING: `db.v3` is not finished yet, the contents of this document may change
+without previous notice.
+
 `upper-db` provides a *common interface* to work with different data sources
 using *adapters* that wrap mature database drivers.
 
