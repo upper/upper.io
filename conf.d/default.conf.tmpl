@@ -26,7 +26,7 @@ server {
 
     rewrite ^/db/(.*)$ /db.v1/$1 redirect;
     rewrite ^/db$ /db.v1/ redirect;
-    rewrite ^/$ /db.v2/ redirect;
+    rewrite ^/$ /db.v3/ redirect;
 
     try_files =404 @vanity;
     error_page 404 = @vanity;

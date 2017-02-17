@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v3"
 	"upper.io/db.v3/postgresql"
 )
 
@@ -32,7 +31,7 @@ func main() {
 
 	// Set this to true to enable the query logger which will print all SQL
 	// statements to stdout.
-	db.Conf.SetLogging(false)
+	sess.SetLogging(false)
 
 	// Define a result set without passing a condition to Find(), this means we
 	// want to match all the elements on the books table.

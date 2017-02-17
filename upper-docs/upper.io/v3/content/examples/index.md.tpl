@@ -689,10 +689,10 @@ see the generated SQL queries and the result from their execution printed to
 ```
 
 Besides the `UPPERIO_DB_DEBUG` env, you can enable or disable the built-in
-query logger during runtime using `db.Conf.SetLogging`:
+query logger during runtime using `sess.SetLogging`:
 
 ```go
-db.Conf.SetLogging(true)
+sess.SetLogging(true)
 ```
 
 If you want to do something different with this log, such as reporting query
@@ -712,17 +712,17 @@ func (*customLogger) Log(q *db.QueryStatus) {
 }
 ```
 
-Use `db.Conf.SetLogger` to overwrite the built-in logger:
+Use `sess.SetLogger` to overwrite the built-in logger:
 
 ```go
-db.Conf.SetLogging(true)
-db.Conf.SetLogger(&customLogger{})
+sess.SetLogging(true)
+sess.SetLogger(&customLogger{})
 ```
 
 If you want to restore the built-in logger set the logger to `nil`:
 
 ```go
-db.Conf.SetLogger(nil)
+sess.SetLogger(nil)
 ```
 
 ## SQL builder

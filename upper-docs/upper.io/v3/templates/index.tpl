@@ -82,7 +82,7 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">It's not an ORM, just a productive data access layer for Go</p>
+              <p class="hero__description">A productive data access layer for Go</p>
             </div>
             <div class="github">
               <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the code at Github</a>
@@ -153,16 +153,20 @@
             </div>
 						<h2>Key features</h2>
             <ul>
-              <li>Maps query results into Go structs</li>
-              <li>Lets you use plain SQL when you need to</li>
-              <li>Provides an (optional) set-oriented syntax that works the same on SQL and NoSQL databases</li>
-              <li>Supports Go 1.8's database/sql features</li>
+              <li>Maps query results into Go structs.</li>
+              <li>Lets you use plain SQL whenever you need to.</li>
+              <li>Provides an (optional) set-oriented syntax that works the same on SQL and NoSQL databases.</li>
+              <li>Takes advantage of go1.8+'s context features, like query cancellation and timeouts.</li>
               <li>That's all!</li>
             </ul>
+            <p>
+              Check out our most recent <a href="https://github.com/upper/db/releases/tag/v3.0.0" target="_blank">release notes</a>.
+            </p>
             <h2>Try it!</h2>
             The box below is a <b>live demo</b>, you can modify and run
             read-only queries directly from your browser! Give it a try.
             <textarea class="go-playground-snippet" data-expanded="1" data-title="Live example: Retrieve a list of books">{{ include "webroot/examples/find-map-all-books/main.go" }}</textarea>
+
           {{ else }}
 
             {{ if .Content }}
@@ -178,6 +182,13 @@
           {{ end }}
         </div>
     </main>
+
+    <!--
+    <footer>
+      Want to work with the coolest Go shop in Mexico City? Let's talk: <a href="https://mazing.studio">Mazing Studio</a>.
+    </footer>
+    -->
+
     <script src="{{ asset "/js/app.js" }}"></script>
     {{ if setting "page/body/scripts/footer" }}
       <script type="text/javascript">

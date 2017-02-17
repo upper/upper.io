@@ -1,15 +1,13 @@
 # How to migrate from v2 to v3
 
-WARNING: `db.v3` is not finished yet, the contents of this document may change
-without previous notice.
-
 ## Differences from db.v2
 
-### Go1.8+
+### Go1.7+
 
-`db.v3` requires Go1.8+.
+`db.v3` will compile under go1.7 but requires go1.8+ to provide support for
+query cancelation and timeout (via `context.Context`).
 
-### Context
+### Support for context.Context
 
 Go1.8+ comes with new `database/sql` features, the ability to pass
 `context.Context` is one of them:
@@ -78,3 +76,6 @@ go get -u github.com/upper/cmd/dbcheck
 # Use "..." at the end to check all github.com/my/package's subpackages.
 dbcheck github.com/my/package/...
 ```
+
+If you want to see more details, check out our [release
+notes](https://github.com/upper/db/releases/tag/v3.0.0).

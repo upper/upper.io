@@ -6,7 +6,8 @@
 }
 
 div.play .input textarea {
-  color: #888;
+  color: #333;
+  background: #f0f0f0;
 }
 
 div.play .input:hover {
