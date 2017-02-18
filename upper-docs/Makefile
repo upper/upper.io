@@ -19,6 +19,7 @@ docker-run: docker
 	(docker stop $(CONTAINER_NAME) || exit 0) && \
 	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \
+		--restart=always \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		-v $$PWD:/var/docs \
 		--name $(CONTAINER_NAME) \

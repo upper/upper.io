@@ -11,6 +11,7 @@ docker-run: docker
 	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run \
 		-d \
+		--restart=always \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		--name $(CONTAINER_NAME) \
 		-t $(CONTAINER_IMAGE)

@@ -1,4 +1,4 @@
-FROM docker.io/xiam/vanity:0.1.3
+FROM docker.io/xiam/vanity:0.2
 
 EXPOSE 9001
 
