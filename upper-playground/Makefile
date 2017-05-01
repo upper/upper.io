@@ -1,5 +1,6 @@
-HOST_PORT ?= 9002
-CONTAINER_PORT ?= 9002
+HOST_PORT ?= 3000
+CONTAINER_PORT ?= 3000
+
 CONTAINER_NAME ?= upper-playground
 CONTAINER_IMAGE ?= upper/playground
 

@@ -2,7 +2,8 @@
 #
 
 env:
-  NAME: playground
+  NAME: upper-playground
+  IMAGE: upper/playground
   HOST_PORT: 9002
   CONTAINER_PORT: 3000
   WORKDIR: /home/deploy/tmp/
@@ -17,8 +18,6 @@ commands:
     run: uname -a; date
   check:
     run: rm -rf $WORKDIR/$NAME && mkdir -p $WORKDIR/$NAME
-  base:
-    run: rm -rf /tmp/go-playground && mkdir -p /tmp/go-playground && cd /tmp/go-playground && git clone https://github.com/xiam/go-playground.git . && cd webapp && export GOPATH=$HOME/go && go get -d ./... && go build -o app_linux_amd64 && docker build -t xiam/go-playground .
   upload:
     upload:
       - src: ./
@@ -26,7 +25,7 @@ commands:
   build:
     run: cd $WORKDIR/$NAME && make docker
   image:
-    run: docker images | grep $NAME
+    run: docker images | grep $IMAGE
   stop:
     run: docker stop $NAME || exit 0
   rm:
@@ -35,14 +34,14 @@ commands:
     run: docker start $NAME || exit 0
   run:
     run: >
-      mkdir -p /home/deploy/data/playground && cd $WORKDIR/$NAME && docker run \
+      cd $WORKDIR/$NAME && docker run \
         -d \
-        -v /home/deploy/data/playground:/var/data \
+        -v /data/playground:/var/data \
         --restart=always \
         --link upper-unsafebox:unsafebox \
         --name $NAME \
         -p 127.0.0.1:$HOST_PORT:$CONTAINER_PORT \
-        -t $NAME
+        -t $IMAGE
   ps:
     run: docker ps | grep $NAME
   test:
@@ -54,7 +53,6 @@ targets:
   deploy:
     - ping
     - check
-    - base
     - upload
     - build
     - image

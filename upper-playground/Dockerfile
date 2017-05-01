@@ -1,4 +1,4 @@
-FROM xiam/playgo-web
+FROM xiam/go-playground:1.2
 
 COPY entrypoint.sh /bin/entrypoint.sh
 
