@@ -5,15 +5,19 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
 
-    <link href="https://demo.upper.io/static/example.css" rel="stylesheet" type="text/css" />
+    <link href="//demo.upper.io/static/example.css" rel="stylesheet" type="text/css" />
+    <link href="//demo.upper.io/static/codemirror.css" rel="stylesheet" type="text/css" />
+    <link href="//codemirror.net/theme/material.css" rel="stylesheet" type="text/css" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="https://demo.upper.io/static/playground.js"></script>
-    <script src="https://demo.upper.io/static/snippets.js"></script>
+
+    <script src="//demo.upper.io/static/playground-full.js"></script>
+    <script src="//demo.upper.io/static/snippets.js"></script>
 
     <link href="{{ asset "/css/style.css" }}" rel="stylesheet" />
     <link href="{{ asset "/css/syntax.css" }}" rel="stylesheet">
     <link href="{{ asset "/css/play.css" }}" rel="stylesheet">
+    <link href="{{ asset "/css/upper.css" }}" rel="stylesheet">
     <title>
       {{ if .IsHome }}
         {{ setting "page/head/title" }}
@@ -38,6 +42,7 @@
       'shareRedirect': 'https://demo.upper.io/p/',
       'shareURL': 'https://demo.upper.io/share',
       'compileURL': 'https://demo.upper.io/compile',
+      'theme': 'material',
       'fmtURL': 'https://demo.upper.io/fmt',
       'shareOpenNewWindow': true
     });
@@ -188,6 +193,13 @@
       Want to work with the coolest Go shop in Mexico City? Let's talk: <a href="https://mazing.studio">Mazing Studio</a>.
     </footer>
     -->
+    <footer class='footer'>
+      <small>
+        Made with <span class='hearth'>❤</span> at
+        <a href='https://mazing.studio' target='_blank'>mazing.studio</a>
+        © 2017
+      </small>
+    </footer>
 
     <script src="{{ asset "/js/app.js" }}"></script>
     {{ if setting "page/body/scripts/footer" }}

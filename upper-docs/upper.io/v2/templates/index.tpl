@@ -5,11 +5,13 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
 
-    <link href="https://demo.upper.io/static/example.css" rel="stylesheet" type="text/css" />
+    <link href="//demo.upper.io/static/example.css" rel="stylesheet" type="text/css" />
+    <link href="//demo.upper.io/static/codemirror.css" rel="stylesheet" type="text/css" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="https://demo.upper.io/static/playground.js"></script>
-    <script src="https://demo.upper.io/static/snippets.js"></script>
+
+    <script src="//demo.upper.io/static/playground-full.js"></script>
+    <script src="//demo.upper.io/static/snippets.js"></script>
 
     <link href="{{ asset "/css/style.css" }}" rel="stylesheet" />
     <link href="{{ asset "/css/syntax.css" }}" rel="stylesheet">

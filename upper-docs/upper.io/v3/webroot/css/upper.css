@@ -1,14 +1,14 @@
-.logo {
+.footer {
+  padding: 2rem 3rem;
+  color: #333;
   text-align: center;
-  padding-top: 1rem;
 }
-.logo img {
-  display: inline;
-  margin: 0px;
+.footer .hearth {
+  color: #e74039;
 }
-a img {
-  border: none;
+.footer a {
+  text-decoration: underline;
 }
-h1 {
-  margin-top: 0px;
+main .CodeMirror {
+  height: 100%;
 }

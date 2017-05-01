@@ -12,3 +12,6 @@ a img {
 h1 {
   margin-top: 0px;
 }
+main .CodeMirror {
+  height: 100%;
+}
