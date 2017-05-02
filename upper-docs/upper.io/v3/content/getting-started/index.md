@@ -7,8 +7,8 @@ The main purpose of `db` is to abstract common database tasks (CRUD) and
 provide tools for [Go 1.8+][1] developers to perform complex queries when they
 need to.
 
-`db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5] and [QL][6]
-databases and provides partial support (CRUD, no transactions) for
+`db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5], [MSSQL][8] and
+[QL][6] databases and provides partial support (CRUD, no transactions) for
 [MongoDB][7].
 
 <center>
@@ -168,14 +168,8 @@ go build && go install
 
 ### Supported databases
 
-Here's the list of currently supported adapters, make sure to read the
-instructions from the specific adapter for installation instructions:
-
-* [MySQL](/db.v3/mysql)
-* [MongoDB](/db.v3/mongo)
-* [PostgreSQL](/db.v3/postgresql)
-* [QL](/db.v3/ql)
-* [SQLite](/db.v3/sqlite)
+See the [adapters](/db.v3/adapters) for the complete list of supported
+adapters.
 
 ## Basic usage
 
@@ -747,3 +741,4 @@ The MIT license:
 [5]: /db.v3/sqlite
 [6]: /db.v3/ql
 [7]: /db.v3/mongo
+[8]: /db.v3/mssql

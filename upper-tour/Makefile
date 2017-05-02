@@ -5,10 +5,9 @@ CONTAINER_IMAGE ?= upper/db-tour
 CONTAINER_NAME ?= upper-tour
 
 docker:
-	docker build -t $(CONTAINER_IMAGE) .
+	docker build --pull -t $(CONTAINER_IMAGE) .
 
 docker-run: docker
-	mkdir -p data && \
 	(docker stop $(CONTAINER_NAME) || exit 0) && \
 	(docker rm $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \

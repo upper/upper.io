@@ -64,14 +64,11 @@
           {{ end }}
         </div>
         <div class="nav--adapters">
-          <span class="nav__trigger--adapters" id="adapters-menu-trigger">tools</span>
+          <span class="nav__trigger--adapters" id="adapters-menu-trigger">upper.io</span>
           <ul id="adapters-menu">
-            <li>{{ anchor "/postgresql" "PostgreSQL" }}</li>
-            <li>{{ anchor "/mysql" "MySQL" }}</li>
-            <li>{{ anchor "/sqlite" "SQLite" }}</li>
-            <li>{{ anchor "/ql" "QL" }}</li>
-            <li>{{ anchor "/mongo" "MongoDB" }}</li>
-            <li>{{ anchor "/lib/sqlbuilder" "SQL Builder" }}</li>
+            <li><a href="//tour.upper.io">Tour</a></li>
+            <li><a href="/db.v3/adapters">Adapters</a></li>
+            <li><a href="//godoc.org/upper.io/db.v3">Reference</a></li>
           </ul>
         </div>
       </nav>
@@ -87,10 +84,10 @@
                   <span>upper.io/db</span>
                 </a>
               </h1>
-              <p class="hero__description">A productive data access layer for Go</p>
+              <p class="hero__description">Productive <b>data access layer</b> for Go</p>
             </div>
             <div class="github">
-              <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out the code at Github</a>
+              <a class="github__icon" target="_blank" href="https://github.com/upper/db">Check out our repo at Github</a>
             </div>
             <p class="pressly text-center hidden-extra-small">Proudly sponsored by
               <a href="https://www.pressly.com" target="_blank"><img width="150" class="vertical-middle logo-pressly" src="{{ asset "images/pressly-logo.svg?1" }}" /></a>
@@ -128,6 +125,27 @@
               <div class="feature">
                 <h2 class="feature__title">{{ anchor "/getting-started" "Get started" }}</h2>
                 <p class="feature__description">
+                  If you're new you can {{ anchor "/getting-started" "read an intro"}}
+                  or see {{ anchor "/examples" "code snippets"}} to <b>learn the basics</b>.
+                </p>
+                <a href="{{ asset "/examples" }}" class="hidden">
+                  <img class="feature__icon" src="{{ asset "images/figure-01.svg" }}" />
+                </a>
+              </div>
+              <div class="feature">
+                <h2 class="feature__title"><a href="//tour.upper.io">Take the tour</a></h2>
+                <p class="feature__description">
+                  After reading the basics, <a href="//tour.upper.io">take the
+                  tour</a> and practise with <b>live examples</b>.
+                </p>
+                <a href="{{ asset "/examples" }}" class="hidden">
+                  <img class="feature__icon" src="{{ asset "images/figure-01.svg" }}" />
+                </a>
+              </div>
+              <!--
+              <div class="feature">
+                <h2 class="feature__title">{{ anchor "/getting-started" "Get started" }}</h2>
+                <p class="feature__description">
                   If you're new you can {{ anchor "/getting-started" "start here"}}
                   to read an intro and <b>learn the basics</b>.
                 </p>
@@ -145,6 +163,7 @@
                   <img class="feature__icon" src="{{ asset "images/figure-02.svg" }}" />
                 </a>
               </div>
+              -->
               <div class="feature">
                 <h2 class="feature__title">{{ anchor "/contribute" "Contribute" }}</h2>
                 <p class="feature__description">
@@ -156,11 +175,11 @@
                 </a>
               </div>
             </div>
-						<h2>Key features</h2>
+						<h2>upper-db features</h2>
             <ul>
               <li>Maps query results into Go structs.</li>
               <li>Lets you use plain SQL whenever you need to.</li>
-              <li>Provides an (optional) set-oriented syntax that works the same on SQL and NoSQL databases.</li>
+              <li>Provides an (optional) common result-set oriented syntax (CROS) that works the same on SQL and NoSQL databases.</li>
               <li>Takes advantage of go1.8+'s context features, like query cancellation and timeouts.</li>
               <li>That's all!</li>
             </ul>

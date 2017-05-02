@@ -4,3 +4,9 @@
 .play a.run:visited {
   color: #e74039;
 }
+.exampleHeading {
+  font-weight: bold;
+}
+.play {
+  overflow: auto;
+}
