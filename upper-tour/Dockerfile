@@ -1,4 +1,4 @@
-FROM upper/db-tour:0.1.1
+FROM upper/db-tour:0.1.2
 
 WORKDIR /app
 
