@@ -226,18 +226,27 @@ the field name with a case-sensitive lookup.
 
 The `postgresql` adapter supports saving and retrieving JSON data when using
 [JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html), if
-you want to try this out, make sure your column is of `jsonb` type and that
-you're using the `jsonb` option when mapping your field:
+you want to try this out, make sure that the table column was created as
+`jsonb` and that the field has the `postgresql.JSONB` type.
 
 ```go
+import (
+  ...
+  "upper.io/db.v3/postgresql"
+  ...
+)
+
 type Person struct {
   ...
-  Properties  []string                `db:"properties,jsonb"`
-  Meta        map[string]interface{}  `db:"meta,jsonb"`
+  Properties  postgresql.JSONB                `db:"properties"`
+  Meta        postgresql.JSONB  `db:"meta"`
 }
 ```
 
 JSON types area supported on PostgreSQL 9.4+.
+
+Besides JSON, the `postgresql` adapter provides you with other custom types
+like `postgresql.StringArray` and `postgresql.Int64Array`.
 
 ### Setting up a database session
 

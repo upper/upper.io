@@ -681,11 +681,7 @@ see the generated SQL queries and the result from their execution printed to
 	Rows affected:  0
 	Time taken:     0.01813s
 
-2016/10/04 19:14:28
-	Session ID:     00003
-	Query:          INSERT INTO "option_types" ("name", "settings", "tags") VALUES ($1, $2, $3) RETURNING "id"
-	Arguments:      []interface {}{"Hi", sqlbuilder.jsonbType{V:postgresql.Settings{Name:"a", Num:123}}, sqlbuilder.stringArray{"aah", "ok"}}
-	Time taken:     0.00202s
+...
 ```
 
 Besides the `UPPERIO_DB_DEBUG` env, you can enable or disable the built-in
