@@ -593,14 +593,18 @@ You can create and use transaction blocks with the `Tx` method:
 
 ```go
 import (
+  "context"
   "log"
+
   "upper.io/db.v3"
   "upper.io/db.v3/lib/sqlbuilder"
 )
 
 func main() {
   ...
-  err := sess.Tx(func(tx sqlbuilder.Tx) error {
+  // The first argument for Tx() is either nil or a context.Context type.
+  // Use nil if you want the session's default context to be used.
+  err := sess.Tx(context.Background(), func(tx sqlbuilder.Tx) error {
     // Use `tx` like you would normally use `sess`.
     ...
     id, err := tx.Collection("accounts").Insert(...)
@@ -622,6 +626,8 @@ func main() {
 }
 ```
 
+If you want to know more about the context Tx requires see:
+https://golang.org/pkg/context/
 
 ### Manual transactions
 

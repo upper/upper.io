@@ -21,7 +21,9 @@ func main() {
 	}
 	defer sess.Close()
 
-	err = sess.Tx(func(tx sqlbuilder.Tx) error {
+	// The first argument for Tx() is either nil or a context.Context type.
+	// Use nil if you want the session's default context to be used.
+	err = sess.Tx(nil, func(tx sqlbuilder.Tx) error {
 		// Use tx like you would normally use sess:
 		total, err := tx.Collection("books").Find().Count()
 		if err != nil {
