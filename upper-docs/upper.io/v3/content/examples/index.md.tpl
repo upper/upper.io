@@ -632,10 +632,10 @@ https://golang.org/pkg/context/
 ### Manual transactions
 
 Alternatively, you can also request a transaction context and manage it
-yourself using the `NewTx()` method:
+yourself using the `NewTx` method:
 
 ```go
-tx, err := sess.NewTx()
+tx, err := sess.NewTx(ctx)
 ...
 ```
 

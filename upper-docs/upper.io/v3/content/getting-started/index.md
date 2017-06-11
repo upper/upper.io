@@ -660,10 +660,10 @@ See [SQL builder](/db.v3/lib/sqlbuilder).
 
 ## Transactions
 
-Use the `NewTx()` method on a session to create a transaction context:
+Use the `NewTx` method on a session to create a transaction context:
 
 ```go
-tx, err = sess.NewTx()
+tx, err = sess.NewTx(nil)
 ...
 
 id, err = tx.Collection("accounts").Insert(account)
