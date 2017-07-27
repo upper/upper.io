@@ -71,7 +71,7 @@ Then, you can use the `mssql.Open()` method to create a session:
 
 ```go
 var settings = mssql.ConnectionURL{
-  Host:       "localhost",          // PostgreSQL server IP or name.
+  Host:       "localhost",          // MSSQL server IP or name.
   Database:   "peanuts",            // Database name.
   User:       "cbrown",             // Optional user name.
   Password:   "snoopy",             // Optional user password.
