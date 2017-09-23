@@ -121,7 +121,7 @@ import (
 
 var settings = postgresql.ConnectionURL{
   Database: `upperio_tests`,
-  Host:     `localhost,`
+  Host:     `localhost`,
   User:     `upperio`,
   Password: `upperio`,
 }
