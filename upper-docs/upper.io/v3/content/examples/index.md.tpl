@@ -397,7 +397,7 @@ You can update all rows on the result set with the `Update()` method.
 var account Account
 res = col.Find("id", 5) // WHERE id = 5
 
-err = col.One(account)
+err = res.One(account)
 ...
 
 account.Name = "New name"
