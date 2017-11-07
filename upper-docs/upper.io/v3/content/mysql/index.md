@@ -212,7 +212,7 @@ You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query
 ```go
 q := b.Select(
     "p.id",
-    "p.title AD publication_title",
+    "p.title AS publication_title",
     "a.name AS artist_name",
   ).From("artists AS a", "publication AS p").
   Where("a.id = p.author_id")
