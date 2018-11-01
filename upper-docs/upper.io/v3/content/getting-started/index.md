@@ -284,56 +284,6 @@ fmt.Printf("There are %d items", c)
 and `One()` methods.
 
 
-## Advanced usage
-
-The basic collection/result won't be appropriate for some situations, when this
-happens, you can use `db` as a simple bridge between SQL queries and Go types.
-
-SQL adapters come with a [SQL builder](/db.v3/lib/sqlbuilder), try it and see if it
-fits your needs:
-
-```go
-q = sess.Select("name").From("accounts").
-  Join("owners").
-  Using("employee_id")
-...
-
-err = q.All(&accounts)
-...
-```
-
-If the SQL builder is not able to express what you want, you can use hand-made
-SQL queries directly:
-
-```go
-rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
-...
-
-row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
-...
-
-res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
-...
-```
-
-SQL queries like the above can also be mapped to Go structs by using an
-iterator:
-
-```go
-import "upper.io/db.v3/lib/sqlbuilder"
-...
-
-rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
-...
-
-var accounts []Account
-iter := sqlbuilder.NewIterator(rows)
-err = iter.All(&accounts)
-...
-```
-
-See [SQL builder](/db.v3/lib/sqlbuilder).
-
 ## Transactions
 
 Use the `NewTx` method on a session to create a transaction context:
