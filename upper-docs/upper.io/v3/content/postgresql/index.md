@@ -69,8 +69,7 @@ In the following example, a table named 'birthday' consisting of two columns ('n
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > The database operations described above refer to an advanced use of upper-db, hence they do not follow the exact same patterns of the [tour](https://tour.upper.io/welcome/01) and [getting started](https://upper.io/db.v3/getting-started) page.
 
-The following SQL statement creates a `birthday` table with `name` and `born`
-columns.
+The `birthday` table with the `name` and `born` columns is created with these SQL statements:
 
 ```sql
 --' example.sql
