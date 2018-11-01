@@ -241,7 +241,7 @@ db.And(
 )
 ```
 
-### Options for limiting and sorting results
+### Results Limit and Order
 
 Reduce the number of results you want to walk over using the `Limit()` and
 `Offset()` methods of `db.Result`:
