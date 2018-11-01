@@ -307,8 +307,8 @@ UPPERIO_DB_DEBUG=1 ./go-program
 In case you require methods that are only available from the underlying driver, you can use the `db.Database.Driver()`. For instance, if you need the [mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method, you can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it into the appropriate type, and use `Ping()`, as shown below:
 
 ```go
-drv = sess.Driver().(*mgo.Session) // You'll need to cast the driver
-                                   // into the appropiare type.
+drv = sess.Driver().(*mgo.Session) // The driver is cast into the 
+                                   // the appropriate type.
 err = drv.Ping()
 ```
 
