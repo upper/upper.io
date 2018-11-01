@@ -14,7 +14,8 @@ Use `go get` to download and install the adapter:
 go get upper.io/db.v3/mysql
 ```
 
-## Setting up database access
+## Setup
+### Database Session
 
 The `mysql.ConnectionURL{}` struct is defined as follows:
 
