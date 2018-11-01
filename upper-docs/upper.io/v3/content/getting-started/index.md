@@ -155,14 +155,6 @@ type Person struct {
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
-One important `db.Database` method is `Collection()`, use it to get a
-collection reference.
-
-```go
-users = sess.Collection("users") // A reference to the users table.
-...
-```
-
 Once you're done with the database session, you must use the `Close()` method
 on it to close and free all associated resources:
 
