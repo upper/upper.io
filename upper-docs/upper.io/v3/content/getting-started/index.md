@@ -296,8 +296,7 @@ To get the full picture on how to perform all CRUD tasks (starting right from th
 
 ## Logging
 
-You can force the adapter to print SQL statements and errors to standard output
-by using the `UPPERIO_DB_DEBUG` environment variable:
+The adapter can be set to print SQL statements and errors to standard output through the `UPPERIO_DB_DEBUG` environment variable:
 
 ```console
 UPPERIO_DB_DEBUG=1 ./go-program
