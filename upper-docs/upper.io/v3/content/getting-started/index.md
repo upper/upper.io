@@ -66,8 +66,7 @@ go build && go install
 
 ## Supported databases
 
-See the [adapters](/db.v3/adapters) for the complete list of supported
-adapters.
+To see the complete list of supported adapters, click [here](/db.v3/adapters).
 
 ## Basic usage
 
