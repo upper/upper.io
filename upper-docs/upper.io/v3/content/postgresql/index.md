@@ -229,7 +229,7 @@ if err = q.All(&publications); err != nil {
 }
 ```
 
-### Auto-incremental keys (serial)
+### Auto-incremental Keys (Serial)
 
 If you want to use auto-increment (or serial) keys with PostgreSQL database,
 you must define the column type as `SERIAL`, like this:
