@@ -2,7 +2,7 @@
 
 # Purpose
 `upper-db` provides a *common interface* to work with different data sources
-using *adapters* that wrap mature database drivers.
+using *adapters* that wrap mature SQL and NoSQL database drivers.
 
 The main purpose of `db` is to abstract common database tasks (CRUD) and
 provide tools for [Go 1.8+][1] developers to perform complex queries when they
