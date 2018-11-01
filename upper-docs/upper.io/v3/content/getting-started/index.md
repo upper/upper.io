@@ -73,6 +73,14 @@ To see the complete list of supported adapters, click [here](/db.v3/adapters).
 # Setup
 ## Database Session
 
+Import the adapter package into your application:
+
+```go
+import (
+  "upper.io/db.v3/postgresql" // PostgreSQL package
+)
+```
+
 ### Mapping tables to structs
 
 Add a `db` struct tag next to an *exported field* to map that field to a table
