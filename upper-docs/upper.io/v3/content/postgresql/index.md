@@ -190,7 +190,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
 ## Specifications
-### JSON types
+### JSON Types
 
 The `postgresql` adapter supports saving and retrieving JSON data when using
 [JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html), if
