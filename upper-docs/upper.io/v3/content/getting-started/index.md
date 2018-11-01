@@ -118,7 +118,7 @@ users = sess.Collection("users") // Reference to a table named "users"
 ...
 ```
  
-### Mapping tables to structs
+## Mapping
 
 Add a `db` struct tag next to an *exported field* to map that field to a table
 column:
