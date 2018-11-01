@@ -210,10 +210,7 @@ cond = db.Cond{
 }
 ```
 
-### Composing conditions: db.Or and db.And
-
-The `db.Or()` function takes one or more `db.Cond{}` maps and joins them under
-the OR disjunction:
+Constraints can also be composed using `db.Or()`/`db.And()`:
 
 ```go
 // (name = 'John' OR name = 'Jhon')
