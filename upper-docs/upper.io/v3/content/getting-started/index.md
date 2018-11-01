@@ -219,9 +219,6 @@ db.Or(
 )
 ```
 
-The `db.And()` function is like `db.Or()`, except it joins statements under the
-AND conjunction:
-
 ```go
 // (age > 21 AND age < 28)
 db.And(
