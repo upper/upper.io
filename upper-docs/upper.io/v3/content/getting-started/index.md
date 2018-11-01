@@ -302,7 +302,7 @@ The adapter can be set to print SQL statements and errors to standard output thr
 UPPERIO_DB_DEBUG=1 ./go-program
 ```
 
-### Working with the underlying driver
+## Underlying driver
 
 Some situations will require you to use methods that are only available from
 the underlying driver, the `db.Database.Driver()` is there to help. For
