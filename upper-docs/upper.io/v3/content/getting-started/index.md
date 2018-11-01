@@ -70,16 +70,7 @@ go build && go install
 
 To see the complete list of supported adapters, click [here](/db.v3/adapters).
 
-## Basic usage
 
-In order to use `db` efficiently you can follow some recommended patterns:
-
-1. This is not a full-featured ORM, make sure you understand the database
-   you're working with.
-1. Use Go structs to describe data models. One struct per table is a common
-   thing.
-1. Try to use the collection / result set model first.
-1. When in doubt, use the query builder or plain SQL.
 
 ### Mapping tables to structs
 
