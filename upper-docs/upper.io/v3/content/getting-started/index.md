@@ -188,7 +188,7 @@ res = sess.Collection("people").Find(20)
 You can narrow down result sets with db.Cond{}`:
 
 ```go
-cond = db.Cond{ // Equality is the default operator. 
+cond = db.Cond{ // Equality is the default operator 
   "id": 36, // id = 36
 }
 ```
