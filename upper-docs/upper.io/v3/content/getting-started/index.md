@@ -312,7 +312,7 @@ drv = sess.Driver().(*mgo.Session) // The driver is cast into the
 err = drv.Ping()
 ```
 
-You can expect to do the same with an SQL adapter, just change the casting:
+You can do the same when working with an SQL adapter by changing the casting:
 
 ```go
 drv = sess.Driver().(*sql.DB)
