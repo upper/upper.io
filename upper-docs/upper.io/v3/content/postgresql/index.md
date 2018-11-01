@@ -61,32 +61,6 @@ sess, err = postgresql.Open(settings)
 postgresql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
-## Usage
-
-Import the `upper.io/db.v3/postgresql` package into your application:
-
-```go
-// main.go
-package main
-
-import (
-  "upper.io/db.v3/postgresql"
-)
-```
-
-Then, you can use the `postgresql.Open()` method to create a session:
-
-```go
-var settings = postgresql.ConnectionURL{
-  Host:       "localhost",          // PostgreSQL server IP or name.
-  Database:   "peanuts",            // Database name.
-  User:       "cbrown",             // Optional user name.
-  Password:   "snoopy",             // Optional user password.
-}
-
-sess, err = postgresql.Open(settings)
-```
-
 ## Example
 
 The following SQL statement creates a `birthday` table with `name` and `born`
