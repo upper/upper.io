@@ -143,8 +143,7 @@ type Person struct {
 }
 ```
 
-If you want the adapter to ignore a field completely, set a hyphen (`-`) as its
-name:
+You can also set the adapter to ignore specific fields by means of a hyphen (`-`):
 
 ```go
 type Person struct {
