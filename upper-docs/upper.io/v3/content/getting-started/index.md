@@ -304,12 +304,7 @@ UPPERIO_DB_DEBUG=1 ./go-program
 
 ## Underlying driver
 
-Some situations will require you to use methods that are only available from
-the underlying driver, the `db.Database.Driver()` is there to help. For
-instance, if you're in the need of using the
-[mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method you
-can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it with
-the appropriate type and use the `mgo.Session.Ping()` method on it, like this:
+In case you require methods that are only available from the underlying driver, you can use the `db.Database.Driver()`. For instance, if you need the [mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method, you can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it into the appropriate type, and use `Ping()`, as shown below:
 
 ```go
 drv = sess.Driver().(*mgo.Session) // You'll need to cast the driver
