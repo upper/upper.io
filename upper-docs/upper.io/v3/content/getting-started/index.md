@@ -29,7 +29,7 @@ A **collection** is a set of similar data type items identified with the name 't
 
 A **result set** is a subset of items that match specific conditions. It is retrieved with `Find()` and can be delimited or modified through different methods, like `Update()`, `Delete()`, `Insert()`, `All()`, or `One()`.
 
-The figure below ilustrates the session, collection, `Find()` and result set
+The figure below ilustrates the session, collection, and result set
 concepts:
 
 <center>
