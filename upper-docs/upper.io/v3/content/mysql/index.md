@@ -52,8 +52,8 @@ sess, err = mysql.Open(settings)
 ...
 ```
 
-A `mysql.ParseURL()` function is provided to convert a DSN into a
-`mysql.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `mysql.ParseURL()` function is also provided in case you need to convert the DSN into a `mysql.ConnectionURL`:
 
 ```go
 // ParseURL parses a DSN into a ConnectionURL struct.
