@@ -228,17 +228,12 @@ db.And(
 Nesting values is another option:
 
 ```go
-// (
-//   (age > 21 AND age < 28)
-//   AND
-//   (name = 'Joanna' OR name = 'John' OR name = 'Jhon')
-// )
 db.And(
-  db.And(
+  db.And( // The result set will cover ages from 22 to 27
     db.Cond{"age >": 21},
     db.Cond{"age <": 28},
   ),
-  db.Or(
+  db.Or( // along with the names Joanna, John, or Jhon.
     db.Cond{"name": "Joanna"},
     db.Cond{"name": "John"},
     db.Cond{"name": "Jhon"},
