@@ -148,7 +148,7 @@ You can also set the adapter to ignore specific fields by means of a hyphen (`-`
 ```go
 type Person struct {
   ...
-  Token    string `db:"-"` // The adapter will skip this field.
+  Token    string `db:"-"` // Field to be skipped
 }
 ```
 
