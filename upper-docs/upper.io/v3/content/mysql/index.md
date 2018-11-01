@@ -66,6 +66,8 @@ Once the connection is established, you can start performing operations on the d
 
 ### Example
 
+In the following example, a table named ‘birthday’ consisting of two columns (‘name’ and ‘born’) will be created. Before starting, the table will be searched in the database and, in the event it already exists, it will be removed. Then, three rows will be inserted into the table and checked for accuracy. To this end, the database will be queried and the matches (insertions) will be printed to standard output.
+
 The following SQL statement creates a `birthday` table with `name` and `born`
 columns.
 
