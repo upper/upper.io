@@ -225,19 +225,6 @@ db.And(
   db.Cond{"age <": 28},
 )
 
-// Which is the same as:
-db.Cond{
-  "age >": 21,
-  "age <": 28,
-}
-
-// Perhaps db.And is more useful in situations like:
-db.And(
-  db.Cond{"name": "john"},
-  db.Cond{"name": "jhon"},
-)
-```
-
 Both `db.Or()` and `db.And()` can take other `db.Or()` and `db.And()` nested
 values:
 
