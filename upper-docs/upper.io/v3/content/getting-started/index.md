@@ -255,7 +255,7 @@ err = res.Offset(2).Limit(8).All(&accounts) // The result set will consist of 8
 ...
 ```
 
-Use the `OrderBy()` method to order them:
+Results can also be sorted according to a given value with `OrderBy()`:
 
 ```go
 res = col.Find(...)
