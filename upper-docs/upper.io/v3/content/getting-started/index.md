@@ -161,9 +161,8 @@ type Person struct {
 Get specific pieces of information (result sets) using `Find()`:
 
 ```go
-// Find() with no conditions is a reference to all items
-// on the collection:
-res = sess.Collection("people").Find()
+res = sess.Collection("people").Find() // All the items in the collection 
+                                       // are requested. 
 ...
 
 // You can use a `db.Cond` map to reduce the subset of
