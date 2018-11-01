@@ -171,8 +171,8 @@ res = sess.Collection("people").Find("id", 25)
 // Equality is the default operator but a different one can be used.
 res = sess.Collection("people").Find("id >", 29) 
 
-// Use the `?` placeholder to map arguments by position:
-res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)
+// The `?` placeholder maps arguments by order.
+res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)  
 
 // Or the And/Or methods if you prefer:
 res = sess.Collection("people").Find("id >", 20).And("id <", 39)
