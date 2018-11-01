@@ -259,9 +259,6 @@ Otherwise, you'll end up with an error like this:
 ERROR:  duplicate key violates unique constraint "id"
 ```
 
-In order for the ID to be returned by `db.Collection.Insert()`, the `SERIAL`
-field must be set as `PRIMARY KEY` too.
-
 ### Using `db.Raw` and `db.Func`
 
 If you need to provide a raw parameter for a method you can use the `db.Raw`
