@@ -36,7 +36,7 @@ concepts:
 ![Collections](/db.v3/res/collection.png)
 </center>
 
-See more code examples and patterns on our [examples](/db.v3/examples) page.
+
 
 ## Installation
 
