@@ -193,11 +193,8 @@ cond = db.Cond{ // Equality is the default operator.
 }
 ```
 
-As with `Find()`, you can also add operators next to the column name to change
-the equality into something else:
-
 ```go
-cond = db.Cond{
+cond = db.Cond{ // ...but a different one can be used. 
   "id >=": 36, // id >= 36
 }
 
