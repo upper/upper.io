@@ -161,8 +161,8 @@ type Person struct {
 Get specific pieces of information (result sets) using `Find()`:
 
 ```go
-res = sess.Collection("people").Find() // All the items in the collection 
-                                       // are requested. 
+// All the items in the collection are requested.
+res = sess.Collection("people").Find() 
 ...
 
 res = sess.Collection("people").Find("id", 25) // String-like syntax is accepted.
