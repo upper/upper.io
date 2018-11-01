@@ -132,8 +132,7 @@ type Person struct {
 }
 ```
 
-You can safely mix `db` struct tags with other struct tags, such as those used
-to map JSON:
+You can mix different `db` struct tags, including those used to map JSON: 
 
 ```go
 type Person struct {
