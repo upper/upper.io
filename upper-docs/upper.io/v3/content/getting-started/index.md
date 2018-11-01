@@ -289,6 +289,9 @@ Insert, modify, and remove items in the result set.
 
 To get the full picture on how to perform all CRUD tasks (starting right from the installation and setup steps), take the upper-db [tour](https://tour.upper.io/welcome/01).
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The methods related to sessions, collections, and result sets are exemplified using the approaches 'SQL/NoSQL' and 'SQL only'. For further reference about what applies in each case, click [here](https://upper.io/db.v3/examples).
+
 ## Tips and tricks
 
 ### Logging
