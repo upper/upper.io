@@ -292,7 +292,7 @@ To get the full picture on how to perform all CRUD tasks (starting right from th
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > The methods related to sessions, collections, and result sets are exemplified using the approaches 'SQL/NoSQL' and 'SQL only'. For further reference about what applies in each case, click [here](https://upper.io/db.v3/examples).
 
-## Tips and tricks
+# Tips and tricks
 
 ### Logging
 
