@@ -28,7 +28,7 @@ import (
 )
 ```
 
-The `mysql.ConnectionURL{}` struct is defined as follows:
+Define the `mysql.ConnectionURL{}` struct:
 
 ```go
 // ConnectionURL implements a MySQL connection struct.
