@@ -31,7 +31,7 @@ import (
 Define the `postgresql.ConnectionURL{}` struct:
 
 ```go
-// ConnectionURL implements a PostgreSQL connection struct.
+// ConnectionURL defines the DSN attributes.
 type ConnectionURL struct {
   User     string
   Password string
