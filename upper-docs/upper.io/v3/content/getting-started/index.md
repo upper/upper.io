@@ -124,9 +124,9 @@ Map exported fields to structs by adding a `db` tag next to them:
 
 ```go
 type Person struct {
-  ID       uint64 `db:"id,omitempty"` // Use `omitempty` to prevent
-                                      // the adapter from sending
-                                      // this value if it's zero.
+  ID       uint64 `db:"id,omitempty"` // Use `omitempty` for zero-valued
+                                      // fields that are not to be sent 
+                                      // by the adapter.
   Name     string `db:"name"`
   LastName string `db:"last_name"`
 }
