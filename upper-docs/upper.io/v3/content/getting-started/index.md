@@ -283,6 +283,9 @@ fmt.Printf("There are %d items", c)
 > `Limit()`, `Offset()`, and `OrderBy()` affect exclusively the `All()`
 and `One()` methods.
 
+## Creation, Update, and Deletion
+
+Insert, modify, and remove items in the result set. 
 
 ## Tips and tricks
 
