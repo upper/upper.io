@@ -27,47 +27,7 @@ A **collection** is a set of similar data type items identified with the name 't
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > The term 'collection' is used indistinctively by methods that work on both SQL and  NoSQL. Such is the case of `Collection()`, which creates a reference to the structures of any of these two database types.
 
-A collection reference provides special methods to perform operations on the
-underlying table, such as `Find()` which can be used to define a subset of
-items that match given conditions, this is known as a **result set**:
-
-```go
-var marias []Person
-// SELECT * FROM people WHERE name = 'María'
-res = people.Find("name", "María")
-err = res.All(&marias)
-...
-```
-
-`Find()` returns a result set, which is like lazy query that gets compiled and
-executed only when a method is called on it.
-
-```go
-// All builds and executes a `SELECT * FROM ...` query.
-err = res.All(&marias)
-
-// One builds and executes a `SELECT * FROM ... LIMIT 1` query.
-err = res.One(&maria)
-```
-
-Besides querying data, you can also perform other operations on `res`, such as
-updating all the items on the result set at once:
-
-```go
-// UPDATE people SET ... WHERE ...
-err = res.Update(newData)
-...
-```
-
-Or deleting all matching items:
-
-```go
-// DELETE FROM article WHERE ...
-err = sess.Collection("article").
-  Find("date_created < ? and draft = ?", oneWeekAgo, true).
-  Delete()
-...
-```
+A **result set** is a subset of items that match specific conditions. It is retrieved with `Find()` and can be delimited or modified through different methods, like `Update()`, `Delete()`, `Insert()`, `All()`, or `One()`.
 
 The figure below ilustrates the session, collection, `Find()` and result set
 concepts:
