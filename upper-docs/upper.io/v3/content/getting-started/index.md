@@ -36,44 +36,6 @@ concepts:
 ![Collections](/db.v3/res/collection.png)
 </center>
 
-Besides giving tools for collections and result sets, sessions also have a
-built-in SQLish [query builder](/db.v3/lib/sqlbuilder) that gives more freedom
-while keeping manual SQL writing at bay.
-
-```go
-q = sess.SelectFrom("people")
-  .Where("name = ?", "María")
-err = q.All(&marias)
-```
-
-Advanced SQL commands should not be over-thinked or forced to fit into the
-collection / result set syntax, if you feel like you need SQL then you can just
-feed queries into the session:
-
-```go
-sqlRes, err = sess.Exec("CREATE TABLE ...") // sqlRes is a sql.Result
-...
-
-// The ? placeholder is automatically expanded into whatever placeholder the
-// database expects.
-sqlRows, err = tx.Query("SELECT * FROM (SELECT ... UNION ...) WHERE id > ?", 9)
-...
-
-// sqlRows is an *sql.Rows object, so you can use Scan() on it
-err = sqlRows.Scan(&a, &b, ...)
-
-// Or you could create and iterator to help you with mapping fields into
-// a struct
-
-// Just make sure you're importing the `sqlbuilder` package:
-import "upper.io/db.v3/lib/sqlbuilder"
-...
-
-// And create a new Iterator with any *sql.Rows object:
-iter = sqlbuilder.NewIterator(sqlRows)
-err = iter.All(&item)
-```
-
 See more code examples and patterns on our [examples](/db.v3/examples) page.
 
 ## Installation
