@@ -41,8 +41,8 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `postgresql.ConnectionURL` value as argument for `postgresql.Open()`
-to create a `postgresql.Database` session.
+Pass the `postgresql.ConnectionURL` value as argument to `postgresql.Open()`
+so the `postgresql.Database` session is created.
 
 ```go
 settings = postgresql.ConnectionURL{
