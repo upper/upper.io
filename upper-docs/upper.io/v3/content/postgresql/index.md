@@ -151,7 +151,7 @@ func main() {
 
   birthdayCollection.Insert(Birthday{
     Name: "Hironobu Sakaguchi",
-    Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.UTC),
+    Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
   })
 
   // Let's query for the results we've just inserted.
