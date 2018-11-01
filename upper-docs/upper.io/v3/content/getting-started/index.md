@@ -213,9 +213,8 @@ cond = db.Cond{
 Constraints can also be composed using `db.Or()`/`db.And()`:
 
 ```go
-// (name = 'John' OR name = 'Jhon')
 db.Or(
-  db.Cond{"name": "John"},
+  db.Cond{"name": "John"}, // The name to be retrieved can be John or Jhon.
   db.Cond{"name": "Jhon"},
 )
 ```
