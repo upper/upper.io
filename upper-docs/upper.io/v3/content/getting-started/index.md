@@ -165,12 +165,6 @@ res = sess.Collection("people").Find() // All the items in the collection
                                        // are requested. 
 ...
 
-// You can use a `db.Cond` map to reduce the subset of
-// items that will be queried:
-res = sess.Collection("people").Find(db.Cond{
-  "id": 25,
-})
-
 // On SQL databases a string-like syntax is also accepted:
 res = sess.Collection("people").Find("id", 25)
 
