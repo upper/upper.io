@@ -180,7 +180,7 @@ func main() {
 The Go file is compiled and executed using `go run`:
 
 ```
-go run main.go
+go run example.go
 ```
 
 gives the following output:
