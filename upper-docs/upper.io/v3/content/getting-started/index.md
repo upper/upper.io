@@ -198,8 +198,6 @@ sess, err = postgresql.Open(settings)
 ...
 ```
 
-This `sess` variable is a `db.Database` type.
-
 One important `db.Database` method is `Collection()`, use it to get a
 collection reference.
 
