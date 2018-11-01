@@ -241,40 +241,6 @@ db.And(
 )
 ```
 
-### Special conditions for SQL databases
-
-SQL databases support conditions with a string part:
-
-```go
-res = col.Find("id", 9)     // id = 9
-...
-
-res = col.Find("id = ?", 9) // id = 9
-...
-
-res = col.Find("id = 9")    // id = 9 is possible but not recommended
-...
-```
-
-This is how you could compose queries with different conditions:
-
-```go
-// name = "John" OR name = "María"
-res = col.Find("name", "John").Or("name", "María")
-...
-
-// name = "John" AND last_name = "Smith"
-res = col.Find("name", "John").And("last_name", "Smith")
-
-// The ? placeholder is automatically converted to $1, $2, etc. on databases
-// that require it.
-
-// name = "John" AND last_name = "Smith"
-res = col.Find("name = ? AND last_name = ?", "John", "Smith")
-...
-```
-
-
 ### Getting the number of items in the result set
 
 Use the `Count()` method to get the number of items on a result set:
