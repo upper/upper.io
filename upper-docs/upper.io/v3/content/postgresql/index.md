@@ -66,6 +66,9 @@ Once the connection is established, you can start performing operations on the d
 ### Example
 In the following example, a table named 'birthday' consisting of two columns ('name' and 'born') will be created. Before starting, the table will be searched in the database and, in the event it already exists, it will be removed. Then, three rows will be inserted into the table and checked for accuracy. To this end, the database will be queried and the matches (insertions) will be printed to standard output. 
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The database operations described above refer to an advanced use of upper-db, hence they do not follow the exact same patterns of the [tour](https://tour.upper.io/welcome/01) and [getting started](https://upper.io/db.v3/getting-started) page.
+
 The following SQL statement creates a `birthday` table with `name` and `born`
 columns.
 
