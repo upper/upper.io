@@ -265,6 +265,21 @@ err = res.OrderBy("-last_name").All(&accounts) // Descending order by last name
 ...
 ```
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Remember that the total number of items in a result set can be calculated with `Count()`:
+
+```go
+res = col.Find(...)
+...
+
+c, err = res.Count()
+...
+
+fmt.Printf("There are %d items", c)
+
+```
+
+
 Note: The `Limit()`, `Offset()`, and `OrderBy()` methods only affect the `All()`
 and `One()` methods, they don't have any effect on `Delete()`, `Update()` or
 `Count()`.
