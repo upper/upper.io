@@ -41,8 +41,7 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `mysql.ConnectionURL` value as argument for `mysql.Open()`
-to create a `mysql.Database` session.
+Pass the `mysql.ConnectionURL` value as argument to `mysql.Open()` so the `mysql.Database` session is created.
 
 ```go
 settings = mysql.ConnectionURL{
