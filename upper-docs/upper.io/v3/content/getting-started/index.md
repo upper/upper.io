@@ -220,9 +220,8 @@ db.Or(
 ```
 
 ```go
-// (age > 21 AND age < 28)
 db.And(
-  db.Cond{"age >": 21},
+  db.Cond{"age >": 21}, // The ages to be retrieved can range from 22 to 27.
   db.Cond{"age <": 28},
 )
 
