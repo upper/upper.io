@@ -167,9 +167,8 @@ res = sess.Collection("people").Find() // All the items in the collection
 
 res = sess.Collection("people").Find("id", 25) // String-like syntax is accepted.
 
-// Equality is the default operator, but it's easy to use
-// different operators:
-res = sess.Collection("people").Find("id >", 29)
+res = sess.Collection("people").Find("id >", 29) // Equality is the default operator
+                                                 // but a different one can be used.
 
 // Use the `?` placeholder to map arguments by position:
 res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)
