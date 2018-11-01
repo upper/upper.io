@@ -158,8 +158,7 @@ type Person struct {
 # CRUD Functions
 ## Retrieval
 
-You can use `Find()` on a collection reference to get a result set from that
-collection.
+Get specific pieces of information (result sets) using `Find()`:
 
 ```go
 // Find() with no conditions is a reference to all items
