@@ -17,6 +17,17 @@ go get upper.io/db.v3/mysql
 ## Setup
 ### Database Session
 
+Import the `upper.io/db.v3/mysql` package into your application:
+
+```go
+// main.go
+package main
+
+import (
+  "upper.io/db.v3/mysql"
+)
+```
+
 The `mysql.ConnectionURL{}` struct is defined as follows:
 
 ```go
