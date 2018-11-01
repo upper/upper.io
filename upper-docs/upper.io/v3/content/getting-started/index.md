@@ -279,10 +279,9 @@ fmt.Printf("There are %d items", c)
 
 ```
 
-
-Note: The `Limit()`, `Offset()`, and `OrderBy()` methods only affect the `All()`
-and `One()` methods, they don't have any effect on `Delete()`, `Update()` or
-`Count()`.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> `Limit()`, `Offset()`, and `OrderBy()` affect exclusively the `All()`
+and `One()` methods.
 
 
 ### Dealing with `NULL` values
