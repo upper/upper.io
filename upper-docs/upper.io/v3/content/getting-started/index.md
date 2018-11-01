@@ -14,7 +14,7 @@ Its main purpose is to enable [Go 1.8+][1] developers to perform database tasks 
 > Coming from [db.v2](https://upper.io/db.v2)? we have a [migration
 > guide](https://upper.io/db.v3/migrate-from-v2) that may come in handy.
 
-## Key concepts
+# Key concepts
 
 <center>
 ![Database](/db.v3/res/database.png)
