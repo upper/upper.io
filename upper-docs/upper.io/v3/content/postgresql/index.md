@@ -87,8 +87,7 @@ The `psql` command line tool is used to run the statements in the `upperio_tests
 cat example.sql | PGPASSWORD=upperio psql -Uupperio upperio_tests
 ```
 
-The Go code below will add some rows to the `birthday` table and it then will
-print the same rows that were inserted.
+The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output. 
 
 ```go
 // example.go
