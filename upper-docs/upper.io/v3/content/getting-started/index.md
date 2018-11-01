@@ -64,7 +64,7 @@ cd $UPPERIO_V3
 go build && go install
 ```
 
-### Supported databases
+## Supported databases
 
 See the [adapters](/db.v3/adapters) for the complete list of supported
 adapters.
