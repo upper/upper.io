@@ -53,8 +53,8 @@ sess, err = postgresql.Open(settings)
 ...
 ```
 
-A `postgresql.ParseURL()` function is provided to convert a DSN into a
-`postgresql.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `postgresql.ParseURL()` function is also provided in case you need to convert the DSN into a `postgresql.ConnectionURL`:
 
 ```go
 // ParseURL parses a DSN into a ConnectionURL struct.
