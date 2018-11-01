@@ -155,7 +155,7 @@ func main() {
     Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
   })
 
-  // Let's query for the results we've just inserted.
+  // The database is queried for the rows inserted.
   var res db.Result
   res = birthdayCollection.Find()
 
