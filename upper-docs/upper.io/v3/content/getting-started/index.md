@@ -53,8 +53,7 @@ compatible with Go 1.4 and above.
 go get -v -u upper.io/db.v3
 ```
 
-If the above command does not work for some reason, you can always pull the
-source directly from GitHub:
+In the event this command does not work, you can always pull the data source directly from GitHub:
 
 ```sh
 export UPPERIO_V3=$GOPATH/src/upper.io/db.v3
