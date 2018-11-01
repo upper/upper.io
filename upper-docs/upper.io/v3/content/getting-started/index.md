@@ -155,37 +155,6 @@ type Person struct {
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
-### Setting up a database session
-
-Import the adapter package into your application:
-
-```go
-import (
-  "upper.io/db.v3/postgresql" // PostgreSQL package
-)
-```
-
-All adapters include a `ConnectionURL` struct that you can use to create a DSN:
-
-```go
-var settings = postgresql.ConnectionURL{
-  User:     "john",
-  Password: "p4ss",
-  Address:  "10.0.0.99",
-  Database: "myprojectdb",
-}
-
-fmt.Printf("DSN: %s", settings) // settings.String() is a DSN
-```
-
-You can use the `settings` value to create a database session by passing it to
-the `Open()` function of your adapter:
-
-```go
-sess, err = postgresql.Open(settings)
-...
-```
-
 One important `db.Database` method is `Collection()`, use it to get a
 collection reference.
 
