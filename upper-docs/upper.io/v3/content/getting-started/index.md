@@ -152,8 +152,8 @@ type Person struct {
 }
 ```
 
-Note that if you don't provide explicit mappings the adapter will try to use
-the field name with a case-sensitive lookup.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
 ### Other mappings: Using JSON on PostgreSQL
 
