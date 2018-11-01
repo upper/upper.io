@@ -60,7 +60,9 @@ sess, err = mysql.Open(settings)
 mysql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
+## Common Database Operations
 
+Once the connection is established, you can start performing operations on the database.
 
 ## Example
 
