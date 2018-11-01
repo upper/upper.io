@@ -183,7 +183,7 @@ The Go file is compiled and executed using `go run`:
 go run example.go
 ```
 
-gives the following output:
+The output consists of three rows including names and birthdates:
 
 ```
 Hayao Miyazaki was born in January 5, 1941.
