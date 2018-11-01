@@ -10,8 +10,9 @@ Its main purpose is to enable [Go 1.8+][1] developers to perform database tasks 
 ![upper.io/db.v3 package](/db.v3/res/general.png)
 </center>
 
-Coming from [db.v2](https://upper.io/db.v2)? we have a [migration
-guide](https://upper.io/db.v3/migrate-from-v2) that may come in handy.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Coming from [db.v2](https://upper.io/db.v2)? we have a [migration
+> guide](https://upper.io/db.v3/migrate-from-v2) that may come in handy.
 
 ## Key concepts
 
