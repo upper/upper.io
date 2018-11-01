@@ -284,33 +284,6 @@ fmt.Printf("There are %d items", c)
 and `One()` methods.
 
 
-## Transactions
-
-Use the `NewTx` method on a session to create a transaction context:
-
-```go
-tx, err = sess.NewTx(nil)
-...
-
-id, err = tx.Collection("accounts").Insert(account)
-...
-
-res = tx.Collection("people").Find(...)
-...
-
-err = tx.Commit()
-...
-
-```
-
-The returned `tx` value is a `db.Transaction` type, which is identical to a
-regular `db.Session`, except that it also has the `Commit()` and `Rollback()`
-methods which can be used to execute the transaction or to discard it
-completely.
-
-Once the transaction is commited or rolled back, the transaction will close
-itself and won't be able to accept more commands.
-
 ## Tips and tricks
 
 ### Logging
