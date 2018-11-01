@@ -155,30 +155,6 @@ type Person struct {
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
-### Inserting a new item into a collection
-
-You can use the database session `sess` to get a collection reference and insert
-a value into it:
-
-```go
-// Creates a value
-person := Person{
-  Name:     "Hedy",
-  LastName: "Lamarr",
-}
-
-// Gets a collection reference
-people  = sess.Collection("people")
-...
-
-// Inserts the value into the collection
-id, err = people.Insert(person)
-...
-
-// Note that chaining works fine too
-id, err = sess.Collection("people").Insert(person)
-```
-
 ### Defining a result set with `Find()`
 
 You can use `Find()` on a collection reference to get a result set from that
