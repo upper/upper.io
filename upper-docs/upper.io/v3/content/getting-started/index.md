@@ -165,8 +165,7 @@ res = sess.Collection("people").Find() // All the items in the collection
                                        // are requested. 
 ...
 
-// On SQL databases a string-like syntax is also accepted:
-res = sess.Collection("people").Find("id", 25)
+res = sess.Collection("people").Find("id", 25) // String-like syntax is accepted.
 
 // Equality is the default operator, but it's easy to use
 // different operators:
