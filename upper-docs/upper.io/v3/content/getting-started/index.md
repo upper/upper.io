@@ -46,7 +46,7 @@ In order to use `upper-db` efficiently, it is advisable that you:
 
 # Installation
 
-The `upper.io/db.v3` package depends on the [Go compiler and tools][2] and it's
+The `upper.io/db.v3` package depends on the [Go compiler and tools][2] and is
 compatible with Go 1.4 and above.
 
 ```sh
