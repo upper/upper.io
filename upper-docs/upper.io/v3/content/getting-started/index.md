@@ -284,49 +284,6 @@ fmt.Printf("There are %d items", c)
 and `One()` methods.
 
 
-### The Marshaler and Unmarshaler interfaces
-
-`db` defines two special interfaces that can be used to marshal struct fields
-before saving them the database and unmarshal them when retrieving from it:
-
-```go
-type Marshaler interface {
-  MarshalDB() (interface{}, error)
-}
-
-type Unmarshaler interface {
-  UnmarshalDB(interface{}) error
-}
-```
-
-This comes in very handy when dealing with custom struct field types that `db`
-does not know how to convert.
-
-
-```go
-type LatLong struct {
-  Lat  float64
-  Long float64
-}
-
-func (ll LatLong) MarshalDB() (interface{}, error) {
-  // Encode ll before saving it to the database.
-  return encodeLatLng(ll), nil
-}
-
-func (ll *LatLong) UnmarshalDB(v interface{}) (error) {
-  // Decode the encoded value v into the custom type.
-  *ll = decodeLatLng(fmt.Sprintf("%v", v))
-  return nil
-}
-
-type Point struct {
-  ...
-  LL LatLong `db:"ll,omitempty"`
-  ...
-}
-```
-
 ## Advanced usage
 
 The basic collection/result won't be appropriate for some situations, when this
