@@ -63,7 +63,7 @@ postgresql.ParseURL(dsn string) (ConnectionURL, error)
 ## Common Database Operations
 Once the connection is established, you can start performing operations on the database.
 
-## Example
+### Example
 
 The following SQL statement creates a `birthday` table with `name` and `born`
 columns.
