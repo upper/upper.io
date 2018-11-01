@@ -241,22 +241,6 @@ db.And(
 )
 ```
 
-### Getting the number of items in the result set
-
-Use the `Count()` method to get the number of items on a result set:
-
-
-```go
-res = col.Find(...)
-...
-
-c, err = res.Count()
-...
-
-fmt.Printf("There are %d items", c)
-
-```
-
 ### Options for limiting and sorting results
 
 Reduce the number of results you want to walk over using the `Limit()` and
