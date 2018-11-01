@@ -108,6 +108,15 @@ sess, err = postgresql.Open(settings) // sess is a db.Database type
 err = sess.Close()
 ...
 ```
+
+## Collection Reference
+
+Set a given database structure (table or collection):
+
+```go
+users = sess.Collection("users") // Reference to a table named "users"
+...
+```
  
 ### Mapping tables to structs
 
