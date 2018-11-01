@@ -128,7 +128,7 @@ func main() {
   }
   defer sess.Close() // Closing the session is a good practice.
 
-  // Pointing to the "birthday" table.
+  // The 'birthday' table is referenced.
   birthdayCollection := sess.Collection("birthday")
 
   // Attempt to remove existing rows (if any).
