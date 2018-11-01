@@ -155,17 +155,6 @@ type Person struct {
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
-Once you're done with the database session, you must use the `Close()` method
-on it to close and free all associated resources:
-
-```go
-err = sess.Close()
-...
-```
-
-Note that Go servers are long-lived process, you may never need to manually
-`Close()` a session unless you don't need it at all anymore.
-
 ### Inserting a new item into a collection
 
 You can use the database session `sess` to get a collection reference and insert
