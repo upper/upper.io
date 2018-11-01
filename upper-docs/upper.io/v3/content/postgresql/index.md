@@ -131,7 +131,8 @@ func main() {
   // The 'birthday' table is referenced.
   birthdayCollection := sess.Collection("birthday")
 
-  // Attempt to remove existing rows (if any).
+  // Any rows that might have been added between the creation of
+  // the table and the execution of this function are removed.
   err = birthdayCollection.Truncate()
   if err != nil {
     log.Fatalf("Truncate(): %q\n", err)
