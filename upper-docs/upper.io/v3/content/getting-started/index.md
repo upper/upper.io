@@ -250,7 +250,8 @@ You can determine the number of items you want to go through using `Offset()` an
 res = col.Find(...)
 ...
 
-err = res.Offset(2).Limit(8).All(&accounts)
+err = res.Offset(2).Limit(8).All(&accounts) // The result set will consist of 8
+                                            // items and skip the first 2 rows.
 ...
 ```
 
