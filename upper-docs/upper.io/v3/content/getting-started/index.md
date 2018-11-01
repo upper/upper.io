@@ -203,7 +203,7 @@ cond = db.Cond{ // ...but a different one can be used.
 > Note that `db.Cond` is a `map[interface{}]interface{}` type and accepts multiple keys.
 
 ```go
-// name = 'John' AND last_name = 'Smi%'
+// John Smi% is to be located. 
 cond = db.Cond{
   "name": "John",
   "last_name LIKE": "Smi%",
