@@ -70,7 +70,8 @@ go build && go install
 
 To see the complete list of supported adapters, click [here](/db.v3/adapters).
 
-
+# Setup
+## Database Session
 
 ### Mapping tables to structs
 
