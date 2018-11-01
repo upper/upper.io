@@ -81,8 +81,7 @@ CREATE TABLE "birthday" (
 );
 ```
 
-Use the `psql` command line tool to create the birthday table into the
-`upperio_tests` database.
+The `psql` command line tool is used to run the statements in the `upperio_tests` database:
 
 ```
 cat example.sql | PGPASSWORD=upperio psql -Uupperio upperio_tests
