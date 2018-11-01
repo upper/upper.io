@@ -168,8 +168,8 @@ res = sess.Collection("people").Find()
 // String-like syntax is accepted.
 res = sess.Collection("people").Find("id", 25) 
 
-res = sess.Collection("people").Find("id >", 29) // Equality is the default operator
-                                                 // but a different one can be used.
+// Equality is the default operator but a different one can be used.
+res = sess.Collection("people").Find("id >", 29) 
 
 // Use the `?` placeholder to map arguments by position:
 res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)
