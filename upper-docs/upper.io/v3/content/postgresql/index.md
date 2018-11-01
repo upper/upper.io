@@ -208,10 +208,8 @@ type Person struct {
 }
 ```
 
-JSON types area supported on PostgreSQL 9.4+.
-
-Besides JSON, the `postgresql` adapter provides you with other custom types
-like `postgresql.StringArray` and `postgresql.Int64Array`.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> JSON types area supported on PostgreSQL 9.4+. In addition to these, the adapter features other custom types like `postgresql.StringArray` and `postgresql.Int64Array`.
 
 ### SQL builder
 
