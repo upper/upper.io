@@ -95,6 +95,12 @@ fmt.Printf("DSN: %s", settings) // settings.String() is a DSN
 ```
 
 Start a database session by passing the `settings` value to the `Open()` function of your adapter:
+
+```go
+sess, err = postgresql.Open(settings) // sess is a db.Database type
+...
+```
+
 ### Mapping tables to structs
 
 Add a `db` struct tag next to an *exported field* to map that field to a table
