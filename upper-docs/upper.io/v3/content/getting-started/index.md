@@ -284,38 +284,6 @@ fmt.Printf("There are %d items", c)
 and `One()` methods.
 
 
-### Dealing with `NULL` values
-
-The `database/sql` package provides some special types
-([NullBool](http://golang.org/pkg/database/sql/#NullBool),
-[NullFloat64](http://golang.org/pkg/database/sql/#NullBool),
-[NullInt64](http://golang.org/pkg/database/sql/#NullInt64) and
-[NullString](http://golang.org/pkg/database/sql/#NullString)) which can be used
-to represent values than could be `NULL`.
-
-SQL adapters support those special types with no additional effort:
-
-```go
-type TestType struct {
-  ...
-  Salary sql.NullInt64 `db:"salary"`
-  ...
-}
-```
-
-Another way of using null values is by using pointers on field values:
-
-```go
-type TestType struct {
-  ...
-  FirstName *string `db:"first_name"`
-  ...
-}
-```
-
-In the above struct, the `FirstName` pointer would be `nil` when no value was
-present on the table. Use with care.
-
 ### The Marshaler and Unmarshaler interfaces
 
 `db` defines two special interfaces that can be used to marshal struct fields
