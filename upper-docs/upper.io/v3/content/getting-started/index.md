@@ -199,7 +199,8 @@ cond = db.Cond{ // ...but a different one can be used.
 }
 ```
 
-Note that `db.Cond` is a just map and it accepts multiple keys:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Note that `db.Cond` is a `map[interface{}]interface{}` type and accepts multiple keys.
 
 ```go
 // name = 'John' AND last_name = 'Smi%'
