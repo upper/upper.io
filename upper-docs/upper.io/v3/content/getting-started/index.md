@@ -225,8 +225,7 @@ db.And(
   db.Cond{"age <": 28},
 )
 
-Both `db.Or()` and `db.And()` can take other `db.Or()` and `db.And()` nested
-values:
+Nesting values is another option:
 
 ```go
 // (
