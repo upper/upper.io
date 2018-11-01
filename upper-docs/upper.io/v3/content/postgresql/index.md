@@ -60,6 +60,8 @@ sess, err = postgresql.Open(settings)
 // ParseURL parses a DSN into a ConnectionURL struct.
 postgresql.ParseURL(dsn string) (ConnectionURL, error)
 ```
+## Common Database Operations
+Once the connection is established, you can start performing operations on the database.
 
 ## Example
 
