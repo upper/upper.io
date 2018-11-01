@@ -179,8 +179,7 @@ res = sess.Collection("people").Find("id >", 20).And("id <", 39)
 
 res = sess.Collection("people").Find("id", 20).Or("id", 21)
 
-// If the table has a primary key, you can look up by that
-// key by providing it as sole argument:
+// Primary keys can also be passed as arguments.
 res = sess.Collection("people").Find(20)
 ```
 
