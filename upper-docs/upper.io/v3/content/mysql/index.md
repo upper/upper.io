@@ -84,8 +84,7 @@ CREATE TABLE birthday (
 );
 ```
 
-Use the `mysql` command line tool to create the birthday table into the
-`upperio_tests` database.
+The `mysql` command line tool is used to run the statements in the `upperio_tests` database.
 
 ```
 cat example.sql | mysql -uupperio -pupperio upperio_tests
