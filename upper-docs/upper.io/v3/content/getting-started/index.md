@@ -24,6 +24,9 @@ A **session** is a database context created with the `Open()` function featured 
 
 A **collection** is a set of similar data type items identified with the name 'table' in SQL or 'collection' in NoSQL.
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The term 'collection' is used indistinctively by methods that work on both SQL and  NoSQL. Such is the case of `Collection()`, which creates a reference to the structures of any of these two database types.
+
 A collection reference provides special methods to perform operations on the
 underlying table, such as `Find()` which can be used to define a subset of
 items that match given conditions, this is known as a **result set**:
