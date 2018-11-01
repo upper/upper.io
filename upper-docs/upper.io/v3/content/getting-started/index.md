@@ -261,7 +261,7 @@ Results can also be sorted according to a given value with `OrderBy()`:
 res = col.Find(...)
 ...
 
-err = res.OrderBy("-last_name").All(&accounts) // OrderBy by last_name descending order
+err = res.OrderBy("-last_name").All(&accounts) // Descending order by last name
 ...
 ```
 
