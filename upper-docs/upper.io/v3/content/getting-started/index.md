@@ -294,7 +294,7 @@ To get the full picture on how to perform all CRUD tasks (starting right from th
 
 # Tips and tricks
 
-### Logging
+## Logging
 
 You can force the adapter to print SQL statements and errors to standard output
 by using the `UPPERIO_DB_DEBUG` environment variable:
