@@ -165,7 +165,8 @@ Get specific pieces of information (result sets) using `Find()`:
 res = sess.Collection("people").Find() 
 ...
 
-res = sess.Collection("people").Find("id", 25) // String-like syntax is accepted.
+// String-like syntax is accepted.
+res = sess.Collection("people").Find("id", 25) 
 
 res = sess.Collection("people").Find("id >", 29) // Equality is the default operator
                                                  // but a different one can be used.
