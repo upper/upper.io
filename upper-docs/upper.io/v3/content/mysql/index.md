@@ -191,7 +191,6 @@ Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
-## Unique adapter features
 
 ### SQL builder
 
