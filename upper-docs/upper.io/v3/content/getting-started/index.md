@@ -44,7 +44,7 @@ In order to use `upper-db` efficiently, it is advisable that you:
 1. Try to use methods applicable to both SQL and NoSQL first. 
 1. Use SQL builder or raw SQL only when needed. 
 
-## Installation
+# Installation
 
 The `upper.io/db.v3` package depends on the [Go compiler and tools][2] and it's
 compatible with Go 1.4 and above.
