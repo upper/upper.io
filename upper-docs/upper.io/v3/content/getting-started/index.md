@@ -22,13 +22,7 @@ Its main purpose is to enable [Go 1.8+][1] developers to perform database tasks 
 
 A **session** is a database context created with the `Open()` function featured in the adapter package. 
 
-The `Collection()` method of a session gives you a table reference, known as
-**collection**:
-
-```go
-// The "people" table.
-people = sess.Collection("people")
-```
+A **collection** is a set of similar data type items identified with the name 'table' in SQL or 'collection' in NoSQL.
 
 A collection reference provides special methods to perform operations on the
 underlying table, such as `Find()` which can be used to define a subset of
