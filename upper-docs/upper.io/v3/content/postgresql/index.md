@@ -28,7 +28,7 @@ import (
 )
 ```
 
-The `postgresql.ConnectionURL{}` struct is defined as follows:
+Define the `postgresql.ConnectionURL{}` struct:
 
 ```go
 // ConnectionURL implements a PostgreSQL connection struct.
