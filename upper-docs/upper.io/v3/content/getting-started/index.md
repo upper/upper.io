@@ -36,7 +36,13 @@ concepts:
 ![Collections](/db.v3/res/collection.png)
 </center>
 
+# SQL/NoSQL Considerations
+In order to use `upper-db` efficiently, it is advisable that you:
 
+1. Understand the database you're working with (object-relational or document-oriented)
+1. Use Go structs to describe data models. One struct per table is a good practice.
+1. Try to use methods applicable to both SQL and NoSQL first. 
+1. Use SQL builder or raw SQL only when needed. 
 
 ## Installation
 
