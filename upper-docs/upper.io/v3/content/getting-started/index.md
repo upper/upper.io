@@ -20,29 +20,7 @@ Its main purpose is to enable [Go 1.8+][1] developers to perform database tasks 
 ![Database](/db.v3/res/database.png)
 </center>
 
-A database context is known as a **session**. You can create a session by
-importing the adapter package and using the `Open()` function that all adapters
-provide:
-
-```
-import (
-  ...
-  "upper.io/db.v3/postgresql" // The PostgreSQL adapter
-  ...
-)
-
-// Connection settings.
-var settings = postgresql.ConnectionURL{
-  Host:     "127.0.0.1",
-  User:     "foo",
-  Password: "bar",
-}
-
-func main() {
-  sess, err := postgresql.Open(settings) // Open a connection.
-  ...
-}
-```
+A **session** is a database context created with the `Open()` function featured in the adapter package. 
 
 The `Collection()` method of a session gives you a table reference, known as
 **collection**:
