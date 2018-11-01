@@ -174,7 +174,7 @@ res = sess.Collection("people").Find("id >", 29)
 // The `?` placeholder maps arguments by order.
 res = sess.Collection("people").Find("id > ? AND id < ?", 20, 39)  
 
-// Or the And/Or methods if you prefer:
+// The And/Or methods can serve the same purpose.
 res = sess.Collection("people").Find("id >", 20).And("id <", 39)
 
 res = sess.Collection("people").Find("id", 20).Or("id", 21)
