@@ -38,6 +38,7 @@ concepts:
 </center>
 
 # SQL/NoSQL Considerations
+
 In order to use `upper-db` efficiently, it is advisable that you:
 
 1. Understand the database you're working with (object-relational or document-oriented)
