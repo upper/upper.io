@@ -101,6 +101,14 @@ sess, err = postgresql.Open(settings) // sess is a db.Database type
 ...
 ```
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Once you finish to work with the database session, use `Close()` to free all associated resources. Note that Go Servers are long-lived processes, you may never need to manually `Close()` a session unless you don`t need it at all anymore.
+
+```go
+err = sess.Close()
+...
+```
+ 
 ### Mapping tables to structs
 
 Add a `db` struct tag next to an *exported field* to map that field to a table
