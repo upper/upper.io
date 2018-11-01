@@ -243,8 +243,8 @@ db.And(
 
 ### Results Limit and Order
 
-Reduce the number of results you want to walk over using the `Limit()` and
-`Offset()` methods of `db.Result`:
+You can determine the number of items you want to go through using `Offset()` and
+`Limit()`:
 
 ```go
 res = col.Find(...)
