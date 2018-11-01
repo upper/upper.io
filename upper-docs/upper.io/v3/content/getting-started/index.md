@@ -183,7 +183,7 @@ res = sess.Collection("people").Find("id", 20).Or("id", 21)
 res = sess.Collection("people").Find(20)
 ```
 
-### Adding constraints
+### Constraints
 
 `db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
 by default `db.Cond` expresses an equality between columns and values:
