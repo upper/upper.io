@@ -159,7 +159,7 @@ func main() {
   var res db.Result
   res = birthdayCollection.Find()
 
-  // Query all results and fill the birthdays variable with them.
+  // The 'birthdays' variable is filled with the results found.
   var birthdays []Birthday
 
   err = res.All(&birthdays)
