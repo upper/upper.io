@@ -4,13 +4,7 @@
 `upper-db` provides a *common interface* to work with different data sources
 using *adapters* that wrap mature SQL and NoSQL database drivers.
 
-The main purpose of `db` is to abstract common database tasks (CRUD) and
-provide tools for [Go 1.8+][1] developers to perform complex queries when they
-need to.
-
-`db` supports the [MySQL][3], [PostgreSQL][4], [SQLite][5], [MSSQL][8] and
-[QL][6] databases and provides partial support (CRUD, no transactions) for
-[MongoDB][7].
+Its main purpose is to enable [Go 1.8+][1] developers to perform database tasks (CRUD) in MySQL, PostgreSQL, SQLite, MSSQL, QL, or MongoDB.
 
 <center>
 ![upper.io/db.v3 package](/db.v3/res/general.png)
