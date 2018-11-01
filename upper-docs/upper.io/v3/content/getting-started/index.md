@@ -81,6 +81,20 @@ import (
 )
 ```
 
+Use the `ConnectionURL` struct included in the adapter to create a DSN:
+
+```go
+var settings = postgresql.ConnectionURL{
+  User:     "john",
+  Password: "p4ss",
+  Address:  "10.0.0.99",
+  Database: "myprojectdb",
+}
+
+fmt.Printf("DSN: %s", settings) // settings.String() is a DSN
+```
+
+Start a database session by passing the `settings` value to the `Open()` function of your adapter:
 ### Mapping tables to structs
 
 Add a `db` struct tag next to an *exported field* to map that field to a table
