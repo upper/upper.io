@@ -192,10 +192,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ## Specifications
 ### JSON Types
 
-The `postgresql` adapter supports saving and retrieving JSON data when using
-[JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html), if
-you want to try this out, make sure that the table column was created as
-`jsonb` and that the field has the `postgresql.JSONB` type.
+You can save and retrieve data when using [JSON types](https://www.postgresql.org/docs/9.4/static/datatype-json.html). If you want to try this out, make sure the column type is `jsonb` and the field type is `postgresql.JSONB`:
 
 ```
 import (
