@@ -3,14 +3,8 @@
 The `postgresql` adapter for [PostgreSQL][2] wraps the `github.com/lib/pq`
 driver written by [Blake Mizerany][1].
 
-## Basic use
-
-This page showcases the particularities of the [PostgreSQL][2] adapter, if
-you're new to upper-db, you should take a look at the [getting started][3] page
-first.
-
-After you're done with the introduction, reading through the [examples][4] is
-highly recommended.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Here you'll learn about the particularities of the [PostgreSQL][2] adapter. Before starting to read this detailed information, it is advisable that you take a look at the [getting started](https://upper.io/db.v3/getting-started) page so you become acquainted with the basics of upper-db and you can grasp concepts better. 
 
 ## Installation
 
