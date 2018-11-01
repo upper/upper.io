@@ -231,8 +231,7 @@ if err = q.All(&publications); err != nil {
 
 ### Auto-incremental Keys (Serial)
 
-If you want to use auto-increment (or serial) keys with PostgreSQL database,
-you must define the column type as `SERIAL`, like this:
+If you want tables to generate a unique number automatically whenever a new record is inserted, you can use auto-incremental keys. In this case, the column must be defined as `SERIAL`.
 
 ```sql
 CREATE TABLE foo(
