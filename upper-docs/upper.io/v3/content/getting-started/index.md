@@ -183,8 +183,6 @@ res = sess.Collection("people").Find("id", 20).Or("id", 21)
 res = sess.Collection("people").Find(20)
 ```
 
-`db.Collection.Find()` returns a result set reference, or `db.Result`.
-
 ### Adding constraints
 
 `db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
