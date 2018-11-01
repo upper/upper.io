@@ -155,7 +155,8 @@ type Person struct {
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > If mapping is not explicit, the adapter will perform a case-sensitive lookup of field names.
 
-### Defining a result set with `Find()`
+# CRUD Functions
+## Retrieval
 
 You can use `Find()` on a collection reference to get a result set from that
 collection.
