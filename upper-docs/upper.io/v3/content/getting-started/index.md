@@ -198,11 +198,6 @@ cond = db.Cond{ // ...but a different one can be used.
   "id >=": 36, // id >= 36
 }
 
-cond = db.Cond{
-  "name LIKE": "Pete%", // SQL: name LIKE 'Pete%'
-}
-```
-
 Note that `db.Cond` is a just map and it accepts multiple keys:
 
 ```go
