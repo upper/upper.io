@@ -185,8 +185,7 @@ res = sess.Collection("people").Find(20)
 
 ### Constraints
 
-`db.Cond{}` is a `map[interface{}]interface{}` type that represents conditions,
-by default `db.Cond` expresses an equality between columns and values:
+You can narrow down result sets with db.Cond{}`:
 
 ```go
 cond = db.Cond{
