@@ -1,5 +1,6 @@
 # upper.io/db.v3
 
+# Purpose
 `upper-db` provides a *common interface* to work with different data sources
 using *adapters* that wrap mature database drivers.
 
