@@ -319,9 +319,7 @@ drv = sess.Driver().(*sql.DB)
 rows, err = drv.Query("SELECT name FROM users WHERE age = ?", age)
 ```
 
-## License
-
-The MIT license:
+# License (MIT)
 
 > Copyright (c) 2013-2016 The upper.io/db authors.
 >
