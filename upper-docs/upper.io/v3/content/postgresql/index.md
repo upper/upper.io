@@ -14,7 +14,8 @@ Use `go get` to download and install the adapter:
 go get upper.io/db.v3/postgresql
 ```
 
-## Setting up database access
+## Setup
+### Database Session
 
 The `postgresql.ConnectionURL{}` struct is defined as follows:
 
