@@ -14,7 +14,8 @@ Use `go get` to download and install the adapter:
 go get upper.io/db.v3/mssql
 ```
 
-## Setting up database access
+## Setup
+### Database Session
 
 The `mssql.ConnectionURL{}` struct is defined as follows:
 
