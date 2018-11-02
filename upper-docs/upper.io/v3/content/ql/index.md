@@ -57,6 +57,10 @@ sess, err = ql.Open(settings)
 ql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
+## Common Database Operations
+
+Once the connection is established, you can start performing operations on the database.
+
 ## Example
 
 The following SQL statement creates a table with `name` and `born`
