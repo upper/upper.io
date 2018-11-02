@@ -162,7 +162,7 @@ func main() {
     log.Fatalf("res.All(): %q\n", err)
   }
 
-  // Printing to stdout.
+  // The 'birthdays' variable is printed to stdout.
   for _, birthday := range birthdays {
     fmt.Printf("%s was born in %s.\n",
       birthday.Name,
