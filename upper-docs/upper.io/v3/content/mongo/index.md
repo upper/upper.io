@@ -24,7 +24,8 @@ Once this requirement is met, you can use `go get` to download and install the a
 go get upper.io/db.v3/mongo
 ```
 
-## Setting up database access
+## Setup
+### Database Session
 
 The `mongo.ConnectionURL{}` struct is defined as follows:
 
