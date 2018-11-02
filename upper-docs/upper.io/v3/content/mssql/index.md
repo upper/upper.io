@@ -123,7 +123,7 @@ func main() {
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
   }
-  defer sess.Close() // Remember to close the database session.
+  defer sess.Close() // Closing the session is a good practice.
 
   // Pointing to the "birthday" table.
   birthdayCollection := sess.Collection("birthday")
