@@ -28,7 +28,7 @@ import (
 )
 ```
 
-The `ql.ConnectionURL{}` struct is defined like this:
+Define the `ql.ConnectionURL{}` struct:
 
 ```go
 // ConnectionURL implements a SQLite connection struct.
