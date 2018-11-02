@@ -138,7 +138,7 @@ func main() {
   // Three rows are inserted into the 'Birthday' table.
   birthdayCollection.Insert(Birthday{
     Name: "Hayao Miyazaki",
-    Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.UTC),
+    Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
   })
 
   birthdayCollection.Insert(Birthday{
