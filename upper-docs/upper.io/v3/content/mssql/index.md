@@ -41,8 +41,7 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `mssql.ConnectionURL` value as argument for `mssql.Open()`
-to create a `mssql.Database` session.
+Pass the `mssql.ConnectionURL` value as argument to `mssql.Open()` so the `mssql.Database` session is created.
 
 ```go
 settings = mssql.ConnectionURL{
