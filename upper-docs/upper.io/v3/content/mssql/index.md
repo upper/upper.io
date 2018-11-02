@@ -31,6 +31,7 @@ import (
 Define the `mssql.ConnectionURL{}` struct:
 
 ```go
+// ConnectionURL defines the DSN attributes.
 type ConnectionURL struct {
   User     string
   Password string
