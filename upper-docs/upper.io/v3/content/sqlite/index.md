@@ -23,7 +23,11 @@ sudo ln -s /usr/local/bin/gcc47 /usr/local/bin/gcc
 > If you're using Mac, you'll need [Xcode](https://developer.apple.com/xcode/) and
 Command Line Tools.
 
-Otherwise, you'll end with an error like this:
+Once this requirement is met, you can use `go get` to download, compile and install the adapter:
+
+```
+go get upper.io/db.v3/sqlite
+```
 
 ```
 # github.com/mattn/go-sqlite3
