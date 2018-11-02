@@ -19,8 +19,9 @@ sudo pkg install gcc
 sudo ln -s /usr/local/bin/gcc47 /usr/local/bin/gcc
 ```
 
-If you're on a Mac, you'll need [Xcode](https://developer.apple.com/xcode/) and
-the Command Line Tools.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> If you're using Mac, you'll need [Xcode](https://developer.apple.com/xcode/) and
+Command Line Tools.
 
 Otherwise, you'll end with an error like this:
 
