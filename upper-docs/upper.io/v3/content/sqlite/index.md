@@ -60,8 +60,7 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `sqlite.ConnectionURL` value as argument for `sqlite.Open()`
-to create a `sqlite.Database` session.
+Pass the `sqlite.ConnectionURL` value as argument to `sqlite.Open()` so the `sqlite.Database` session is created.
 
 ```go
 settings = sqlite.ConnectionURL{
