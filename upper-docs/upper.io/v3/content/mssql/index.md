@@ -28,7 +28,7 @@ import (
 )
 ```
 
-The `mssql.ConnectionURL{}` struct is defined as follows:
+Define the `mssql.ConnectionURL{}` struct:
 
 ```go
 type ConnectionURL struct {
