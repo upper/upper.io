@@ -187,7 +187,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
 ## Specifications
-### SQL builder
+### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
