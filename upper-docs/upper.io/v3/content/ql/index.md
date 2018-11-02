@@ -88,8 +88,7 @@ rm -f example.db
 cat example.sql | ql -db example.db
 ```
 
-The Go code below will add some rows to the "birthday" table and then will
-print the same rows that were inserted.
+The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output.
 
 ```go
 // example.go
