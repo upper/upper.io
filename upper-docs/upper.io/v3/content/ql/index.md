@@ -17,6 +17,17 @@ go get upper.io/db.v3/ql
 ## Setup
 ### Database Session
 
+Import the `upper.io/db.v3/ql` package into your application:
+
+```go
+// main.go
+package main
+
+import (
+  "upper.io/db.v3/ql"
+)
+```
+
 The `ql.ConnectionURL{}` struct is defined like this:
 
 ```go
