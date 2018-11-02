@@ -18,7 +18,7 @@ To use the package, you'll need the [bazaar][2] version control system:
 sudo apt-get install bzr -y
 ```
 
-After bazaar is installed, use `go get` to download and install the adapter.
+Once this requirement is met, you can use `go get` to download and install the adapter:
 
 ```
 go get upper.io/db.v3/mongo
