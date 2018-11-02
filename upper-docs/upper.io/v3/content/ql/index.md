@@ -49,8 +49,8 @@ sess, err = ql.Open(settings)
 ...
 ```
 
-A `ql.ParseURL()` function is provided to convert a DSN into a
-`ql.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `ql.ParseURL()` function is also provided in case you need to convert the DSN into a `ql.ConnectionURL`:
 
 ```go
 // ParseURL parses a DSN into a ConnectionURL struct.
