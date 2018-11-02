@@ -172,7 +172,7 @@ func main() {
 
 ```
 
-Running the example above:
+The Go file is compiled and executed using `go run`:
 
 ```
 go run main.go
