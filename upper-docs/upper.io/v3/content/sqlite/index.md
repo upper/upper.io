@@ -71,8 +71,8 @@ sess, err = sqlite.Open(settings)
 ...
 ```
 
-A `sqlite.ParseURL()` function is provided to convert a DSN into a
-`sqlite.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `sqlite.ParseURL()` function is also provided in case you need to convert the DSN into a `sqlite.ConnectionURL`:
 
 ```go
 // ParseURL parses a DSN into a ConnectionURL struct.
