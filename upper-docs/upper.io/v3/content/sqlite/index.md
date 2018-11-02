@@ -1,6 +1,6 @@
 # SQLite
 
-The `sqlite` adapter for the [SQLite3][3] wraps the
+The `sqlite` adapter for [SQLite3][3] wraps the
 `github.com/mattn/go-sqlite3` driver written by [Yasuhiro Matsumoto][1].
 
 ## Basic use
