@@ -3,7 +3,6 @@
 The `mongo` adapter for [MongoDB][3] wraps the `labix.org/v2/mgo` driver
 written by [Gustavo Niemeyer][1].
 
-## Known limitations
 
 * Does not support transactions.
 * Does not support the `db` tag. You must use [bson][4] tags instead.
