@@ -73,7 +73,6 @@ The `birthday` table with the `name` and `born` columns is created with these SQ
 
 ```sql
 --' example.sql
-
 DROP TABLE IF EXISTS birthday;
 
 CREATE TABLE birthday (
