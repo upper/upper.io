@@ -50,7 +50,7 @@ import (
 )
 ```
 
-The `sqlite.ConnectionURL{}` struct is defined like this:
+Define the `sqlite.ConnectionURL{}` struct:
 
 ```go
 // ConnectionURL implements a SQLite connection struct.
