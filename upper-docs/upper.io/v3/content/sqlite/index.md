@@ -83,7 +83,7 @@ sqlite.ParseURL(dsn string) (ConnectionURL, error)
 
 Once the connection is established, you can start performing operations on the database.
 
-## Example
+### Example
 
 The following SQL statement creates a table with `name` and `born`
 columns.
