@@ -41,7 +41,7 @@ import (
 Define the `mongo.ConnectionURL{}` struct:
 
 ```go
-// ConnectionURL implements a MongoDB connection struct.
+// ConnectionURL defines the DSN attributes.
 type ConnectionURL struct {
   User     string
   Password string
