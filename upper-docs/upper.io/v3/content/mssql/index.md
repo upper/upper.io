@@ -107,8 +107,8 @@ var settings = mssql.ConnectionURL{
 }
 
 type Birthday struct {
-  // Name maps the "Name" property to the "name" column
-  // of the "birthday" table.
+  // The 'name' column of the 'birthday' table
+  // is mapped to the 'name' property.
   Name string `db:"name"`
 
   // Born maps the "Born" property to the "born" column
