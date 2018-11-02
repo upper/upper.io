@@ -8,8 +8,7 @@ The `sqlite` adapter for [SQLite3][3] wraps the
 
 ## Installation
 
-This package uses [cgo][4], so in order to compile and install it you'll also need a
-C compiler, such as `gcc`:
+This package uses [cgo][4]. To use it, you'll need a C compiler, such as `gcc`:
 
 ```
 # Debian
