@@ -3,14 +3,8 @@
 The `sqlite` adapter for [SQLite3][3] wraps the
 `github.com/mattn/go-sqlite3` driver written by [Yasuhiro Matsumoto][1].
 
-## Basic use
-
-This page showcases the particularities of the [SQLite][2] adapter, if you're
-new to upper-db, you should take a look at the [getting started][5] page first.
-
-After you're done with the introduction, reading through the [examples][6] is
-highly recommended.
-
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Here you’ll learn about the particularities of the [SQLite3][3] adapter. Before starting to read this detailed information, it is advisable that you take a look at the [getting started](https://upper.io/db.v3/getting-started) page so you become acquainted with the basics of upper-db and you can grasp concepts better.
 
 ## Installation
 
