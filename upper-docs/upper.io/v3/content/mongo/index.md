@@ -38,7 +38,7 @@ import (
 )
 ```
 
-The `mongo.ConnectionURL{}` struct is defined as follows:
+Define the `mongo.ConnectionURL{}` struct:
 
 ```go
 // ConnectionURL implements a MongoDB connection struct.
