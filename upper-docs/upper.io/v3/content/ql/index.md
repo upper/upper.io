@@ -57,29 +57,6 @@ sess, err = ql.Open(settings)
 ql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
-## Usage
-
-Import the `upper.io/db.v3/ql` package into your application:
-
-```go
-// main.go
-package main
-
-import (
-  "upper.io/db.v3/ql"
-)
-```
-
-Then, you can use the `ql.Open()` method to open a SQLite3 database file:
-
-```go
-var settings = ql.ConnectionURL{
-  Database: `/path/to/example.db`, // Path to a QL database file.
-}
-
-sess, err = ql.Open(settings)
-```
-
 ## Example
 
 The following SQL statement creates a table with `name` and `born`
