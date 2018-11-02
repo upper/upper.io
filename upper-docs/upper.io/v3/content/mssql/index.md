@@ -60,32 +60,6 @@ sess, err = mssql.Open(settings)
 mssql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
-## Usage
-
-Import the `upper.io/db.v3/mssql` package into your application:
-
-```go
-// main.go
-package main
-
-import (
-  "upper.io/db.v3/mssql"
-)
-```
-
-Then, you can use the `mssql.Open()` method to create a session:
-
-```go
-var settings = mssql.ConnectionURL{
-  Host:       "localhost",          // MSSQL server IP or name.
-  Database:   "peanuts",            // Database name.
-  User:       "cbrown",             // Optional user name.
-  Password:   "snoopy",             // Optional user password.
-}
-
-sess, err = mssql.Open(settings)
-```
-
 ## Example
 
 The following SQL statement creates a `birthday` table with `name` and `born`
