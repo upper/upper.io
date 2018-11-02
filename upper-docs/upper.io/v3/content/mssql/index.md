@@ -52,8 +52,8 @@ sess, err = mssql.Open(settings)
 ...
 ```
 
-A `mssql.ParseURL()` function is provided to convert a DSN into a
-`mssql.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `mssql.ParseURL()` function is also provided in case you need to convert the DSN into a `mssql.ConnectionURL`:
 
 ```go
 // ParseURL parses a DSN into a ConnectionURL struct.
