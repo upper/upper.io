@@ -51,8 +51,7 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `mongo.ConnectionURL` value as argument for `mongo.Open()`
-to create a `mongo.Database` session.
+Pass the `mongo.ConnectionURL` value as argument to `mongo.Open()` so the `mongo.Database` session is created.
 
 A `mongo.ParseURL()` function is provided to convert a DSN into a
 `mongo.ConnectionURL`:
