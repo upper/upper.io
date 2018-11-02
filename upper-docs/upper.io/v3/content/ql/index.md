@@ -81,8 +81,7 @@ CREATE TABLE birthday (
 );
 ```
 
-Use the `ql` command line tool to create a `example.db` database
-file.
+The `ql` command line tool is used to create an `example.db` database file:
 
 ```
 rm -f example.db
