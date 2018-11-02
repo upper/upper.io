@@ -36,13 +36,6 @@ Otherwise, you'll see the following error:
 exec: "gcc": executable file not found in $PATH
 ```
 
-Once `gcc` is installed, use `go get` to download, compile and install the
-sqlite adapter.
-
-```
-go get upper.io/db.v3/sqlite
-```
-
 ## Setting up database access
 
 The `sqlite.ConnectionURL{}` struct is defined like this:
