@@ -126,7 +126,7 @@ import (
 )
 
 var settings = sqlite.ConnectionURL{
-  Database: `example.db`, // Path to database file.
+  Database: `example.db`, // Path to database file
 }
 
 type Birthday struct {
