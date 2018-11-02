@@ -208,9 +208,8 @@ Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
-## Unique adapter features
-
-### SQL builder
+## Specifications
+### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
