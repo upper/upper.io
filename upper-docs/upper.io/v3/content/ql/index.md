@@ -117,7 +117,7 @@ type Birthday struct {
 
 func main() {
 
-  // Attemping to open the "example.db" database file.
+  // Attempt to open the 'example.db' database file
   sess, err := ql.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
