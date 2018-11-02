@@ -111,8 +111,8 @@ type Birthday struct {
   // is mapped to the 'name' property.
   Name string `db:"name"`
 
-  // Born maps the "Born" property to the "born" column
-  // of the "birthday" table.
+  // The 'born' column of the 'birthday' table
+  // is mapped to the 'born' property.
   Born time.Time `db:"born"`
 }
 
