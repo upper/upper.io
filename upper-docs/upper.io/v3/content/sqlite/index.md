@@ -29,6 +29,8 @@ Once this requirement is met, you can use `go get` to download, compile and inst
 go get upper.io/db.v3/sqlite
 ```
 
+Otherwise, you'll see the following error:
+
 ```
 # github.com/mattn/go-sqlite3
 exec: "gcc": executable file not found in $PATH
