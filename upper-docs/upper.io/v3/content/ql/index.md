@@ -31,7 +31,7 @@ import (
 Define the `ql.ConnectionURL{}` struct:
 
 ```go
-// ConnectionURL implements a SQLite connection struct.
+// ConnectionURL defines the DSN attributes.
 type ConnectionURL struct {
   Database string
   Options  map[string]string
