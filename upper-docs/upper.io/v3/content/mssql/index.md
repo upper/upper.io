@@ -17,6 +17,17 @@ go get upper.io/db.v3/mssql
 ## Setup
 ### Database Session
 
+Import the `upper.io/db.v3/mssql` package into your application:
+
+```go
+// main.go
+package main
+
+import (
+  "upper.io/db.v3/mssql"
+)
+```
+
 The `mssql.ConnectionURL{}` struct is defined as follows:
 
 ```go
