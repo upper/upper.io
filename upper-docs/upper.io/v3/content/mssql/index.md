@@ -60,6 +60,10 @@ sess, err = mssql.Open(settings)
 mssql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
+## Common Database Operations
+
+Once the connection is established, you can start performing operations on the database.
+
 ## Example
 
 The following SQL statement creates a `birthday` table with `name` and `born`
