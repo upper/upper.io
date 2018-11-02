@@ -118,7 +118,7 @@ type Birthday struct {
 
 func main() {
 
-  // Attemping to establish a connection to the database.
+  // The database connection is attempted.
   sess, err := mssql.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
