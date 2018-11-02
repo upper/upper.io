@@ -27,6 +27,17 @@ go get upper.io/db.v3/mongo
 ## Setup
 ### Database Session
 
+Import the `upper.io/db.v3/mongo` package into your application:
+
+```go
+// main.go
+package main
+
+import (
+  "upper.io/db.v3/mongo"
+)
+```
+
 The `mongo.ConnectionURL{}` struct is defined as follows:
 
 ```go
