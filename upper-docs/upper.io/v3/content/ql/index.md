@@ -1,6 +1,6 @@
 # QL
 
-The `ql` adapter for the [QL][1] wraps the `github.com/cznic/ql/ql` driver
+The `ql` adapter for [QL][1] wraps the `github.com/cznic/ql/ql` driver
 written by [Jan Mercl][1].
 
 ## Basic use
