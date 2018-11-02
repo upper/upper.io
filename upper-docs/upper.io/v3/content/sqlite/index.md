@@ -79,29 +79,6 @@ sess, err = sqlite.Open(settings)
 sqlite.ParseURL(dsn string) (ConnectionURL, error)
 ```
 
-## Usage
-
-Import the `upper.io/db.v3/sqlite` package into your application:
-
-```go
-// main.go
-package main
-
-import (
-  "upper.io/db.v3/sqlite"
-)
-```
-
-Then, you can use the `sqlite.Open()` method to open a SQLite3 database file:
-
-```go
-var settings = sqlite.ConnectionURL{
-  Database: `/path/to/example.db`, // Path to a sqlite3 database file.
-}
-
-sess, err = sqlite.Open(settings)
-```
-
 ## Example
 
 The following SQL statement creates a table with `name` and `born`
