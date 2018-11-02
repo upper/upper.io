@@ -39,6 +39,17 @@ exec: "gcc": executable file not found in $PATH
 ## Setup
 ### Database Session
 
+Import the `upper.io/db.v3/sqlite` package into your application:
+
+```go
+// main.go
+package main
+
+import (
+  "upper.io/db.v3/sqlite"
+)
+```
+
 The `sqlite.ConnectionURL{}` struct is defined like this:
 
 ```go
