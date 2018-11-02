@@ -38,8 +38,7 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `ql.ConnectionURL` value as argument for `ql.Open()`
-to create a `ql.Database` session.
+Pass the `ql.ConnectionURL` value as argument to `ql.Open()` so the `ql.Database` session is created.
 
 ```go
 settings = ql.ConnectionURL{
