@@ -143,7 +143,7 @@ func main() {
 
   birthdayCollection.Insert(Birthday{
     Name: "Nobuo Uematsu",
-    Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.UTC),
+    Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.Local),
   })
 
   birthdayCollection.Insert(Birthday{
