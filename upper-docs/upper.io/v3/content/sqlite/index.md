@@ -103,8 +103,7 @@ CREATE TABLE "birthday" (
 );
 ```
 
-Use the `sqlite3` command line tool to create a `example.db`
-database file.
+The `sqlite3` command line tool is used to create an `example.db` database file:
 
 ```
 rm -f example.db
