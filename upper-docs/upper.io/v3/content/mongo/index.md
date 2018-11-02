@@ -7,8 +7,8 @@ written by [Gustavo Niemeyer][1].
 > Please note that MongoDB:
 
 * Does not support transactions.
-* Does not support the `db` tag. You must use [bson][4] tags instead.
 * Does not support query builder.
+* Uses [bson][4] tags instead of `db` for mapping.
 
 ## Installation
 
