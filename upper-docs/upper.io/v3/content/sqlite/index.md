@@ -36,7 +36,8 @@ Otherwise, you'll see the following error:
 exec: "gcc": executable file not found in $PATH
 ```
 
-## Setting up database access
+## Setup
+### Database Session
 
 The `sqlite.ConnectionURL{}` struct is defined like this:
 
