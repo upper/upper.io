@@ -12,10 +12,7 @@ written by [Gustavo Niemeyer][1].
 
 ## Installation
 
-If you want to install the package with `go get`, you'll need the [bazaar][2]
-version control system.
-
-You can install `bzr` like this:
+To use the package, you'll need the [bazaar][2] version control system:
 
 ```
 sudo apt-get install bzr -y
