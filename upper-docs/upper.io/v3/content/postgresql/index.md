@@ -103,10 +103,10 @@ import (
 )
 
 var settings = postgresql.ConnectionURL{
-  Database: `upperio_tests`,
-  Host:     `localhost`,
-  User:     `upperio`,
-  Password: `upperio`,
+  Database: `upperio_tests`,  // Database name
+  Host:     `localhost`,      // Server IP or name
+  User:     `upperio`,        // Username
+  Password: `upperio`,        // Password
 }
 
 type Birthday struct {
