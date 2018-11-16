@@ -257,10 +257,9 @@ type Foo struct {
 
 Otherwise, an error will be returned. 
 
-### Using `db.Raw` and `db.Func`
+### Escape Sequences
 
-If you need to provide a raw parameter for a method you can use the `db.Raw`
-function. Plese note that raw means that the specified value won't be filtered:
+There might be characters that cannot be typed in the context you're working, or else would have an undesired interpretation. Through `db.Func` you can encode the syntactic entities that cannot be directly represented by the alphabet: 
 
 ```go
 res = sess.Find().Select(db.Raw("DISTINCT(name)"))
