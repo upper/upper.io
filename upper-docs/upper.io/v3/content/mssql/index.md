@@ -84,6 +84,12 @@ CREATE TABLE [birthdays] (
 );
 ```
 
+The `sqlcmd` command line tool is used to run the statements in the `upperio_tests` database:
+
+```
+sqlcmd -U upperio -P upperio -i example.sql 
+```
+
 The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output. 
 
 ```go
