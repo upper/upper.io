@@ -233,8 +233,7 @@ if err = q.All(&publications); err != nil {
 
 ### Auto-incremental Keys
 
-If you want to use auto-increment keys with a MySQL database,
-you must define the column type as `NOT NULL AUTO_INCREMENT`, like this:
+If you want to generate a unique number automatically whenever a new record is inserted, you can use auto-incremental keys. In this case, the column must be defined as `NOT NULL AUTO_INCREMENT`.
 
 ```sql
 CREATE TABLE foo(
