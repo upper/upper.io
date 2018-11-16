@@ -232,7 +232,7 @@ if err = q.All(&publications); err != nil {
 }
 ```
 
-### The identity type
+### Identity Columns
 
 If you want to use auto-increment (or serial) keys with a SQL Server database,
 you must define the column type as an `IDENTITY(1, 1)`, like this:
