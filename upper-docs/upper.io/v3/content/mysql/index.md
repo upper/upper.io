@@ -265,10 +265,6 @@ There might be characters that cannot be typed in the context you're working, or
 res = sess.Find().Select(db.Func("DISTINCT", "name"))
 ```
 
-`db.Raw` also works for condition values.
-
-Another useful type that you could use to create an equivalent statement is
-`db.Func`:
 
 ```go
 res = sess.Find().Select(db.Func("DISTINCT", "name"))
