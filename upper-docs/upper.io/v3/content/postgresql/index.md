@@ -263,6 +263,12 @@ There might be characters that cannot be typed in the context you're working, or
 res = sess.Find().Select(db.Func("DISTINCT", "name"))
 ```
 
+On the other hand, you can use the `db.Raw` function so a given value is taken literally: 
+
+```go
+res = sess.Find().Select(db.Raw("DISTINCT(name)"))
+```
+
 `db.Raw` also works for condition values.
 
 Another useful type that you could use to create an equivalent statement is
