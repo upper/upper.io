@@ -235,6 +235,10 @@ if err = q.All(&publications); err != nil {
 
 If you want to generate a unique number automatically whenever a new record is inserted, you can use auto-incremental keys. In this case, the column must be defined as `NOT NULL AUTO_INCREMENT`.
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> In order for the ID to be returned by `db.Collection.Insert()`, the `AUTO_INCREMENT`
+column must be set as `PRIMARY KEY` too.
+
 ```sql
 CREATE TABLE foo(
   id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT, PRIMARY KEY(id),
