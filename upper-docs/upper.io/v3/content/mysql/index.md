@@ -192,6 +192,27 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
 ## Specifications
+### JSON Types
+
+You can save and retrieve data when using [JSON types](https://dev.mysql.com/doc/refman/8.0/en/json.html). If you want to try this out, make sure the column type is `json` and the field type is `mysql.JSON`:
+
+```
+import (
+  ...
+  "upper.io/db.v3/mysql"
+  ...
+)
+
+type Person struct {
+  ...
+  Properties  mysql.JSON  `db:"properties"`
+  Meta        mysql.JSON  `db:"meta"`
+}
+```
+
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> JSON types area supported on MySQL 8.0+. 
+
 ### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
