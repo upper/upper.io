@@ -248,7 +248,7 @@ if err = q.All(&publications); err != nil {
 }
 ```
 
-### Auto-incremental keys
+### Auto-incremental Keys
 
 If you want to use auto-increment keys with a SQLite database, you must define
 the column type as `INTEGER PRIMARY KEY`, like this:
