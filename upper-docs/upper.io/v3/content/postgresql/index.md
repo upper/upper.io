@@ -253,11 +253,7 @@ type Foo struct {
 }
 ```
 
-Otherwise, you'll end up with an error like this:
-
-```
-ERROR:  duplicate key violates unique constraint "id"
-```
+Otherwise, an error will be returned.
 
 ### Using `db.Raw` and `db.Func`
 
