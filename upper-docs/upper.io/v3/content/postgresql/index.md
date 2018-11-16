@@ -272,12 +272,6 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
 
-Another useful type that you could use to create an equivalent statement is
-`db.Func`:
-
-```go
-res = sess.Find().Select(db.Func("DISTINCT", "name"))
-```
 
 [1]: https://github.com/lib/pq
 [2]: http://www.postgresql.org/
