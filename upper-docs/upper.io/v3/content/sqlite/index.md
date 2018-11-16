@@ -250,8 +250,7 @@ if err = q.All(&publications); err != nil {
 
 ### Auto-incremental Keys
 
-If you want to use auto-increment keys with a SQLite database, you must define
-the column type as `INTEGER PRIMARY KEY`, like this:
+If you want tables to generate a unique number automatically whenever a new record is inserted, you can use auto-incremental keys. In this case, the column must be defined as `INTEGER PRIMARY KEY`.
 
 ```sql
 CREATE TABLE foo(
