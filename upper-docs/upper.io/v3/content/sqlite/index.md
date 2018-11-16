@@ -209,6 +209,27 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
 ## Specifications
+### JSON Types
+
+You can save and retrieve data when using [JSON types](https://www.sqlite.org/json1.html). If you want to try this out, make sure the column type is `json` and the field type is `sqlite.JSON`:
+
+```
+import (
+  ...
+  "upper.io/db.v3/sqlite"
+  ...
+)
+
+type Person struct {
+  ...
+  Properties  sqlite.JSON  `db:"properties"`
+  Meta        sqlite.JSON  `db:"meta"`
+}
+```
+
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> JSON types area supported on SQLite 3.9.0+. 
+
 ### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
