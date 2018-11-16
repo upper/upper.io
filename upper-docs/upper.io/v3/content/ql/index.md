@@ -219,6 +219,9 @@ On the other hand, you can use the `db.Raw` function so a given value is taken l
 res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ```
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
+
 [1]: https://github.com/cznic/ql
 [2]: http://golang.org/doc/effective_go.html#blank
 [3]: /db.v3/getting-started
