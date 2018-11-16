@@ -213,9 +213,10 @@ There might be characters that cannot be typed in the context you're working, or
 res = sess.Find().Select(db.Func("DISTINCT", "name"))
 ```
 
+On the other hand, you can use the `db.Raw` function so a given value is taken literally: 
 
 ```go
-res = sess.Find().Select(db.Func("DISTINCT", "name"))
+res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ```
 
 [1]: https://github.com/cznic/ql
