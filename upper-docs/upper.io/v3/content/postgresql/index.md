@@ -260,7 +260,7 @@ Otherwise, an error will be returned.
 There might be characters that cannot be typed in the context you're working, or else would have an undesired interpretation. Through `db.Func` you can encode the syntactic entities that cannot be directly represented by the alphabet: 
 
 ```go
-res = sess.Find().Select(db.Raw("DISTINCT(name)"))
+res = sess.Find().Select(db.Func("DISTINCT", "name"))
 ```
 
 `db.Raw` also works for condition values.
