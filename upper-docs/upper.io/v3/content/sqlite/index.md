@@ -259,7 +259,7 @@ CREATE TABLE foo(
 );
 ```
 
-Remember to set the `omitempty` option to the ID field:
+Remember to use `omitempty` to specify that the ID field should be ignored if it has an empty value:
 
 ```go
 type Foo struct {
