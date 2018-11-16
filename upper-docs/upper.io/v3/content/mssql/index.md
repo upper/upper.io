@@ -234,8 +234,7 @@ if err = q.All(&publications); err != nil {
 
 ### Identity Columns
 
-If you want to use auto-increment (or serial) keys with a SQL Server database,
-you must define the column type as an `IDENTITY(1, 1)`, like this:
+If you want tables to generate a unique number automatically whenever a new record is inserted, you can use auto-incremental keys. In this case, the column must be defined as `IDENTITY(1, 1)`.
 
 ```sql
 CREATE TABLE foo(
