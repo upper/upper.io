@@ -193,6 +193,27 @@ Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
 ## Specifications
+### JSON Types
+
+You can save and retrieve data when using [JSON types](https://docs.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server?view=sql-server-2017). If you want to try this out, make sure the column type is `json` and the field type is `mssql.JSON`:
+
+```
+import (
+  ...
+  "upper.io/db.v3/mssql"
+  ...
+)
+
+type Person struct {
+  ...
+  Properties  mssql.JSON  `db:"properties"`
+  Meta        mssql.JSON  `db:"meta"`
+}
+```
+
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> JSON types area supported on SQL Server 2016+.
+
 ### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
