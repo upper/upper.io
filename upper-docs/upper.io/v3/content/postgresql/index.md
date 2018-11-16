@@ -269,7 +269,8 @@ On the other hand, you can use the `db.Raw` function so a given value is taken l
 res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ```
 
-`db.Raw` also works for condition values.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
 
 Another useful type that you could use to create an equivalent statement is
 `db.Func`:
