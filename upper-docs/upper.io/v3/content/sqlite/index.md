@@ -268,6 +268,8 @@ type Foo struct {
 }
 ```
 
+Otherwise, an error will be returned.
+
 ### Using `db.Raw` and `db.Func`
 
 If you need to provide a raw parameter for a method you can use the `db.Raw`
