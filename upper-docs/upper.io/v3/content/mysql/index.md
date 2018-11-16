@@ -274,6 +274,8 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Click [here](https://upper.io/db.v3/examples) to keep learning about different database operations that can be executed with upper-db. 
 
 [1]: https://github.com/go-sql-driver/mysql
 [2]: http://www.mysql.com
