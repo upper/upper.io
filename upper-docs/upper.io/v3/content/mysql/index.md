@@ -231,7 +231,7 @@ if err = q.All(&publications); err != nil {
 }
 ```
 
-### Auto-incremental keys
+### Auto-incremental Keys
 
 If you want to use auto-increment keys with a MySQL database,
 you must define the column type as `NOT NULL AUTO_INCREMENT`, like this:
