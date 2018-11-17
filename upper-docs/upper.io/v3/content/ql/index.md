@@ -1,15 +1,10 @@
 # QL
 
-The `ql` adapter for the [QL][1] wraps the `github.com/cznic/ql/ql` driver
+The `ql` adapter for [QL][1] wraps the `github.com/cznic/ql/ql` driver
 written by [Jan Mercl][1].
 
-## Basic use
-
-This page showcases the particularities of the [QL][2] adapter, if you're
-new to upper-db, you should take a look at the [getting started][3] page first.
-
-After you're done with the introduction, reading through the [examples][4] is
-highly recommended.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Here you’ll learn about the particularities of the [QL][1] adapter. Before starting to read this detailed information, it is advisable that you take a look at the [getting started](https://upper.io/db.v3/getting-started) page so you become acquainted with the basics of upper-db and you can grasp concepts better.
 
 ## Installation
 
@@ -19,39 +14,8 @@ Use `go get` to download and install the adapter:
 go get upper.io/db.v3/ql
 ```
 
-## Setting up database access
-
-The `ql.ConnectionURL{}` struct is defined like this:
-
-```go
-// ConnectionURL implements a SQLite connection struct.
-type ConnectionURL struct {
-  Database string
-  Options  map[string]string
-}
-```
-
-Pass the `ql.ConnectionURL` value as argument for `ql.Open()`
-to create a `ql.Database` session.
-
-```go
-settings = ql.ConnectionURL{
-  ...
-}
-
-sess, err = ql.Open(settings)
-...
-```
-
-A `ql.ParseURL()` function is provided to convert a DSN into a
-`ql.ConnectionURL`:
-
-```go
-// ParseURL parses a DSN into a ConnectionURL struct.
-ql.ParseURL(dsn string) (ConnectionURL, error)
-```
-
-## Usage
+## Setup
+### Database Session
 
 Import the `upper.io/db.v3/ql` package into your application:
 
@@ -64,24 +28,51 @@ import (
 )
 ```
 
-Then, you can use the `ql.Open()` method to open a SQLite3 database file:
+Define the `ql.ConnectionURL{}` struct:
 
 ```go
-var settings = ql.ConnectionURL{
-  Database: `/path/to/example.db`, // Path to a QL database file.
+// ConnectionURL defines the DSN attributes.
+type ConnectionURL struct {
+  Database string
+  Options  map[string]string
+}
+```
+
+Pass the `ql.ConnectionURL` value as argument to `ql.Open()` so the `ql.Database` session is created.
+
+```go
+settings = ql.ConnectionURL{
+  ...
 }
 
 sess, err = ql.Open(settings)
+...
 ```
 
-## Example
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `ql.ParseURL()` function is also provided in case you need to convert the DSN into a `ql.ConnectionURL`:
 
-The following SQL statement creates a table with `name` and `born`
-columns.
+```go
+// ParseURL parses a DSN into a ConnectionURL struct.
+ql.ParseURL(dsn string) (ConnectionURL, error)
+```
+
+## Common Database Operations
+
+Once the connection is established, you can start performing operations on the database.
+
+### Example
+
+In the following example, a table named ‘birthday’ consisting of two columns (‘name’ and ‘born’) will be created. Before starting, the table will be searched in the database and, in the event it already exists, it will be removed. Then, three rows will be inserted into the table and checked for accuracy. To this end, the database will be queried and the matches (insertions) will be printed to standard output.
+
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The database operations described above refer to an advanced use of upper-db, hence
+they do not follow the exact same patterns of the [tour](https://tour.upper.io/welcome/01) and [getting started](https://upper.io/db.v3/getting-started) page.
+
+The `birthday` table with the `name` and `born` columns is created with these SQL statements:
 
 ```sql
 --' example.sql
-
 DROP TABLE IF EXISTS birthday;
 
 CREATE TABLE birthday (
@@ -90,16 +81,14 @@ CREATE TABLE birthday (
 );
 ```
 
-Use the `ql` command line tool to create a `example.db` database
-file.
+The `ql` command line tool is used to create an `example.db` database file:
 
 ```
 rm -f example.db
 cat example.sql | ql -db example.db
 ```
 
-The Go code below will add some rows to the "birthday" table and then will
-print the same rows that were inserted.
+The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output.
 
 ```go
 // example.go
@@ -114,37 +103,38 @@ import (
 )
 
 var settings = ql.ConnectionURL{
-  Database: `example.db`, // Path to database file.
+  Database: `example.db`, // Path to database file
 }
 
 type Birthday struct {
-  // Maps the "Name" property to the "name" column
-  // of the "birthday" table.
+  // The 'name' column of the 'birthday' table
+  // is mapped to the 'name' property.
   Name string `db:"name"`
-  // Maps the "Born" property to the "born" column
-  // of the "birthday" table.
+  // The 'born' column of the 'birthday' table
+  // is mapped to the 'born' property.
   Born time.Time `db:"born"`
 }
 
 func main() {
 
-  // Attemping to open the "example.db" database file.
+  // Attempt to open the 'example.db' database file
   sess, err := ql.Open(settings)
   if err != nil {
     log.Fatalf("db.Open(): %q\n", err)
   }
-  defer sess.Close() // Remember to close the database session.
+  defer sess.Close() // Closing the session is a good practice.
 
-  // Pointing to the "birthday" table.
+  // The 'birthday' table is referenced.
   birthdayCollection := sess.Collection("birthday")
 
-  // Attempt to remove existing rows (if any).
+  // Any rows that might have been added between the creation of
+  // the table and the execution of this function are removed. 
   err = birthdayCollection.Truncate()
   if err != nil {
     log.Fatalf("Truncate(): %q\n", err)
   }
 
-  // Inserting some rows into the "birthday" table.
+  // Three rows are inserted into the 'Birthday' table.
   birthdayCollection.Insert(Birthday{
     Name: "Hayao Miyazaki",
     Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
@@ -160,10 +150,10 @@ func main() {
     Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
   })
 
-  // Let's query for the results we've just inserted.
+  // The database is queried for the rows inserted.
   res := birthdayCollection.Find()
 
-  // Query all results and fill the birthday variable with them.
+  // The 'birthdays' variable is filled with the results found.
   var birthdays []Birthday
 
   err = res.All(&birthdays)
@@ -171,7 +161,7 @@ func main() {
     log.Fatalf("res.All(): %q\n", err)
   }
 
-  // Printing to stdout.
+  // The 'birthdays' variable is printed to stdout.
   for _, birthday := range birthday {
     fmt.Printf("%s was born in %s.\n",
       birthday.Name,
@@ -182,13 +172,13 @@ func main() {
 
 ```
 
-Running the example above:
+The Go file is compiled and executed using `go run`:
 
 ```
-go run main.go
+go run example.go
 ```
 
-Expected output:
+The output consists of three rows including names and birthdates:
 
 ```
 Hayao Miyazaki was born in January 5, 1941.
@@ -196,9 +186,8 @@ Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
-## Unique adapter features
-
-### SQL builder
+## Specifications
+### SQL Builder
 
 You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL query:
 
@@ -216,23 +205,26 @@ if err = q.All(&publications); err != nil {
 }
 ```
 
-### Using `db.Raw` and `db.Func`
+### Escape Sequences
 
-If you need to provide a raw parameter for a method you can use the `db.Raw`
-function. Plese note that raw means that the specified value won't be filtered:
+There might be characters that cannot be typed in the context you're working, or else would have an undesired interpretation. Through `db.Func` you can encode the syntactic entities that cannot be directly represented by the alphabet: 
+
+```go
+res = sess.Find().Select(db.Func("DISTINCT", "name"))
+```
+
+On the other hand, you can use the `db.Raw` function so a given value is taken literally: 
 
 ```go
 res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 ```
 
-`db.Raw` also works for condition values.
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
 
-Another useful type that you could use to create an equivalent statement is
-`db.Func`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Click [here][4] to keep learning about different database operations that can be executed with upper-db. 
 
-```go
-res = sess.Find().Select(db.Func("DISTINCT", "name"))
-```
 
 [1]: https://github.com/cznic/ql
 [2]: http://golang.org/doc/effective_go.html#blank
