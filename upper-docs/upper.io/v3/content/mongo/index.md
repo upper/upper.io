@@ -73,7 +73,7 @@ mongo.ParseURL(s string) (ConnectionURL, error)
 ## Common Database Operations
 Once the connection is established, you can start performing operations on the database.
 
-## Example
+### Example
 
 The Go code below will add some rows to the "birthday" collection and then
 will print the same rows that were inserted.
