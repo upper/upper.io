@@ -100,8 +100,8 @@ var settings = mongo.ConnectionURL{
 }
 
 type Birthday struct {
-  // Maps the "Name" property to the "name" column
-  // of the "birthday" table.
+  // The 'name' column of the 'birthday' table
+  // is mapped to the 'name' property.
   Name string `bson:"name"`
   // Maps the "Born" property to the "born" column
   // of the "birthday" table.
