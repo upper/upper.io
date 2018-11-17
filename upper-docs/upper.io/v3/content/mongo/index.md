@@ -95,8 +95,8 @@ import (
 )
 
 var settings = mongo.ConnectionURL{
-  Database:  `upperio_tests`,
-  Host:      `127.0.0.1`,
+  Database:  `upperio_tests`,  // Database name
+  Host:      `127.0.0.1`,      // Server IP or name
 }
 
 type Birthday struct {
