@@ -62,8 +62,8 @@ sess, err = mongo.Open(settings)
 ...
 ```
 
-A `mongo.ParseURL()` function is provided to convert a DSN into a
-`mongo.ConnectionURL`:
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> The `mongo.ParseURL()` function is also provided in case you need to convert a DSN into a `mongo.ConnectionURL`:
 
 ```go
 // ParseURL parses s into a ConnectionURL struct.
