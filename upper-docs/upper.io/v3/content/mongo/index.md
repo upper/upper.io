@@ -70,7 +70,8 @@ sess, err = mongo.Open(settings)
 mongo.ParseURL(s string) (ConnectionURL, error)
 ```
 
-
+## Common Database Operations
+Once the connection is established, you can start performing operations on the database.
 
 ## Example
 
