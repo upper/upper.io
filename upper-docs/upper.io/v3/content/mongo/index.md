@@ -70,31 +70,7 @@ sess, err = mongo.Open(settings)
 mongo.ParseURL(s string) (ConnectionURL, error)
 ```
 
-## Usage
 
-Import the `upper.io/db.v3/mongo` package into your application:
-
-```go
-// main.go
-package main
-
-import (
-  "upper.io/db.v3/mongo"
-)
-```
-
-Then, you can use the `mongo.Open()` method to create a session:
-
-```go
-var settings = mongo.ConnectionURL{
-  Host:       "localhost",          // PostgreSQL server IP or name.
-  Database:   "peanuts",            // Database name.
-  User:       "cbrown",             // Optional user name.
-  Password:   "snoopy",             // Optional user password.
-}
-
-sess, err = mongo.Open(settings)
-```
 
 ## Example
 
