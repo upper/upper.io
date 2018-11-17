@@ -146,7 +146,7 @@ func main() {
   // The database is queried for the rows inserted.
   res := birthdayCollection.Find()
 
-  // Query all results and fill the birthday variable with them.
+  // The 'birthdays' variable is filled with the results found.
   var birthday []Birthday
 
   err = res.All(&birthday)
