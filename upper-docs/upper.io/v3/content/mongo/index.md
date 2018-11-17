@@ -179,6 +179,9 @@ Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
+![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
+> Click [here](https://upper.io/db.v3/examples) to keep learning about different database operations that can be executed with upper-db. 
+
 [1]: http://labix.org/v2/mgo
 [2]: http://bazaar.canonical.com/en/
 [3]: http://www.mongodb.org/
