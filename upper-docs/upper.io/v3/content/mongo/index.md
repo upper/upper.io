@@ -79,8 +79,7 @@ In the following example, a table named 'birthday' consisting of two columns ('n
 ![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
 > The database operations described above refer to an advanced use of upper-db, hence they do not follow the exact same patterns of the [tour](https://tour.upper.io/welcome/01) and [getting started](https://upper.io/db.v3/getting-started) page.
 
-The Go code below will add some rows to the "birthday" collection and then
-will print the same rows that were inserted.
+The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output.
 
 ```go
 // example.go
