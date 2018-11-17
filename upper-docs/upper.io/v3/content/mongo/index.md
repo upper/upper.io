@@ -103,8 +103,8 @@ type Birthday struct {
   // The 'name' column of the 'birthday' table
   // is mapped to the 'name' property.
   Name string `bson:"name"`
-  // Maps the "Born" property to the "born" column
-  // of the "birthday" table.
+  // The 'born' column of the 'birthday' table
+  // is mapped to the 'born' property.
   Born time.Time `bson:"born"`
 }
 
