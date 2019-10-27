@@ -67,6 +67,7 @@
           <span class="nav__trigger--adapters" id="adapters-menu-trigger">upper.io</span>
           <ul id="adapters-menu">
             <li><a href="//tour.upper.io">Tour</a></li>
+	    <li><a href="/db.v3/examples">Examples</a></li>
             <li><a href="/db.v3/adapters">Adapters</a></li>
             <li><a href="//godoc.org/upper.io/db.v3">Reference</a></li>
           </ul>
