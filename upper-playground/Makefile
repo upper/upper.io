@@ -1,22 +1,26 @@
-HOST_PORT ?= 3000
-CONTAINER_PORT ?= 3000
+IMAGE_NAME          ?= xiam/go-playground
+IMAGE_TAG           ?= latest
+IMAGE_VERSION       ?=
 
-CONTAINER_NAME ?= upper-playground
-CONTAINER_IMAGE ?= upper/playground
+GIT_SHORTHASH       ?= $(shell git rev-parse --short HEAD)
 
-docker:
-	docker build -t $(CONTAINER_IMAGE) .
+HOST_PORT           ?= 3000
+CONTAINER_PORT      ?= 3000
 
-docker-run: docker
+CONTAINER_NAME      ?= upper-playground
+
+docker-run:
 	mkdir -p data && \
-	(docker stop $(CONTAINER_NAME) || exit 0) && \
-	(docker rm $(CONTAINER_NAME) || exit 0) && \
+	(docker rm -f $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \
 		--restart=always \
 		-v $$PWD/data:/var/data \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
 		--name $(CONTAINER_NAME) \
-		-t $(CONTAINER_IMAGE)
+		-t $(IMAGE_NAME)
 
 deploy:
-	sup prod deploy
+	ansible-playbook \
+		-i ../conf/ansible.hosts \
+		-e image_tag=$(IMAGE_TAG) \
+		playbook.yml
