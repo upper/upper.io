@@ -22,11 +22,16 @@ mkdir -p $WORKDIR/c/etc
 
 cp /app/playground $WORKDIR/c/bin
 
-mount -o bind /usr/local/go $WORKDIR/c/usr/local/go
-mount -o bind /go $WORKDIR/c/go
-mount -o bind /dev $WORKDIR/c/dev
-mount -o bind /lib $WORKDIR/c/lib
-mount -o bind /lib64 $WORKDIR/c/lib64
+echo "hosts: files dns" > $WORKDIR/c/etc/nsswitch.conf
+
+mount -o ro,bind /usr/local/go $WORKDIR/c/usr/local/go
+mount -o ro,bind /go $WORKDIR/c/go
+mount -o ro,bind /dev $WORKDIR/c/dev
+mount -o ro,bind /lib $WORKDIR/c/lib
+mount -o ro,bind /lib64 $WORKDIR/c/lib64
+
+touch $WORKDIR/c/etc/resolv.conf
+mount -o ro,bind /etc/resolv.conf $WORKDIR/c/etc/resolv.conf
 
 chmod -R 755 $WORKDIR/c/go
 chmod -R 755 $WORKDIR/c/usr/local/go
