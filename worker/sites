@@ -1,0 +1,76 @@
+server {
+	server_name demo.upper.io;
+
+	set $playground http://go-playground:3000;
+
+	resolver 127.0.0.11 valid=5s;
+
+	location / {
+		proxy_pass $playground;
+	}
+}
+
+server {
+  server_name upper.io;
+	
+	set $vanity http://upper-vanity:9001;
+	set $docs http://upper-docs:9000;
+
+	resolver 127.0.0.11 valid=5s;
+
+  root /var/www;
+
+  location / {
+    set $pass 0;
+    if ($arg_go-get = 1) {
+      set $pass 1;
+    }
+    if ($request_uri ~ git-upload-pack) {
+      set $pass 1;
+    }
+    if ($pass = 1) {
+      return 404;
+    }
+
+    rewrite ^/db/(.*)$ /db.v1/$1 redirect;
+    rewrite ^/db$ /db.v1/ redirect;
+    rewrite ^/$ /db.v3/ redirect;
+
+    try_files =404 @vanity;
+    error_page 404 = @vanity;
+    log_not_found off;
+  }
+
+  location @vanity {
+
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_pass $vanity;
+    proxy_intercept_errors on;
+    recursive_error_pages on;
+
+    set $pass 0;
+    if ($arg_go-get = 1) {
+      set $pass 1;
+    }
+    if ($request_uri ~ git-upload-pack) {
+      set $pass 1;
+    }
+    if ($pass = 0) {
+      return 404;
+    }
+
+    error_page 404 = @fallback;
+    log_not_found off;
+  }
+
+  location @fallback {
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_pass $docs;
+  }
+}
