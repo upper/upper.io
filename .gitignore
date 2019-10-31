@@ -2,3 +2,4 @@
 *.retry
 *.DS_Store
 private/
+conf/ansible.hosts
