@@ -25,7 +25,7 @@ docker-run: docker-build
 		--name $(CONTAINER_NAME) \
 		--ulimit nofile=256:512 \
 		--ulimit nproc=128 \
-		-t $(IMAGE_NAME)
+		-t $(IMAGE_NAME):$(GIT_SHORTHASH)
 
 docker-push: docker-build
 	docker tag $(IMAGE_NAME):$(GIT_SHORTHASH) $(IMAGE_NAME):$(IMAGE_TAG) && \
