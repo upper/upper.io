@@ -1,16 +1,4 @@
 server {
-	server_name demo.upper.io;
-
-	set $playground http://go-playground:3000;
-
-	resolver 127.0.0.11 valid=5s;
-
-	location / {
-		proxy_pass $playground;
-	}
-}
-
-server {
   server_name upper.io;
 	
 	set $vanity http://upper-vanity:9001;

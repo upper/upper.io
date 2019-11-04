@@ -1,4 +1,8 @@
-deploy:
-	for MODULE in worker upper-unsafebox upper-playground upper-tour upper-docs upper-vanity; do \
-		$(MAKE) -C $$MODULE docker-push deploy; \
+push:
+	for MODULE in upper-unsafebox upper-docs upper-vanity; do \
+		$(MAKE) -C $$MODULE docker-push || exit 1; \
 	done
+
+deploy:
+	$(MAKE) -C postgresql-server deploy
+	$(MAKE) -C upper-docs deploy
