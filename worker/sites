@@ -1,10 +1,10 @@
 server {
   server_name upper.io;
-	
-	set $vanity http://upper-vanity:9001;
-	set $docs http://upper-docs:9000;
+  
+  set $vanity http://upper-vanity:9001;
+  set $docs http://upper-docs:9000;
 
-	resolver 127.0.0.11 valid=5s;
+  resolver 127.0.0.11 valid=5s;
 
   root /var/www;
 
