@@ -110,7 +110,7 @@ DROP TABLE IF EXISTS "birthday";
 
 CREATE TABLE "birthday" (
   "name" varchar(50) DEFAULT NULL,
-  "born" varchar(12) DEFAULT NULL
+  "born" DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -196,7 +196,7 @@ func main() {
   }
 
   // Printing to stdout.
-  for _, birthday := range birthday {
+  for _, birthday := range birthdays {
     fmt.Printf("%s was born in %s.\n",
       birthday.Name,
       birthday.Born.Format("January 2, 2006"),
