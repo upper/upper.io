@@ -1,0 +1,31 @@
+- hosts: demo
+
+  tasks:
+    - name: pull docker image
+      docker_image:
+        name: upper/tour:{{ tag }}
+        force: yes
+        state: present
+
+    - name: run docker container
+      docker_container:
+        image: upper/tour:{{ tag }}
+        name: upper-tour
+        recreate: yes
+        state: started
+        ports:
+          - 127.0.0.1:4000:4000
+        restart_policy: always
+        restart: true
+
+    - name: test tour
+      uri:
+        url: http://127.0.0.1:4000/welcome/01
+        method: GET
+        status_code:
+          - 200
+          - -1
+      register: result
+      retries: 10
+      delay: 5
+      until: result.status == 200

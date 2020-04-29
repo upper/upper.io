@@ -1,6 +1,6 @@
 # Adapters
 
-Here's the list of all the adapters upper-db supports:
+Upper-db supports all of the following adapters:
 
 * [PostgreSQL](/db.v3/postgresql)
 * [MySQL](/db.v3/mysql)

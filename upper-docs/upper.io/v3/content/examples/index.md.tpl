@@ -223,9 +223,8 @@ pass a struct value:
 
 ```go
 account := Account{
-  // Make sure you're using the omitempty option on IDs.
-  ID          uint64 `db:"id,omitempty"`
-  Department  string `db:"department"`
+  Name: "Eliza",
+  LastName: "Smith",
   ...
 }
 

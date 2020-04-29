@@ -1,26 +1,32 @@
-HOST_PORT        ?= 9000
-CONTAINER_PORT   ?= 9000
-CONTAINER_NAME   ?= upper-docs
-CONTAINER_IMAGE  ?= upper/docs
+IMAGE_NAME          ?= upper/docs
+IMAGE_TAG           ?= latest
+IMAGE_VERSION       ?=
 
-deps:
-	go get -v menteslibres.net/luminos
+GIT_SHORTHASH       ?= $(shell git rev-parse --short HEAD)
 
-run: deps
-	if [ ! -f settings.yaml ]; then  \
-		cp settings.test.yaml settings.yaml; \
-	fi && \
-	luminos -c settings.yaml run
+HOST_PORT           ?= 9000
+CONTAINER_PORT      ?= 9000
 
-docker:
-	docker build -t $(CONTAINER_IMAGE) .
+CONTAINER_NAME      ?= upper-docs
 
-docker-run: docker
-	(docker stop $(CONTAINER_NAME) || exit 0) && \
-	(docker rm $(CONTAINER_NAME) || exit 0) && \
+docker-build:
+	docker build -t $(IMAGE_NAME):$(GIT_SHORTHASH) .
+
+docker-run: docker-build
+	(docker rm -f $(CONTAINER_NAME) || exit 0) && \
 	docker run -d \
 		--restart=always \
 		-p $(HOST_PORT):$(CONTAINER_PORT) \
-		-v $$PWD:/var/docs \
 		--name $(CONTAINER_NAME) \
-		-t $(CONTAINER_IMAGE)
+		-t $(IMAGE_NAME):$(GIT_SHORTHASH)
+
+docker-push: docker-build
+	docker tag $(IMAGE_NAME):$(GIT_SHORTHASH) $(IMAGE_NAME):$(IMAGE_TAG) && \
+	docker push $(IMAGE_NAME):$(GIT_SHORTHASH) && \
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+
+deploy:
+	ansible-playbook \
+		-i ../conf/ansible.hosts \
+		-e image_tag=$(IMAGE_TAG) \
+		playbook.yml

@@ -1,0 +1,70 @@
+- hosts: upper
+
+  tasks:
+
+    - name: update apt
+      apt:
+        autoclean: yes
+        autoremove: yes
+        cache_valid_time: 86400
+        update_cache: yes
+        upgrade: yes
+
+    - name: add docker GPG key
+      apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+
+    - name: add docker apt repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+
+    - name: install dependencies
+      apt:
+        name:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - docker-ce
+        - libpq-dev
+        - python
+        - python-pip
+        - python-setuptools
+        - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: install python packages
+      pip:
+        name:
+          - docker
+          - psycopg2
+
+    - name: /data directory
+      file:
+        path: /data/nginx
+        state: directory
+
+    - name: upload config file
+      copy:
+        src: ./sites
+        dest: /data/nginx/sites
+
+    - name: run nginx
+      docker_container:
+        image: nginx:latest
+        name: nginx
+        ports:
+          - 0.0.0.0:80:80
+        recreate: yes
+        volumes:
+          - /data/nginx/sites:/etc/nginx/conf.d/default.conf
+        state: started
+        keep_volumes: no
+        command: "bash -c 'nginx -g \"daemon off;\"'"
+
+    - name: create docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - nginx

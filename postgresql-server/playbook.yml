@@ -1,0 +1,101 @@
+- hosts: demo
+
+  tasks:
+
+    - name: create /data/postgresql directory
+      file:
+        path: /data/postgresql
+        state: directory
+
+    - name: upload booktown.sql
+      copy:
+        src: ./booktown.sql
+        dest: /data/postgresql/booktown.sql
+
+    - name: run postgresql
+      docker_container:
+        image: postgres:11
+        name: demo.upper.io
+        restart_policy: always
+        recreate: yes
+        memory: 1024m
+        memory_swap: 0
+        memory_swappiness: 0
+        ulimits:
+          - nofile:256:512
+          - nproc:128
+        volumes:
+          - /data/postgresql/booktown.sql:/booktown.sql
+        env:
+          POSTGRES_USER: "{{ postgres_user }}"
+          POSTGRES_PASSWORD: "{{ postgres_password }}"
+        ports:
+          - 0.0.0.0:5432:5432
+
+    - name: wait a few seconds for postgresql to start...
+      pause:
+        seconds: 10
+
+    - name: remove postgresql database
+      postgresql_db:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        name: booktown
+        state: absent
+
+    - name: remove user demouser
+      postgresql_user:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        name: demouser
+        state: absent
+
+    - name: add postgresql user
+      postgresql_user:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        name: demouser
+        password: demop4ss
+
+    - name: add postgresql database
+      postgresql_db:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        name: booktown
+        owner: demouser
+
+    - name: load database dump
+      shell: "docker exec -t demo.upper.io bash -c 'psql -Udemouser booktown < /booktown.sql'"
+
+    - name: remove postgresql privileges
+      postgresql_privs:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        db: booktown
+        state: absent
+        roles: demouser
+        priv: ALL
+        objs: ALL_IN_SCHEMA
+
+    - name: make postgresql user read-only
+      postgresql_privs:
+        login_host: "127.0.0.1"
+        login_password: "{{ postgres_password }}"
+        login_user: "{{ postgres_user }}"
+        db: booktown
+        roles: demouser
+        priv: SELECT
+        objs: ALL_IN_SCHEMA
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - demo.upper.io

@@ -1,14 +1,19 @@
-CONTAINER_IMAGE ?= upper/unsafebox
-CONTAINER_NAME ?= upper-unsafebox
-CONTAINER_PORT ?= 8080
-HOST_PORT ?= 8080
+IMAGE_NAME        ?= upper/unsafebox
+IMAGE_TAG         ?= latest
+IMAGE_VERSION     ?=
 
-docker:
-	docker build -t $(CONTAINER_IMAGE) .
+GIT_SHORTHASH     ?= $(shell git rev-parse --short HEAD)
 
-docker-run: docker
-	(docker stop $(CONTAINER_NAME) || exit 0) && \
-	(docker rm $(CONTAINER_NAME) || exit 0) && \
+CONTAINER_PORT    ?= 8080
+HOST_PORT         ?= 8080
+
+CONTAINER_NAME    ?= upper-unsafebox
+
+docker-build:
+	docker build -t $(IMAGE_NAME):$(GIT_SHORTHASH) .
+
+docker-run: docker-build
+	(docker rm -f $(CONTAINER_NAME) || exit 0) && \
 	docker run \
 		-d \
 		--restart=always \
@@ -20,9 +25,15 @@ docker-run: docker
 		--name $(CONTAINER_NAME) \
 		--ulimit nofile=256:512 \
 		--ulimit nproc=128 \
-		-t $(CONTAINER_IMAGE) && \
-	sleep 5 && \
-	curl --data 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A' "http://127.0.0.1:$(HOST_PORT)/compile?output=json"
+		-t $(IMAGE_NAME):$(GIT_SHORTHASH)
+
+docker-push: docker-build
+	docker tag $(IMAGE_NAME):$(GIT_SHORTHASH) $(IMAGE_NAME):$(IMAGE_TAG) && \
+	docker push $(IMAGE_NAME):$(GIT_SHORTHASH) && \
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
 deploy:
-	sup prod deploy
+	ansible-playbook \
+		-i ../conf/ansible.hosts \
+		-e image_tag=$(IMAGE_TAG) \
+		playbook.yml
