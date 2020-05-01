@@ -1,10 +1,10 @@
-# Adapters
+# Supported databases
 
-Here's the list of all the adapters upper-db supports:
+`upper/db` supports all of the following databases:
 
-* [PostgreSQL](/db.v3/postgresql)
-* [MySQL](/db.v3/mysql)
-* [SQLite](/db.v3/sqlite)
-* [QL](/db.v3/ql)
-* [SQL Server](/db.v3/mssql)
-* [MongoDB](/db.v3/mongo)
+* [PostgreSQL](/db/postgresql)
+* [MySQL](/db/mysql)
+* [SQLite](/db/sqlite)
+* [QL](/db/ql)
+* [SQL Server](/db/mssql)
+* [MongoDB](/db/mongo)
