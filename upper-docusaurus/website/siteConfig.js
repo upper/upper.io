@@ -41,7 +41,6 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'getting-started/index', label: 'Getting started'},
-    {doc: 'adapters/index', label: 'Databases'},
     {href: 'https://tour.upper.io', label: 'Tour'},
     {blog: true, label: 'Blog'},
     {href: 'https://github.com/upper/db', label: 'Github'},
@@ -82,7 +81,20 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [
+		'https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js',
+		'https://buttons.github.io/buttons.js',
+		'https://demo.upper.io/static/playground-full.js',
+		'https://demo.upper.io/static/snippets.js',
+		'/js/playground.js',
+	],
+
+	stylesheets: [
+		'https://demo.upper.io/static/example.css',
+		'https://demo.upper.io/static/codemirror.css',
+		'https://codemirror.net/theme/material.css',
+		'/css/playground.css'
+	],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
@@ -106,6 +118,10 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   repoUrl: 'https://github.com/upper/db',
+
+	markdownPlugins: [
+		require('./lib/goplayground-embed'),
+	],
 };
 
 module.exports = siteConfig;
