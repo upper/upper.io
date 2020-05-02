@@ -3,12 +3,12 @@ package main
 import (
 	"log"
 
-	"upper.io/db.v3/postgresql"
+	"github.com/upper/db/postgresql"
 )
 
 // Employee defines the mapping between the "employees" table and Go.
 type Employee struct {
-	ID       int    `db:"id,omitempty"` // IDs must be omitted when empty.
+	ID       int    `db:"id,omitempty"` // Skip `id` column when zero.
 	LastName string `db:"last_name"`
 }
 
