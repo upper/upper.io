@@ -32,7 +32,7 @@ docker-push: docker-build
 	docker push $(IMAGE_NAME):$(GIT_SHORTHASH) && \
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
-deploy:
+deploy: docker-push
 	ansible-playbook \
 		-i ../conf/ansible.hosts \
 		-e image_tag=$(IMAGE_TAG) \
