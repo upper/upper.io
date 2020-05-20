@@ -1,3 +1,6 @@
 .CodeMirror {
   height: 100%;
 }
+.toggleVisible {
+  margin-bottom: 48px;
+}
