@@ -208,7 +208,7 @@ $$
 ## Getting started
 
 * [Key concepts](/docs/getting-started/key-concepts)
-* Connect to a database
+* [Connect to a database](/docs/getting-started/connect-to-a-database)
 * Struct mapping
 * Using `db`
 * Using `sqlbuilder`

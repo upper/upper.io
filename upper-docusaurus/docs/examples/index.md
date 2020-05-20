@@ -34,62 +34,6 @@ In order to use `upper/db` efficiently, it is advisable that you:
 1. Try to use `db.Collection` methods applicable to both SQL and NoSQL first.
 1. Use the SQL builder or raw SQL only when needed.
 
-# Installation
-
-Use `go get`
-
-```sh
-go get -v -u github.com/upper/db
-```
-
-## Supported databases
-
-To see the complete list of supported adapters, see
-[/db/adapters](/db/adapters).
-
-# Setup
-
-## Database Session
-
-Import the adapter package into your application:
-
-```go
-import (
-  "github.com/upper/db/postgresql" // PostgreSQL adapter
-)
-```
-
-Use the `ConnectionURL` struct included in the adapter to create a DSN:
-
-```go
-var settings = postgresql.ConnectionURL{
-  User:     "john",
-  Password: "p4ss",
-  Address:  "10.0.0.99",
-  Database: "myprojectdb",
-}
-
-fmt.Printf("DSN: %s", settings) // settings.String() is a DSN
-```
-
-Start a database session by passing the `settings` value to the `Open()`
-function of your adapter:
-
-```go
-sess, err := postgresql.Open(settings) // sess is a db.Database type
-...
-```
-
-> Once you finish to work with the database session, use `Close()` to free all
-> associated resources. Keep in mind that Go apps are long-lived processes, you
-> may never need to manually `Close()` a session unless you don't need it at
-> all anymore.
-
-```go
-// Closing session
-err = sess.Close()
-...
-```
 
 ## Collection Reference
 
