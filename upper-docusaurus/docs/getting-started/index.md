@@ -16,7 +16,7 @@ SQLServer, SQLite and MongoDB).
 
 ### `db`
 
-The `db` package provides a **agnostic Go API** focused on working with
+The `db` package provides an **agnostic Go API** focused on working with
 collections of items. This API is modelled after basic set theory concepts that
 are applicable to relational and document-based database engines alike.
 
@@ -209,8 +209,8 @@ $$
 
 * [Key concepts](/docs/getting-started/key-concepts)
 * [Connect to a database](/docs/getting-started/connect-to-a-database)
-* Struct mapping
-* Using `db`
+* [Struct mapping](/docs/getting-started/struct-mapping)
+* [Using `db`](/docs/getting-started/db-usage)
 * Using `sqlbuilder`
 * Map structs to columns
 * Map structs to query results
