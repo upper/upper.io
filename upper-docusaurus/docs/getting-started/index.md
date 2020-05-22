@@ -209,13 +209,11 @@ $$
 
 * [Key concepts](/docs/getting-started/key-concepts)
 * [Connect to a database](/docs/getting-started/connect-to-a-database)
-* [Struct mapping](/docs/getting-started/struct-mapping)
+* [Mapping structs to columns and query results](/docs/getting-started/struct-mapping)
 * [Using `db`](/docs/getting-started/db-usage)
-* Using `sqlbuilder`
-* Map structs to columns
-* Map structs to query results
-* Transactions
-* Query logger
+* [Using `sqlbuilder`](/docs/getting-started/sqlbuilder-usage)
+* [Transactions](/docs/getting-started/db-usage)
+* [Query logger](/docs/getting-started/logger)
 
 ## Tutorials
 

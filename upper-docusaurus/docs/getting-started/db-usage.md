@@ -754,6 +754,82 @@ If you want to cancel the whole operation, use `Rollback()`.
 There is no need to `Close()` the transaction, after commiting or rolling back
 the transaction gets closed and it's no longer valid.
 
+## SQL builder
+
+The `Find()` method on a collection provides a compatibility layer between SQL
+and NoSQL databases, but that might feel short in some situations. That's the
+reason why SQL adapters also provide a powerful **SQL query builder**.
+
+This is how you would create a query reference using the SQL builder on a
+session:
+
+```go
+q := sess.SelectAllFrom("accounts")
+...
+
+q := sess.Select("id", "last_name").From("accounts")
+...
+
+q := sess.SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
+...
+```
+
+A query reference also provides the `All()` and `One()` methods from `Result`:
+
+```go
+var accounts []Account
+err = q.All(&accounts)
+...
+```
+
+Using the query builder you can express simple queries:
+
+```go
+q = sess.Select("id", "name").From("accounts").
+  Where("last_name = ?", "Smith").
+  OrderBy("name").Limit(10)
+```
+
+But even SQL-specific features, like joins, are supported (still depends on the
+database, though):
+
+```go
+q = sess.Select("a.name").From("accounts AS a").
+  Join("profiles AS p").
+  On("p.account_id = a.id")
+
+q = sess.Select("name").From("accounts").
+  Join("owners").
+  Using("employee_id")
+```
+
+Sometimes the builder won't be able to represent complex queries, if this
+happens it may be more effective to use plain SQL:
+
+```go
+rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+...
+
+row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+...
+
+res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+...
+```
+
+Mapping results from raw queries is also straightforward:
+
+```go
+rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+...
+
+var accounts []Account
+iter := sqlbuilder.NewIterator(rows)
+iter.All(&accounts)
+...
+```
+
+
 ## Take the `upper/db` tour
 
 To get the full picture on how to perform all CRUD tasks (starting right from

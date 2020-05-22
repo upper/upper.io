@@ -130,3 +130,26 @@ $$
 > to a database server or openning a database file, some databases like SQLite
 > do not have a server concept and they just use files. Please refer to the
 > page of the adapter you're using to see such particularities.
+
+## Underlying driver
+
+In case you require methods that are only available from the underlying driver,
+you can use the `db.Database.Driver()` method, which returns an `interface{}`.
+For instance, if you need the
+[mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method, you
+can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it into
+the appropriate type, and use `Ping()`, as shown below:
+
+```go
+drv = sess.Driver().(*mgo.Session) // The driver is cast into the
+                                   // the appropriate type.
+err = drv.Ping()
+```
+
+You can do the same when working with an SQL adapter by changing the casting:
+
+```go
+drv = sess.Driver().(*sql.DB)
+rows, err = drv.Query("SELECT name FROM users WHERE age = ?", age)
+```
+
