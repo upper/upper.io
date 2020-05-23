@@ -2,13 +2,44 @@
 title: Bond hooks
 ---
 
+Hooks are tasks to be performed before or after a specific action happens on a
+Bond model. You can add hooks to models by defining special methods like
+`BeforeCreate`, `AfterUpdate`, or `Validate` that satisfy specific signatures:
+
+```go
+type User struct {
+
+}
+
+// BeforeCreate hook
+func (u *User) BeforeCreate(sess bond.Session) error {
+  // ...
+}
+
+// Validate hook
+func (u *User) Validate() error {
+  // ...
+}
+```
+
+Hooks are a bond-specific feature, thus they're only executed when using `bond`
+methods:
+
+```go
+// Hooks will be executed
+sess.Store(...).Update(&user)
+
+// Hooks won't be executed
+sess.Collection(...).Find().Update(&user)
+```
+
 ## Validate
 
 The `Validate() error` hook is called before creating or updating an item. If
 `Validate()` returns a non-nil error, then the operation is aborted.
 
-The purpose of this method is for models to run preliminary checks on
-themselves before executing a query.
+The purpose of this method is for models to run preliminary checks on their own
+data before executing a query.
 
 Make sure your model satisfies the `bond.Validator` interface at compile time:
 
@@ -27,7 +58,7 @@ the state of a collection.
 
 ```go
 func (m *Model) BeforeCreate(sess bond.Session) error {
-  //
+  // Check if the e-mail was already registered by another user.
   c, err := sess.Store("users").
     Find(db.Email{"email": m.Email}).
     Count()
@@ -60,8 +91,8 @@ the state of a collection.
 
 ```go
 func (m *Model) AfterCreate(sess bond.Session) error {
-  // Send log to somewhere
-  _ = events.Send("Item has been inserted.")
+  // Send log to somewhere else.
+  events.Log("Item has been inserted.")
   return nil
 }
 ```
@@ -84,7 +115,21 @@ the state of a collection.
 
 ```go
 func (m *Model) BeforeUpdate(sess bond.Session) error {
-  // Check if an e-mail
+  // Check if the e-mail is already in use.
+  c, err := sess.Store("users").
+    Find(db.Email{
+      "email": m.Email,
+      "id": db.NotEq(m.ID),
+    }).
+    Count()
+  if err != nil {
+    return err
+  }
+  if c > 0 {
+    return errors.New("e-mail is already in use")
+  }
+
+  return nil
 }
 ```
 
@@ -107,6 +152,7 @@ the state of a collection.
 ```go
 func (m *Model) AfterUpdate(sess bond.Session) error {
   // Send log to somewhere
+  events.Log("Item has been updated.")
   return nil
 }
 ```
@@ -128,7 +174,11 @@ the state of a collection.
 
 ```go
 func (m *Model) BeforeDelete(sess bond.Session) error {
-  // Check if an e-mail
+  // Check if the post is unpublished before deletion
+  if m.Published {
+    return errors.New("post must be unpublished before deletion")
+  }
+  return nil
 }
 ```
 
@@ -149,7 +199,8 @@ the state of a collection.
 
 ```go
 func (m *Model) AfterDelete(sess bond.Session) error {
-  // Send log to somewhere
+  // Update post counter
+  sess.Store("stats").Update(...)
   return nil
 }
 ```
