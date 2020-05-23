@@ -212,10 +212,11 @@ $$
 * [Mapping structs to columns and query results](/docs/getting-started/struct-mapping)
 * [Using `db`](/docs/getting-started/db-usage)
 * [Using `sqlbuilder`](/docs/getting-started/sqlbuilder-usage)
+* [Using `bond`](/docs/getting-started/bond)
 * [Transactions](/docs/getting-started/db-usage)
 * [Query logger](/docs/getting-started/logger)
 
 ## Tutorials
 
-* Structing a `bond` application
-* `bond` hooks
+* [Building a `bond` application](/docs/tutorial/building-a-bond-app)
+* [Wiring `bond` hooks](/docs/tutorial/bond-hooks)
