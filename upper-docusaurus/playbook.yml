@@ -1,0 +1,36 @@
+- hosts: {{ host }}
+
+  tasks:
+    - name: retrieve docker image
+      docker_image:
+        name: upper/docusaurus:{{ image_tag }}
+        force: yes
+        state: present
+
+    - name: run docusaurus
+      docker_container:
+        image: upper/docusaurus:{{ image_tag }}
+        name: upper-docusaurus
+        recreate: yes
+        ports:
+          - 127.0.0.1:3080:80
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - upper-docusaurus
+
+#    - name: test docusaurus
+#      uri:
+#        url: http://127.0.0.1/db
+#        method: GET
+#        status_code:
+#          - 200
+#        headers:
+#          Host: upper.io
+#        return_content: yes
+#      register: this
+#      failed_when: "'DOCTYPE' not in this.content"
