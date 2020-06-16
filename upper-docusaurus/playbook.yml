@@ -12,6 +12,7 @@
         image: "upper/docusaurus:{{ image_tag }}"
         name: upper-docusaurus
         recreate: yes
+        restart_policy: always
         ports:
           - 127.0.0.1:3080:80
 

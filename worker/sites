@@ -1,8 +1,9 @@
 server {
-  server_name upper.io;
+  server_name upper.io dev.upper.io;
   
   set $vanity http://upper-vanity:9001;
-  set $docs http://upper-docs:9000;
+  set $legacy_docs http://upper-docs:9000;
+  set $docs http://upper-docusaurus:80;
 
   resolver 127.0.0.11 valid=5s;
 
@@ -20,9 +21,9 @@ server {
       return 404;
     }
 
-    rewrite ^/db/(.*)$ /db.v1/$1 redirect;
-    rewrite ^/db$ /db.v1/ redirect;
-    rewrite ^/$ /db.v3/ redirect;
+    #rewrite ^/db/(.*)$ /db.v1/$1 redirect;
+    #rewrite ^/db$ /db.v1/ redirect;
+    #rewrite ^/$ /db.v3/ redirect;
 
     try_files =404 @vanity;
     error_page 404 = @vanity;

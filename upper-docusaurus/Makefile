@@ -1,8 +1,8 @@
 IMAGE_NAME        ?= upper/docusaurus
-IMAGE_TAG         ?= latest
 IMAGE_VERSION     ?=
 
 GIT_SHORTHASH     ?= $(shell git rev-parse --short HEAD)
+IMAGE_TAG         ?= $(GIT_SHORTHASH)
 
 CONTAINER_PORT    ?= 80
 HOST_PORT         ?= 3080
