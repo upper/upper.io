@@ -8,7 +8,7 @@ CONTAINER_PORT    ?= 80
 HOST_PORT         ?= 3080
 
 CONTAINER_NAME    ?= upper-docusaurus
-DEPLOY_TARGET     ?= dev
+DEPLOY_TARGET     ?= staging
 
 docker-build:
 	docker build -t $(IMAGE_NAME):$(GIT_SHORTHASH) .

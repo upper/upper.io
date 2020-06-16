@@ -1,15 +1,15 @@
-- hosts: {{ host }}
+- hosts: "{{ host }}"
 
   tasks:
     - name: retrieve docker image
       docker_image:
-        name: upper/docusaurus:{{ image_tag }}
+        name: "upper/docusaurus:{{ image_tag }}"
         force: yes
         state: present
 
     - name: run docusaurus
       docker_container:
-        image: upper/docusaurus:{{ image_tag }}
+        image: "upper/docusaurus:{{ image_tag }}"
         name: upper-docusaurus
         recreate: yes
         ports:
