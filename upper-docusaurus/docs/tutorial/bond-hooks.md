@@ -60,7 +60,7 @@ the state of a collection.
 func (m *Model) BeforeCreate(sess bond.Session) error {
   // Check if the e-mail was already registered by another user.
   c, err := sess.Store("users").
-    Find(db.Email{"email": m.Email}).
+    Find(db.Cond{"email": m.Email}).
     Count()
   if err != nil {
     return err
@@ -117,7 +117,7 @@ the state of a collection.
 func (m *Model) BeforeUpdate(sess bond.Session) error {
   // Check if the e-mail is already in use.
   c, err := sess.Store("users").
-    Find(db.Email{
+    Find(db.Cond{
       "email": m.Email,
       "id": db.NotEq(m.ID),
     }).
