@@ -215,8 +215,4 @@ $$
 * [Using `bond`](/docs/getting-started/bond)
 * [Transactions](/docs/getting-started/db-usage)
 * [Query logger](/docs/getting-started/logger)
-
-## Tutorials
-
-* [Building a `bond` application](/docs/tutorial/building-a-bond-app)
-* [Wiring `bond` hooks](/docs/tutorial/bond-hooks)
+* [Wiring hooks](/docs/tutorial/bond-hooks)
