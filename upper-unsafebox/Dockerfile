@@ -22,6 +22,7 @@ ENV GOPATH /go
 #ENV TAG_V1 v1.0.1
 ENV TAG_V2 v2.0.7
 ENV TAG_V3 v3.7.1
+ENV TAG_V4 65230c78008aeba65d29e837fcd758f4d005d933
 
 ENV UPPER_ROOT $GOPATH/src/upper.io
 
@@ -44,7 +45,7 @@ RUN git clone https://github.com/upper/db.git $UPPER_ROOT/db.v3 && \
 
 RUN git clone https://github.com/upper/db.git $GOPATH/src/github.com/upper/db && \
   cd $GOPATH/src/github.com/upper/db && \
-  git checkout v4 && \
+  git checkout $TAG_V4 && \
   go get -v ./...
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
