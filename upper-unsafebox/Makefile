@@ -1,8 +1,7 @@
 IMAGE_NAME        ?= upper/unsafebox
-IMAGE_TAG         ?= latest
-IMAGE_VERSION     ?=
 
 GIT_SHORTHASH     ?= $(shell git rev-parse --short HEAD)
+IMAGE_TAG         ?= $(GIT_SHORTHASH)
 
 CONTAINER_PORT    ?= 8080
 HOST_PORT         ?= 8080
@@ -10,7 +9,7 @@ HOST_PORT         ?= 8080
 CONTAINER_NAME    ?= upper-unsafebox
 
 docker-build:
-	docker build -t $(IMAGE_NAME):$(GIT_SHORTHASH) .
+	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) .
 
 docker-run: docker-build
 	(docker rm -f $(CONTAINER_NAME) || exit 0) && \
@@ -25,11 +24,10 @@ docker-run: docker-build
 		--name $(CONTAINER_NAME) \
 		--ulimit nofile=256:512 \
 		--ulimit nproc=128 \
-		-t $(IMAGE_NAME):$(GIT_SHORTHASH)
+		-t $(IMAGE_NAME):latest
 
 docker-push: docker-build
-	docker tag $(IMAGE_NAME):$(GIT_SHORTHASH) $(IMAGE_NAME):$(IMAGE_TAG) && \
-	docker push $(IMAGE_NAME):$(GIT_SHORTHASH) && \
+	docker tag $(IMAGE_NAME):latest $(IMAGE_NAME):$(IMAGE_TAG) && \
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
 deploy: docker-push
