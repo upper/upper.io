@@ -1,0 +1,4 @@
+*.sw?
+bin/
+tour
+vendor
