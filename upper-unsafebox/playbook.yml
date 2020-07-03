@@ -1,17 +1,17 @@
-- hosts: demo
+- hosts: "{{ host }}"
 
   tasks:
 
     - name: pull image
       docker_image:
-        name: upper/unsafebox:{{ image_tag }}
+        name: "upper/unsafebox:{{ image_tag }}"
         source: pull
         force: yes
         state: present
 
     - name: run sandbox
       docker_container:
-        image: upper/unsafebox:{{ image_tag }}
+        image: "upper/unsafebox:{{ image_tag }}"
         name: upper-unsafebox
         restart_policy: always
         recreate: yes
