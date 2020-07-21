@@ -46,6 +46,7 @@ RUN git clone https://github.com/upper/db.git $UPPER_ROOT/db.v3 && \
 RUN git clone https://github.com/upper/db.git $GOPATH/src/github.com/upper/db && \
   cd $GOPATH/src/github.com/upper/db && \
   git checkout $TAG_V4 && \
-  go get -v ./...
+  go get -v github.com/upper/db/v4/...
+
 
 ENTRYPOINT ["/bin/entrypoint.sh"]

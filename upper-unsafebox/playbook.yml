@@ -6,7 +6,7 @@
       docker_image:
         name: "upper/unsafebox:{{ image_tag }}"
         source: pull
-        force: yes
+        force_source: yes
         state: present
 
     - name: run sandbox
