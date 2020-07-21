@@ -4,7 +4,12 @@ WORKDIR /go/src/github.com/upper/tour
 
 COPY . .
 
-RUN go install github.com/upper/tour/cmd/tour
+ENV GO111MODULE=on
+
+RUN cd cmd/tour && \
+  go mod init \
+  && go get ./... \
+  && go build -o /go/bin/tour .
 
 FROM debian:buster
 

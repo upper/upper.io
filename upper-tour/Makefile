@@ -34,7 +34,7 @@ test:
 	done
 
 docker-build: fmt
-	docker build -t $(IMAGE_NAME) .
+	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) .
 
 docker-run: docker-build
 	(docker rm -f $(CONTAINER_NAME) || exit 0) && \
@@ -44,10 +44,9 @@ docker-run: docker-build
 		-t $(IMAGE_NAME)
 
 docker-push: docker-build
-	docker tag $(IMAGE_NAME) $(IMAGE_NAME):$(IMAGE_TAG) && \
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
-deploy:
+deploy: docker-push
 	ansible-playbook \
 		-i ../conf/ansible.hosts \
 		-e host="$(DEPLOY_TARGET)" \
