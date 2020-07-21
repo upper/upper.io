@@ -12,41 +12,50 @@ RUN apt-get update && \
 
 COPY entrypoint.sh /bin/entrypoint.sh
 
-ENV WORKDIR /home/sandbox
-WORKDIR $WORKDIR
-
 RUN useradd -ms /bin/bash sandbox
 
 ENV GOPATH /go
+
+ENV WORKDIR /home/sandbox
+WORKDIR $WORKDIR
 
 #ENV TAG_V1 v1.0.1
 ENV TAG_V2 v2.0.7
 ENV TAG_V3 v3.7.1
 ENV TAG_V4 233c81551bff73e62b0994723122230796a95a0a
 
-ENV UPPER_ROOT $GOPATH/src/upper.io
+ENV SRC_DIR ./src
 
-RUN mkdir -p $UPPER_ROOT
+ENV LEGACY_ROOT $GOPATH/src/upper.io
+ENV UPPER_ROOT $GOPATH/src/github.com/upper/db
 
-#RUN git clone https://github.com/upper/db.git $UPPER_ROOT/db.v1 && \
-#  cd $UPPER_ROOT/db.v1 && \
+RUN mkdir -p $LEGACY_ROOT $UPPER_ROOT
+
+#RUN git clone https://github.com/upper/db.git $LEGACY_ROOT/db.v1 && \
+#  cd $LEGACY_ROOT/db.v1 && \
 #  git checkout $TAG_V1 && \
 #  go get -v ./...
 
-RUN git clone https://github.com/upper/db.git $UPPER_ROOT/db.v2 && \
-  cd $UPPER_ROOT/db.v2 && \
+COPY _tests ./_tests
+
+RUN git clone https://github.com/upper/db.git $SRC_DIR
+
+RUN cp -r $SRC_DIR $LEGACY_ROOT/db.v2 && \
+  cd $LEGACY_ROOT/db.v2 && \
   git checkout $TAG_V2 && \
   go get -v ./...
+RUN cd ./_tests/v2 && go build -v
 
-RUN git clone https://github.com/upper/db.git $UPPER_ROOT/db.v3 && \
-  cd $UPPER_ROOT/db.v3 && \
+RUN cp -r $SRC_DIR $LEGACY_ROOT/db.v3 && \
+  cd $LEGACY_ROOT/db.v3 && \
   git checkout $TAG_V3 && \
   go get -v ./...
+RUN cd ./_tests/v3 && go build -v
 
-RUN git clone https://github.com/upper/db.git $GOPATH/src/github.com/upper/db && \
-  cd $GOPATH/src/github.com/upper/db && \
+RUN cp -r $SRC_DIR $UPPER_ROOT/v4 && \
+  cd $UPPER_ROOT/v4 && \
   git checkout $TAG_V4 && \
-  go get -v github.com/upper/db/v4/...
-
+  go get -v ./...
+RUN cd ./_tests/v4 && go build
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
