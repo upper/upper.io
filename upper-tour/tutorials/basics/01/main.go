@@ -6,7 +6,7 @@ import (
 	"log"
 
 	// Import an adapter
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Set the database credentials using the ConnectionURL type provided by the

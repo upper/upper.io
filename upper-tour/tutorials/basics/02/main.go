@@ -5,7 +5,7 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{

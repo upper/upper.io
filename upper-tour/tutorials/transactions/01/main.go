@@ -4,9 +4,9 @@ import (
 	"context"
 	"log"
 
-	"github.com/upper/db"
-	"github.com/upper/db/adapter/postgresql"
-	"github.com/upper/db/sqlbuilder"
+	"github.com/upper/db/v4"
+	"github.com/upper/db/v4/adapter/postgresql"
+	"github.com/upper/db/v4/sqlbuilder"
 )
 
 var settings = postgresql.ConnectionURL{

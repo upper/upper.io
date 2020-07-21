@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
-	"github.com/upper/db/sqlbuilder"
+	"github.com/upper/db/v4/adapter/postgresql"
+	"github.com/upper/db/v4/sqlbuilder"
 )
 
 var settings = postgresql.ConnectionURL{
