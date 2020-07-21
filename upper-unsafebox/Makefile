@@ -29,7 +29,6 @@ docker-run: docker-build
 		-t $(IMAGE_NAME):latest
 
 docker-push: docker-build
-	docker tag $(IMAGE_NAME) $(IMAGE_NAME):$(IMAGE_TAG) && \
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
 deploy: docker-push
