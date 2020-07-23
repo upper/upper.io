@@ -6,7 +6,7 @@ To connect to a database you need an adapter. Use `go get` to get one, like
 this:
 
 ```
-go get -u github.com/upper/db/adapter/{$ADAPTER}
+go get -u github.com/upper/db/v4/adapter/{$ADAPTER}
 ```
 
 Where `$ADAPTER` could be any of the following:
@@ -21,7 +21,7 @@ Where `$ADAPTER` could be any of the following:
 For instace, if you'd like to use the `cockroachdb` adapter you'd run:
 
 ```
-go get -u github.com/upper/db/adapter/cockroachdb
+go get -u github.com/upper/db/v4/adapter/cockroachdb
 ```
 
 ## 2. Configure a Database Connection
@@ -31,7 +31,7 @@ adapter:
 
 ```go
 import (
-  "github.com/upper/adapter/postgresql"
+  "github.com/upper/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
