@@ -3,13 +3,13 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/v4/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/cockroachdb"
 	"github.com/upper/db/v4/sqlbuilder"
 )
 
-var settings = postgresql.ConnectionURL{
+var settings = cockroachdb.ConnectionURL{
 	Database: `booktown`,
-	Host:     `demo.upper.io`,
+	Host:     `cockroachdb.demo.upper.io`,
 	User:     `demouser`,
 	Password: `demop4ss`,
 }
@@ -37,7 +37,7 @@ type Subject struct {
 }
 
 func main() {
-	sess, err := postgresql.Open(settings)
+	sess, err := cockroachdb.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}

@@ -31,12 +31,12 @@ adapter:
 
 ```go
 import (
-  "github.com/upper/v4/adapter/postgresql"
+  "github.com/upper/v4/adapter/cockroachdb"
 )
 
-var settings = postgresql.ConnectionURL{
+var settings = cockroachdb.ConnectionURL{
   Database: `booktown`,
-  Host:     `demo.upper.io`,
+  Host:     `cockroachdb.demo.upper.io`,
   User:     `demouser`,
   Password: `demop4ss`,
 }
@@ -53,7 +53,7 @@ properties required by each adapter are explained in detail
 Use the `Open` function to establish a connection with the database server:
 
 ```go
-sess, err := postgresql.Open(settings)
+sess, err := cockroachdb.Open(settings)
 ...
 ```
 
