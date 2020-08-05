@@ -6,6 +6,7 @@
       docker_container:
         image: xiam/go-playground:{{ image_tag }}
         name: go-playground
+        restart_policy: always
         recreate: yes
         volumes:
           - /data/go-playground:/data

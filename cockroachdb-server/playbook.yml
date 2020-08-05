@@ -2,19 +2,47 @@
 
   tasks:
 
-    - name: create /data/cockroachdb directory
+    - name: remove destination
+      file:
+        path: /data/cockroachdb
+        state: absent
+
+    - name: ensure /data/cockroachdb directory
       file:
         path: /data/cockroachdb
         state: directory
 
-    - name: upload booktown.sql
+    - name: ensure /data/cockroachdb/data directory
+      file:
+        path: /data/cockroachdb/storage
+        state: directory
+
+    - name: upload sql
       copy:
         src: ./booktown.sql
         dest: /data/cockroachdb/booktown.sql
 
+    - name: upload certs dir
+      copy:
+        src: ./certs
+        mode: '600'
+        dest: /data/cockroachdb
+
+    - name: upload private dir
+      copy:
+        src: ./private
+        mode: '600'
+        dest: /data/cockroachdb
+
+    - name: add docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+
     - name: run cockroachdb
       docker_container:
-        image: cockroachdb/cockroach:v20.1.3
+        image: cockroachdb/cockroach:{{ image_tag }}
         name: cockroachdb.demo.upper.io
         restart_policy: always
         recreate: yes
@@ -24,69 +52,82 @@
         ulimits:
           - nofile:256:2048
           - nproc:128
+        oom_killer: yes
         volumes:
-          - /data/cockroachdb/booktown.sql:/booktown.sql
-        env:
-          COCKROACHDB_USER: "{{ cockroachdb_user }}"
-          COCKROACHDB_DB: "{{ cockroachdb_db }}"
+          - /data/cockroachdb/certs:/etc/certs
+          - /data/cockroachdb/storage:/cockroachdb/cockroachdb-data
+        networks:
+          - name: upper-network
         command:
-          "start --insecure"
+          "start --certs-dir=/etc/certs --store=node --http-addr=localhost:8080 --listen-addr=0.0.0.0:26257 --join=localhost:26257"
         ports:
           - 0.0.0.0:26257:26257
 
-    - name: wait a few seconds for cockroachdb to start...
+    - name: wait a few seconds for start...
       pause:
-        seconds: 10
+        seconds: 5
 
-    - name: remove cockroachdb database
-      postgresql_db:
-        login_host: "127.0.0.1"
-        login_user: "root"
-        port: 26257
-        db: "postgres"
-        name: booktown
-        state: absent
+    - name: init cockroachdb
+      docker_container:
+        image: cockroachdb/cockroach:{{ image_tag }}
+        name: cockroach-init
+        volumes:
+          - /data/cockroachdb/certs:/etc/certs
+          - /data/cockroachdb/storage:/cockroachdb/cockroachdb-data
+        networks:
+          - name: upper-network
+        command:
+          "init --certs-dir=/etc/certs --host=cockroachdb.demo.upper.io:26257"
 
-    - name: remove user demouser
-      postgresql_user:
-        login_host: "127.0.0.1"
-        login_user: "root"
-        port: 26257
-        db: "postgres"
-        name: demouser
-        state: absent
+    - name: wait a few seconds for init...
+      pause:
+        seconds: 5
 
-    - name: add cockroachdb user
-      postgresql_user:
-        login_host: "127.0.0.1"
-        login_user: "root"
-        port: 26257
-        db: "postgres"
-        name: demouser
-
-    - name: add cockroachdb database
-      postgresql_db:
-        login_host: "127.0.0.1"
-        login_user: "root"
-        port: 26257
-        name: booktown
-
-    - name: grant privileges to demouser
-      shell: "psql -Uroot -h127.0.0.1 -p26257 -c 'GRANT ALL ON DATABASE booktown TO demouser'"
+    - name: setup database
+      docker_container:
+        image: cockroachdb/cockroach:{{ image_tag }}
+        name: cockroach-init
+        volumes:
+          - /data/cockroachdb/certs:/etc/certs
+        networks:
+          - name: upper-network
+        entrypoint: /bin/sh
+        command:
+          - -c
+          - |
+              "cockroach sql --certs-dir=/etc/certs --host=cockroachdb.demo.upper.io:26257 -e \"
+                CREATE USER {{ cockroachdb_user }} WITH PASSWORD '{{ cockroachdb_password }}';
+                CREATE DATABASE {{ cockroachdb_db }};
+                GRANT ALL ON DATABASE {{ cockroachdb_db }} TO {{ cockroachdb_user }};
+              \""
 
     - name: load database dump
-      shell: "psql -Uroot -h127.0.0.1 -p26257 < /data/cockroachdb/booktown.sql"
+      shell: "PGPASSWORD={{ cockroachdb_password }} psql -hcockroachdb.demo.upper.io -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
 
-    - name: revoke privileges from demouser
-      shell: "psql -Uroot -h127.0.0.1 -p26257 -c 'REVOKE ALL ON DATABASE booktown FROM demouser'"
+    - name: remove write privileges
+      docker_container:
+        image: cockroachdb/cockroach:{{ image_tag }}
+        name: cockroach-init
+        volumes:
+          - /data/cockroachdb/certs:/etc/certs
+        networks:
+          - name: upper-network
+        entrypoint: /bin/sh
+        command:
+          - -c
+          - |
+              "cockroach sql --certs-dir=/etc/certs --host=cockroachdb.demo.upper.io:26257 -e \"
+                REVOKE ALL ON DATABASE {{ cockroachdb_db }} FROM {{  cockroachdb_user }};
+                REVOKE ALL ON {{ cockroachdb_db }}.* FROM {{  cockroachdb_user }};
+                GRANT SELECT ON {{ cockroachdb_db }}.* TO {{  cockroachdb_user }};
+              \""
 
-    - name: grant READ ONLY
-      shell: "psql -Uroot -h127.0.0.1 -p26257 -c 'GRANT SELECT ON DATABASE booktown TO demouser'"
+    - name: remove client.root.key
+      file:
+        path: /data/cockroachdb/certs/client.root.key
+        state: absent
 
-    - name: add to docker network
-      docker_network:
-        name: upper-network
-        state: present
-        appends: yes
-        connected:
-          - cockroachdb.demo.upper.io
+    - name: remove client.root.crt
+      file:
+        path: /data/cockroachdb/certs/client.root.crt
+        state: absent
