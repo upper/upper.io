@@ -91,15 +91,16 @@
           - /data/cockroachdb/certs:/etc/certs
         networks:
           - name: upper-network
-        entrypoint: /bin/sh
         command:
-          - -c
+          - sql
+          - --certs-dir=/etc/certs
+          - --host=cockroachdb.demo.upper.io:26257
           - |
-              "cockroach sql --certs-dir=/etc/certs --host=cockroachdb.demo.upper.io:26257 -e \"
+              -e "
                 CREATE USER {{ cockroachdb_user }} WITH PASSWORD '{{ cockroachdb_password }}';
                 CREATE DATABASE {{ cockroachdb_db }};
                 GRANT ALL ON DATABASE {{ cockroachdb_db }} TO {{ cockroachdb_user }};
-              \""
+              "
 
     - name: load database dump
       shell: "PGPASSWORD={{ cockroachdb_password }} psql -hcockroachdb.demo.upper.io -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
@@ -112,15 +113,16 @@
           - /data/cockroachdb/certs:/etc/certs
         networks:
           - name: upper-network
-        entrypoint: /bin/sh
         command:
-          - -c
+          - sql
+          - --certs-dir=/etc/certs
+          - --host=cockroachdb.demo.upper.io:26257
           - |
-              "cockroach sql --certs-dir=/etc/certs --host=cockroachdb.demo.upper.io:26257 -e \"
+              -e "
                 REVOKE ALL ON DATABASE {{ cockroachdb_db }} FROM {{  cockroachdb_user }};
                 REVOKE ALL ON {{ cockroachdb_db }}.* FROM {{  cockroachdb_user }};
                 GRANT SELECT ON {{ cockroachdb_db }}.* TO {{  cockroachdb_user }};
-              \""
+              "
 
     - name: remove client.root.key
       file:

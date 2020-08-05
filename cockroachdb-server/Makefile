@@ -1,5 +1,5 @@
-COCKROACHDB_USER     ?= demo_user
-COCKROACHDB_PASSWORD ?= demo_p4ss
+COCKROACHDB_USER     ?= demouser
+COCKROACHDB_PASSWORD ?= demop4ss
 COCKROACHDB_DB       ?= demo
 IMAGE_TAG            ?= v20.1.4
 
