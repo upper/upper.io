@@ -1,4 +1,4 @@
-- hosts: demo
+- hosts: "{{ host }}"
 
   tasks:
 

@@ -13,6 +13,8 @@ RUN cd cmd/tour && \
 
 FROM debian:buster
 
+COPY --from=builder /go/src/github.com/upper/tour/certs /etc/certs
+
 COPY --from=builder /go/src/github.com/upper/tour/tutorials /app/tutorials
 COPY --from=builder /go/src/github.com/upper/tour/static /app/static
 COPY --from=builder /go/bin/tour /app/tour
