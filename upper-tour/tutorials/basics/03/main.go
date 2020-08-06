@@ -11,11 +11,6 @@ var settings = cockroachdb.ConnectionURL{
 	Host:     `cockroachdb.demo.upper.io`,
 	User:     `demouser`,
 	Password: `demop4ss`,
-
-	Options: map[string]string{
-		"sslmode":     "require",
-		"sslrootcert": "/etc/certs/crdb.crt",
-	},
 }
 
 func main() {
