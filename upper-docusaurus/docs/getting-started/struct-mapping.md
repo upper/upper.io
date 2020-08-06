@@ -101,7 +101,7 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Person represents a person with a name.
@@ -222,7 +222,7 @@ import (
 	"log"
 
 	"github.com/upper/db"
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Book represents a book.

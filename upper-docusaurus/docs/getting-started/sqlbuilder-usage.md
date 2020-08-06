@@ -303,7 +303,7 @@ Remember that if you want to use `db.Cond` you'll need to import
 `github.com/upper/db` into your app:
 
 ```go
-import "github.com/upper/db"
+import "github.com/upper/db/v4"
 ```
 
 ## Plain SQL statements
@@ -334,7 +334,7 @@ If you don't want to use `Scan` directly, you could always create an iterator
 using any `*sql.Rows` value:
 
 ```go
-import "github.com/upper/db/sqlbuilder"
+import "github.com/upper/db/v4/sqlbuilder"
 ...
 
 rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")

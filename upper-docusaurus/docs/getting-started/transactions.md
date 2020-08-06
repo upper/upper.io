@@ -15,8 +15,8 @@ import (
   "context"
   "log"
 
-  "github.com/upper/db"
-  "github.com/upper/db/sqlbuilder"
+  "github.com/upper/db/v4"
+  "github.com/upper/db/v4/sqlbuilder"
 )
 
 func main() {

@@ -5,14 +5,14 @@ title: Create a database session
 Use `go get` to grab the database adapter:
 
 ```sh
-go get -v -u github.com/upper/db/adapter/$ADAPTER_NAME
+go get -v -u github.com/upper/db/v4/adapter/$ADAPTER_NAME
 ```
 
 Import the adapter package into your application:
 
 ```go
 import (
-  "github.com/upper/db/adapter/{{adapter_name}}"
+  "github.com/upper/db/v4/adapter/{{adapter_name}}"
 )
 ```
 
@@ -23,7 +23,7 @@ In this example we'll use the `postgresql` adapter:
 
 ```go
 import (
-  "github.com/upper/db/adapter/postgresql"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 ```
 
@@ -62,7 +62,7 @@ into a `ConnectionURL` struct and use it to connect to a database by using the
 ```go
 import (
   ...
-  "github.com/upper/db/adapter/postgresql"
+  "github.com/upper/db/v4/adapter/postgresql"
   ...
 )
 
@@ -99,7 +99,7 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{

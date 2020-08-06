@@ -37,17 +37,17 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('getting-started/index', this.props.language)}>
+            <a href={this.docUrl('getting-started', this.props.language)}>
               Getting started
             </a>
-            <a href={this.docUrl('examples/index', this.props.language)}>
+            <a href={this.docUrl('examples', this.props.language)}>
               Examples
             </a>
-            <a href={this.docUrl('reference/index', this.props.language)}>
+            <a href="https://pkg.go.dev/github.com/upper/db/v4">
               API Reference
             </a>
           </div>
-          <div>
+          <div style={{display: 'none'}}>
             <h5>Community</h5>
             <a href={this.pageUrl('users.html', this.props.language)}>
               User Showcase

@@ -36,7 +36,7 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
@@ -80,8 +80,8 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
-	"github.com/upper/db"
+	"github.com/upper/db/v4/adapter/postgresql"
+	"github.com/upper/db/v4"
 )
 
 var settings = postgresql.ConnectionURL{
@@ -126,20 +126,20 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/cockroachdb"
 )
 
-var settings = postgresql.ConnectionURL{
+var settings = cockroachdb.ConnectionURL{
 	Database: "booktown",
-	Host:     "demo.upper.io",
+	Host:     "cockroachdb.demo.upper.io",
 	User:     "demouser",
 	Password: "demop4ss",
 }
 
 func main() {
-	sess, err := postgresql.Open(settings)
+	sess, err := cockroachdb.Open(settings)
 	if err != nil {
-		log.Fatal("postgresql.Open: ", err)
+		log.Fatal("cockroachdb.Open: ", err)
 	}
 	defer sess.Close()
 
@@ -158,13 +158,11 @@ func main() {
 }
 $$
 
-### `bond`
+### ORM-like layer
 
-The `bond` package provides an (optional) ORM-like layer for `upper/db` that
+`db` provides an (optional) ORM-like layer for `upper/db` that
 allows developers to represent data structures and relationships between them
 in a more formal way.
-
-`bond` is ideal for developing with a team, and gives you features like:
 
 * Before(Save|Update|Create|Delete) and After(Save|Update|Create|Delete) hooks.
 * Validation hook.
@@ -178,8 +176,7 @@ package main
 import (
 	"log"
 
-	"github.com/upper/db/bond"
-	"github.com/upper/db/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{

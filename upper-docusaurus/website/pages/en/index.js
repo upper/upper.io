@@ -64,7 +64,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle tagline={siteConfig.tagline} title={siteConfig.title} />
           <PromoSection>
-            <Button href="//tour.upper.io" target="_blank">Take the tour</Button>
+            <Button href="//tour.dev.upper.io" target="_blank">Take the tour</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -192,6 +192,15 @@ class Index extends React.Component {
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer">
+        </div>
+      </div>
+    );
+
+    /*
+    return (
+      <div>
+        <HomeSplash siteConfig={siteConfig} language={language} />
+        <div className="mainContainer">
           <Features />
           <CodeSample />
           <QuickStart />
@@ -200,6 +209,7 @@ class Index extends React.Component {
         </div>
       </div>
     );
+    */
   }
 }
 
