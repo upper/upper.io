@@ -15,7 +15,7 @@
         name: upper-unsafebox
         restart_policy: always
         recreate: yes
-        memory: 1024m
+        memory: 512m
         memory_swap: 0
         memory_swappiness: 0
         ulimits:
