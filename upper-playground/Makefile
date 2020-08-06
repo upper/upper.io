@@ -1,6 +1,7 @@
 IMAGE_NAME          ?= xiam/go-playground
 IMAGE_TAG           ?= latest
 IMAGE_VERSION       ?=
+DEPLOY_TARGET       ?= demo
 
 GIT_SHORTHASH       ?= $(shell git rev-parse --short HEAD)
 
@@ -22,5 +23,6 @@ docker-run:
 deploy:
 	ansible-playbook \
 		-i ../conf/ansible.hosts \
+		-e host="$(DEPLOY_TARGET)" \
 		-e image_tag=$(IMAGE_TAG) \
 		playbook.yml

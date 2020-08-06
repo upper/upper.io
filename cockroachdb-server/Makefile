@@ -1,6 +1,6 @@
 COCKROACHDB_USER     ?= demouser
 COCKROACHDB_PASSWORD ?= demop4ss
-COCKROACHDB_DB       ?= demo
+COCKROACHDB_DB       ?= booktown
 
 IMAGE_TAG            ?= v20.1.4
 
