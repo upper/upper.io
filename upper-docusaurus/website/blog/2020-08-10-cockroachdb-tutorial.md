@@ -225,7 +225,7 @@ func main() {
 
 func printRecords(sess db.Session) {
   accounts := []Account{}
-  err := sess.Collection("accounts").Find().All(&accounts)
+  err := Accounts(sess).Find().All(&accounts)
   if err != nil {
     log.Fatal("Find: ", err)
   }
