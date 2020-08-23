@@ -1,0 +1,47 @@
+- hosts: "{{ host }}"
+
+  tasks:
+
+    - name: pull image
+      docker_image:
+        name: "upper/unsafebox:{{ image_tag }}"
+        source: pull
+        force_source: yes
+        state: present
+
+    - name: run sandbox
+      docker_container:
+        image: "upper/unsafebox:{{ image_tag }}"
+        name: upper-unsafebox
+        restart_policy: always
+        recreate: yes
+        memory: 512m
+        memory_swap: 0
+        memory_swappiness: 0
+        ulimits:
+          - nofile:256:512
+          - nproc:128
+        privileged: yes
+        ports:
+          - 127.0.0.1:8080:8080
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - upper-unsafebox
+
+    - name: test playground
+      uri:
+        url: http://127.0.0.1:8080/compile
+        method: POST
+        body: 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A'
+        status_code:
+          - 200
+          - -1
+      register: result
+      retries: 10
+      delay: 5
+      until: result.status == 200
