@@ -7,13 +7,18 @@ with Go structs in a more ORM-ish way:
 package db
 
 type Record interface {
-  Collection(sess Session) Collection
+  Store(sess Session) Store
 }
 ```
 
-> The `upper/db` records functionality is only available for databases that
-> support transactions, such as CockroachDB, PostgreSQL, MySQL, MSSQL, SQLite and
-> ql.
+The `db.Store` interface is a container for `db.Collection` that is defined
+like this:
+
+```go
+type Store interface {
+  Collection
+}
+```
 
 In the example below, `Book` is a struct that satisfies the `db.Record`
 interface:
@@ -32,7 +37,7 @@ type Book struct {
   SubjectID uint   `db:"subject_id,omitempty"`
 }
 
-func (book *Book) Collection(sess db.Session) db.Collection {
+func (book *Book) Store(sess db.Session) db.Store {
   return sess.Collection("books")
 }
 
@@ -65,12 +70,12 @@ err = sess.Delete(&book)
 ## Hooks
 
 `db.Record` objects can optionally satisfy hooks, which are special methods
-called before or after specific events. For instace, if we'd like the `Account`
-record to execute code right before inserting a new entry into the database we'd
-add a `BeforeCreate` hook, like this:
+called before or after specific events. For instace, if we'd like the `Book`
+record to execute code right before inserting a new entry into the database
+we'd add a `BeforeCreate` hook, like this:
 
 ```go
-func (account *Account) BeforeCreate(sess db.Session) error {
+func (book *Book) BeforeCreate(sess db.Session) error {
   // ...
   return nil
 }
@@ -100,3 +105,6 @@ type Validator interface {
 
 The `Validator` interface could be used to run validations against the record's
 own data.
+
+> The `db.Record` interface is only available for databases that support
+> transactions, such as CockroachDB, PostgreSQL, MySQL, MSSQL, SQLite and ql.

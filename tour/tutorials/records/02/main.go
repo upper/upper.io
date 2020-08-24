@@ -15,6 +15,22 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demop4ss`,
 }
 
+type BooksStore struct {
+	db.Collection
+}
+
+func (books *BooksStore) GetBookByTitle(title string) (*Book, error) {
+	var book Book
+	if err := books.Find(db.Cond{"title": title}).One(&book); err != nil {
+		return nil, err
+	}
+	return &book, nil
+}
+
+func Books(sess db.Session) *BooksStore {
+	return &BooksStore{sess.Collection("books")}
+}
+
 // Book represents a record from the "books" table.
 type Book struct {
 	ID        uint   `db:"id,omitempty"`
@@ -24,7 +40,7 @@ type Book struct {
 }
 
 func (book *Book) Store(sess db.Session) db.Store {
-	return sess.Collection("books")
+	return Books(sess)
 }
 
 func (book *Book) BeforeUpdate(sess db.Session) error {
@@ -44,6 +60,10 @@ var _ = interface {
 	db.AfterUpdateHook
 }(&Book{})
 
+var _ = interface {
+	db.Store
+}(&BooksStore{})
+
 func main() {
 	sess, err := cockroachdb.Open(settings)
 	if err != nil {
@@ -51,10 +71,8 @@ func main() {
 	}
 	defer sess.Close()
 
-	var book Book
-
 	// Get a book
-	err = sess.Get(&book, db.Cond{"title": "The Shining"})
+	book, err := Books(sess).GetBookByTitle("The Shining")
 	if err != nil {
 		log.Fatal("Get: ", err)
 	}
@@ -65,7 +83,7 @@ func main() {
 	book.Title = "The Shining (novel)"
 
 	// Persist changes
-	err = sess.Save(&book)
+	err = sess.Save(book)
 	if err != nil {
 		// Allow this to fail in the sandbox
 		log.Print("Save: ", err)
