@@ -36,7 +36,7 @@ func main() {
 	res := booksTable.Find().OrderBy("-ID")
 	defer res.Close() // Remember to close the result set.
 
-	// Next goes over all items one by one. It proves useful when copying large
+	// Next goes over all records one by one. It proves useful when copying large
 	// data sets into a slice is impractical.
 	var book Book
 	for res.Next(&book) {
@@ -46,7 +46,7 @@ func main() {
 	// In the event of a problem Next returns false, that will break the loop and
 	// generate an error (which can be retrieved by calling Err). On the other
 	// hand, when the loop is successfully completed (even if the data set had no
-	// items), Err will be nil.
+	// records), Err will be nil.
 	if err := res.Err(); err != nil {
 		log.Printf("ERROR: %v", err)
 		log.Fatalf(`SUGGESTION: change OrderBy("-ID") into OrderBy("id") and try again.`)

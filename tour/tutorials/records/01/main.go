@@ -15,7 +15,7 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demop4ss`,
 }
 
-// Book represents an item from the "books" table.
+// Book represents a record from the "books" table.
 type Book struct {
 	ID        uint   `db:"id,omitempty"`
 	Title     string `db:"title"`
@@ -23,7 +23,7 @@ type Book struct {
 	SubjectID uint   `db:"subject_id,omitempty"`
 }
 
-func (book *Book) Collection(sess db.Session) db.Collection {
+func (book *Book) Store(sess db.Session) db.Store {
 	return sess.Collection("books")
 }
 

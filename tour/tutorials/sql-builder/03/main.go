@@ -15,7 +15,7 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demop4ss`,
 }
 
-// Book represents an item from the "books" table.
+// Book represents a record from the "books" table.
 type Book struct {
 	ID        uint   `db:"id,omitempty"`
 	Title     string `db:"title"`
@@ -23,14 +23,14 @@ type Book struct {
 	SubjectID uint   `db:"subject_id,omitempty"`
 }
 
-// Author represents an item from the "authors" table.
+// Author represents a record from the "authors" table.
 type Author struct {
 	ID        uint   `db:"id,omitempty"`
 	LastName  string `db:"last_name"`
 	FirstName string `db:"first_name"`
 }
 
-// Subject represents an item from the "subjects" table.
+// Subject represents a record from the "subjects" table.
 type Subject struct {
 	ID       uint   `db:"id,omitempty"`
 	Subject  string `db:"subject"`

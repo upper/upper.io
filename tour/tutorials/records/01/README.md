@@ -26,8 +26,6 @@ import (
 )
 
 type Book struct {
-  sqlbuilder.Item // Provides addional methods for Book
-
   ID        uint   `db:"id,omitempty"`
   Title     string `db:"title"`
   AuthorID  uint   `db:"author_id,omitempty"`

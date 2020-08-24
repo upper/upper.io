@@ -15,8 +15,9 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demop4ss`,
 }
 
-// Book represents an item from the "books" table. The fields accompanying the
-// item represent the columns in the table and are mapped to Go values below.
+// Book represents an record from the "books" table. The fields accompanying
+// the record represent the columns in the table and are mapped to Go values
+// below.
 type Book struct {
 	ID        uint   `db:"id,omitempty"`
 	Title     string `db:"title"`
@@ -39,7 +40,7 @@ func main() {
 	// write SQL statements to os.Stdout:
 	// db.Log().SetLevel(db.LogLevelDebug)
 
-	// Find().All() maps all the items from the books collection.
+	// Find().All() maps all the records from the books collection.
 	books := []Book{}
 	err = booksCol.Find().All(&books)
 	if err != nil {
@@ -47,8 +48,8 @@ func main() {
 	}
 
 	// Print the queried information.
-	fmt.Printf("Items in the %q collection:\n", booksCol.Name())
+	fmt.Printf("Records in the %q collection:\n", booksCol.Name())
 	for i := range books {
-		fmt.Printf("item #%d: %#v\n", i, books[i])
+		fmt.Printf("record #%d: %#v\n", i, books[i])
 	}
 }

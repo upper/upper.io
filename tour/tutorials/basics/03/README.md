@@ -9,8 +9,8 @@ col := sess.Collection("books")
 
 A collection reference satisfies [db.Collection][2], it gives you access to a
 set of methods that can be used to retrieve and manipulate data, such as `Find`
-(to search for specific items in the collection) and `Insert` (to add more
-items to a collection).
+(to search for specific records in the collection) and `Insert` (to add more
+records to a collection).
 
 Note that if you create a reference to a collection that doesn't exist, you'll
 see a WARNING message:

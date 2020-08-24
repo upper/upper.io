@@ -15,8 +15,8 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demopass`,
 }
 
-// Book represents an item from the "books" table. This
-// table has an integer primary key ("id"):
+// Book represents a record from the "books" table. This table has an integer
+// primary key ("id"):
 //
 // booktown=> \d books
 //        Table "public.books"
@@ -51,8 +51,8 @@ func main() {
 
 	booksTable := sess.Collection("books")
 
-	// Find looks for an item that matches the integer primary key of the "books"
-	// table.
+	// Find looks for a record that matches the integer primary key of the
+	// "books" table.
 	var book Book
 	err = booksTable.Find(1).One(&book)
 	if err != nil {

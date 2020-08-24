@@ -33,10 +33,10 @@ func main() {
 
 	booksTable := sess.Collection("books")
 
-	// This result set includes a single item.
+	// This result set includes a single record.
 	res := booksTable.Find(4267)
 
-	// The item is retrieved with the given ID.
+	// The record is retrieved with the given ID.
 	var book Book
 	err = res.One(&book)
 	if err != nil {

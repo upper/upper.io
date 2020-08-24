@@ -1,6 +1,6 @@
-# Update, insert, or delete items in a result set
+# Update, insert, or delete records in a result set
 
-The items in result sets can not only be queried, but also modified and
+The records in result sets can not only be queried, but also modified and
 removed.
 
 If you want to modify the properties of a whole result set, use `Update`:
@@ -19,18 +19,18 @@ err = res.Update(book)
 ```
 
 Note that the result above set consists of only one element, whereas the next
-result set consists of all the items in the collection:
+result set consists of all the records in the collection:
 
 ```go
 res := booksCol.Find()
 
-// Updating all items in the result-set.
+// Updating all records in the result-set.
 err := res.Update(map[string]int{
   "author_id": 23,
 })
 ```
 
-If you want to remove all the items in a result set, use `Delete`:
+If you want to remove all the records in a result set, use `Delete`:
 
 ```go
 res := booksCol.Find(4267)
@@ -39,13 +39,13 @@ err := res.Delete()
 // ...
 ```
 
-As with the `Update` examples, in the previous case only one item will be
-affected and in the following scenario all items will be deleted:
+As with the `Update` examples, in the previous case only one record will be
+affected and in the following scenario all records will be deleted:
 
 ```go
 res := booksCol.Find()
 
-//  Deleting all items in the result-set.
+//  Deleting all records in the result-set.
 err := res.Delete()
 ...
 ```

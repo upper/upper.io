@@ -14,7 +14,7 @@ var settings = cockroachdb.ConnectionURL{
 	Password: `demop4ss`,
 }
 
-// Book represents an item from the "books" table.
+// Book represents a record from the "books" table.
 // booktown=> \d books
 //       Table "public.books"
 //    Column   |  Type   | Modifiers
@@ -33,7 +33,7 @@ type Book struct {
 	SubjectID uint   `db:"subject_id,omitempty"`
 }
 
-// Author represents an item from the "authors" table.
+// Author represents a record from the "authors" table.
 // booktown=> \d authors
 //       Table "public.authors"
 //    Column   |  Type   | Modifiers
@@ -49,7 +49,7 @@ type Author struct {
 	FirstName string `db:"first_name"`
 }
 
-// Subject represents an item from the "subjects" table.
+// Subject represents a record from the "subjects" table.
 // booktown=> \d subjects
 //     Table "public.subjects"
 //   Column  |  Type   | Modifiers

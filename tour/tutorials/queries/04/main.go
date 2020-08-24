@@ -29,7 +29,7 @@ func main() {
 
 	customersCol := sess.Collection("customers")
 
-	// Create a paginator and sets 10 items by page.
+	// Create a paginator and sets 10 records by page.
 	res := customersCol.Find().
 		OrderBy("last_name", "first_name")
 
@@ -38,7 +38,7 @@ func main() {
 	// Try changing the page number and running the example
 	const pageNumber = 2
 
-	// Copy all the items from the current page into the customers slice.
+	// Copy all the records from the current page into the customers slice.
 	var customers []Customer
 	err = p.Page(pageNumber).All(&customers)
 	if err != nil {
