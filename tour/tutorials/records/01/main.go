@@ -32,8 +32,11 @@ func (book *Book) BeforeUpdate(sess db.Session) error {
 	return nil
 }
 
-// Book struct satisfies db.Model
-var _ = db.Record(&Book{})
+// Interface checks
+var _ = interface {
+	db.Record
+	db.BeforeUpdateHook
+}(&Book{})
 
 func main() {
 	sess, err := cockroachdb.Open(settings)
