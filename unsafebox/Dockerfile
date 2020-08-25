@@ -21,7 +21,7 @@ WORKDIR $WORKDIR
 
 ENV TAG_V2 v2.0.7
 ENV TAG_V3 v3.7.1
-ENV TAG_V4 v4.0.0-alpha.2
+ENV TAG_V4 v4.0.0-alpha.3
 
 ENV SRC_DIR ./src
 
