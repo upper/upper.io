@@ -38,7 +38,7 @@ func main() {
 
 	// Uncomment the following line (and the github.com/upper/db import path) to
 	// write SQL statements to os.Stdout:
-	// db.Log().SetLevel(db.LogLevelDebug)
+	// db.LC().SetLevel(db.LogLevelDebug)
 
 	// Find().All() maps all the records from the books collection.
 	books := []Book{}

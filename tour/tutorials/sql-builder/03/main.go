@@ -44,7 +44,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	db.Log().SetLevel(db.LogLevelDebug)
+	db.LC().SetLevel(db.LogLevelDebug)
 
 	var eaPoe Author
 

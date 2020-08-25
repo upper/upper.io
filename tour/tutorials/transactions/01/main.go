@@ -44,7 +44,7 @@ func main() {
 	}
 	defer sess.Close()
 
-	db.Log().SetLevel(db.LogLevelDebug)
+	db.LC().SetLevel(db.LogLevelDebug)
 
 	// The `tx` value in the function required by `sess.Tx` is just like `sess`, except
 	// it lives within a transaction. This means that if the function returns an

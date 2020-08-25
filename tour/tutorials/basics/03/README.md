@@ -28,7 +28,7 @@ see a WARNING message:
 If you'd prefer to not see WARNING messages, set a higher logging level:
 
 ```
-db.Log().SetLevel(db.LogLevelError)
+db.LC().SetLevel(db.LogLevelError)
 ```
 
 Use the `Exists` method to check whether a collection exists or not:

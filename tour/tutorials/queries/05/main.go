@@ -38,7 +38,7 @@ type Book struct {
 
 func main() {
 	// Set logging level to DEBUG
-	db.Log().SetLevel(db.LogLevelDebug)
+	db.LC().SetLevel(db.LogLevelDebug)
 
 	sess, err := cockroachdb.Open(settings)
 	if err != nil {

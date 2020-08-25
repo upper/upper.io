@@ -11,18 +11,18 @@ severity (trace) to the highest (panic).
 * `db.LogLevelFatal`
 * `db.LogLevelPanic`
 
-By default, `upper/db` is set to `db.LogLevelWarn`. Use `db.Log()` to set a
+By default, `upper/db` is set to `db.LogLevelWarn`. Use `db.LC()` to set a
 different logging level:
 
 ```go
-db.Log().SetLevel(db.LogLevelDebug)
+db.LC().SetLevel(db.LogLevelDebug)
 ```
 
 Make sure to set an appropriate logging level in production, as using levels
 lower than `db.LogLevelWarn` could make things pretty slow and verbose.
 
 ```go
-db.Log().SetLevel(db.LogLevelError)
+db.LC().SetLevel(db.LogLevelError)
 ```
 
 # Handle Errors
