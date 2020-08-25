@@ -23,10 +23,14 @@ demonstrate how to connect to it.
 
 ## Tutorial
 
-### Requisites
+### Requisites (insecure cluster)
 
 1. [Install CockroachDB](https://www.cockroachlabs.com/docs/v20.1/install-cockroachdb).
-1. Start up an [insecure cluster](https://www.cockroachlabs.com/docs/v20.1/start-a-local-cluster).
+1. Start up a
+   [secure](https://www.cockroachlabs.com/docs/v20.1/secure-a-cluster) or
+   [insecure](https://www.cockroachlabs.com/docs/v20.1/start-a-local-cluster)
+   local cluster.
+1. Choose the instructions that correspond to whether your cluster is secure or insecure.
 
 #### Step 1. Install the cockroachdb adapter
 
@@ -47,7 +51,7 @@ cd v4
 git checkout v4
 ```
 
-#### Step 2. Create the `maxroach` user and `bank` database
+#### Step 2. Create the `maxroach` user and `bank` database (insecure)
 
 Start the built-in SQL shell:
 
@@ -62,6 +66,30 @@ and `bank` database:
 CREATE USER IF NOT EXISTS maxroach;
 CREATE DATABASE bank;
 GRANT ALL ON DATABASE bank TO maxroach;
+```
+
+#### Step 2. Create the `maxroach` user and `bank` database (secure)
+
+Start the built-in SQL shell:
+
+```
+cockroach sql --certs-dir=certs --database bank
+```
+
+In the SQL shell, issue the following statements to create the `maxroach` user
+and `bank` database:
+
+```
+CREATE USER IF NOT EXISTS maxroach;
+CREATE DATABASE bank;
+GRANT ALL ON DATABASE bank TO maxroach;
+```
+
+Create a certificate and key for the maxroach user by running the following
+command. The code samples will run as this user.
+
+```
+cockroach cert create-client maxroach --certs-dir=certs --ca-key=my-safe-directory/ca.key
 ```
 
 #### Step 3. Create an `accounts` table
@@ -82,6 +110,7 @@ Create a minimal `cockroachdb-example.go` file with the following code:
 package main
 
 import (
+  "fmt"
   "log"
 
   "github.com/upper/db/v4"
@@ -94,13 +123,17 @@ var settings = cockroachdb.ConnectionURL{
   Database: "bank",
   User:     "maxroach",
   Options: map[string]string{
-    // Required in order to connect to insecure nodes.
+    // Insecure node.
     "sslmode": "disable",
+    // Secure node.
+    // "sslrootcert": "certs/ca.crt",
+    // "sslkey":      "certs/client.maxroach.key",
+    // "sslcert":     "certs/client.maxroach.crt",
   },
 }
 
 // Accounts is a handy way to represent a collection.
-func Accounts(sess db.Session) db.Collection {
+func Accounts(sess db.Session) db.Store {
   return sess.Collection("accounts")
 }
 
@@ -112,7 +145,7 @@ type Account struct {
 
 // Collection is required in order to create a relation between the Account
 // struct and the "accounts" table.
-func (a *Account) Collection(sess db.Session) db.Collection {
+func (a *Account) Store(sess db.Session) db.Store {
   return Accounts(sess)
 }
 
@@ -231,7 +264,7 @@ func printRecords(sess db.Session) {
   }
   log.Printf("Balances:")
   for i := range accounts {
-    log.Printf("\taccounts[%d]: %d", accounts[i].ID, accounts[i].Balance)
+    fmt.Printf("\taccounts[%d]: %d\n", accounts[i].ID, accounts[i].Balance)
   }
 }
 ```
@@ -245,16 +278,16 @@ go run cockroachdb-example.go
 At the end of the example, you should see something pretty similar to this:
 
 ```
-2020/08/18 09:02:33 Balances:
-2020/08/18 09:02:33     accounts[582251161764986881]: 1000
-2020/08/18 09:02:33     accounts[582251161912967169]: 250
-2020/08/18 09:02:33 Balances:
-2020/08/18 09:02:33     accounts[582251161764986881]: 500
-2020/08/18 09:02:33     accounts[582251161912967169]: 999
-2020/08/18 09:02:33 Balances:
-2020/08/18 09:02:33     accounts[582251161912967169]: 999
-2020/08/18 09:02:33     accounts[582251162215874561]: 887
-2020/08/18 09:02:33     accounts[582251162262437889]: 342
+Balances:
+    accounts[582251161764986881]: 1000
+    accounts[582251161912967169]: 250
+Balances:
+    accounts[582251161764986881]: 500
+    accounts[582251161912967169]: 999
+Balances:
+    accounts[582251161912967169]: 999
+    accounts[582251162215874561]: 887
+    accounts[582251162262437889]: 342
 ```
 
 Keep in mind that the example includes a simulation of a transaction failure,
