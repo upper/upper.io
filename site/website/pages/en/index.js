@@ -31,7 +31,7 @@ class HomeSplash extends React.Component {
 
     const Logo = props => (
       <div className="projectLogo">
-        <img src={props.img_src} alt="Project Logo" />
+        <img src={props.img_src} alt="upper/db" />
       </div>
     );
 
@@ -83,52 +83,85 @@ class Index extends React.Component {
         id={props.id}
         background={props.background}>
         <GridBlock
-          align="center"
+          align={props.align || 'center'}
           contents={props.children}
           layout={props.layout}
         />
       </Container>
     );
 
+    const helloWorld = () => {
+      return [
+        'package main',
+        '',
+        'import (',
+        '    "fmt"',
+        '    "log"',
+        '',
+        '    "github.com/upper/db/v4/adapter/postgresql"',
+        ')',
+        '',
+        'func main() {',
+        '    sess, err := postgresql.Open(postgresql.ConnectionURL{',
+        '        Database: `booktown`,',
+        '        Host:     `demo.upper.io`,',
+        '        User:     `demouser`,',
+        '        Password: `demop4ss`,',
+        '    })',
+        '    if err != nil {',
+        '        log.Fatal("Open: ", err)',
+        '    }',
+        '    defer sess.Close()',
+        '',
+        '    fmt.Printf("connected to database: %q", sess.Name())',
+        '}',
+      ].join("\n")
+    }
+
     const CodeSample = () => (
-      <Block id="try" background="light">
+      <Block id="try" background="light" align="left">
         {[
           {
-            content:
-              'To make your landing page more attractive, use illustrations! Check out ' +
-              '[**unDraw**](https://undraw.co/) which provides you with customizable illustrations which are free to use. ' +
-              'The illustrations you see on this page are from unDraw.',
-            image: `${baseUrl}img/undraw_code_review.svg`,
-            imageAlign: 'left',
-            title: 'Wonderful SVG Illustrations',
+            content: "We've designed the API with productivity and readability in mind.\n"+
+            "The following snippet demonstrates how to connect to a database via the"+
+            "`postgresql` adapter.\n\n"+
+            "$$\n" +
+            helloWorld() +
+            "\n$$",
+            title: 'Code sample',
           },
         ]}
       </Block>
     );
 
     const Description = () => (
-      <Block background="dark">
+      <Block background="dark" align="left">
         {[
           {
             content:
-              'Upper makes you productive',
+              'The goal of `upper/db` is to give you tools for the most common '+
+              'operations with databases and stay out of the way in more '+
+              'advanced cases. If you feel like writing tons of simple '+
+              '`SELECT *` statements by hand is not the best use of your time, '+
+              'then `upper/db` is the library for you.',
             image: `${baseUrl}img/undraw_note_list.svg`,
             imageAlign: 'right',
-            title: 'Description',
+            title: "Made for productivity",
           },
         ]}
       </Block>
     );
 
     const QuickStart = () => (
-      <Block>
+      <Block align="left">
         {[
           {
             content:
-              '`go get github.com/upper/db/_examples/basic`',
+              "We've prepared a learning playground with useful tips for you to try out `upper/db`. "+
+              "Take the [tour](//tour.upper.io)! :-)",
             image: `${baseUrl}img/undraw_youtube_tutorial.svg`,
             imageAlign: 'right',
-            title: 'Quick start',
+            title: 'Quick start: take the tour',
           },
         ]}
       </Block>
@@ -138,78 +171,38 @@ class Index extends React.Component {
       <Block layout="fourColumn">
         {[
           {
-            content: '`upper/db` works for SQL and NoSQL databases',
+            content: 'Our agnostic API is compatible with SQL and NoSQL databases',
             image: `${baseUrl}img/undraw_react.svg`,
             imageAlign: 'top',
-            title: 'Common abstraction',
+            title: 'Agnostic API',
           },
           {
-            content: '`upper/db/sqlbuilder` for when SQL is necessary',
-            image: `${baseUrl}img/undraw_operating_system.svg`,
-            imageAlign: 'top',
-            title: 'SQL builder',
-          },
-          {
-            content: '`upper/db/bond` gives you ORM-like feeling',
+            content: 'Use the SQL builder or raw SQL statements for advanced cases',
             image: `${baseUrl}img/undraw_react.svg`,
             imageAlign: 'top',
-            title: 'Bond',
+            title: 'SQL friendly',
+          },
+          {
+            content: 'An (optional) ORM-like layer is available for all your data modelling needs',
+            image: `${baseUrl}img/undraw_react.svg`,
+            imageAlign: 'top',
+            title: 'ORM-like layer',
           },
         ]}
       </Block>
     );
 
-    const Showcase = () => {
-      if ((siteConfig.users || []).length === 0) {
-        return null;
-      }
-
-      const showcase = siteConfig.users
-        .filter(user => user.pinned)
-        .map(user => (
-          <a href={user.infoLink} key={user.infoLink}>
-            <img src={user.image} alt={user.caption} title={user.caption} />
-          </a>
-        ));
-
-      const pageUrl = page => baseUrl + (language ? `${language}/` : '') + page;
-
-      return (
-        <div className="productShowcaseSection paddingBottom">
-          <h2>Who is Using This?</h2>
-          <p>This project is used by all these people</p>
-          <div className="logos">{showcase}</div>
-          <div className="more-users">
-            <a className="button" href={pageUrl('users.html')}>
-              More {siteConfig.title} Users
-            </a>
-          </div>
-        </div>
-      );
-    };
-
-    return (
-      <div>
-        <HomeSplash siteConfig={siteConfig} language={language} />
-        <div className="mainContainer">
-        </div>
-      </div>
-    );
-
-    /*
     return (
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer">
           <Features />
+          <Description />
           <CodeSample />
           <QuickStart />
-          <Description />
-          <Showcase />
         </div>
       </div>
     );
-    */
   }
 }
 

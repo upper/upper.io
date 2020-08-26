@@ -10,21 +10,11 @@
 
 // List of projects/orgs using your project for the users page.
 const users = [
-  /*
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/image.jpg'.
-    image: '/img/undraw_open_source.svg',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-  */
 ];
 
 const siteConfig = {
   title: 'upper/db', // Title for your website.
-  tagline: 'database access layer for Go',
+  tagline: 'A productive data access layer for Go',
   url: 'https://upper.io', // Your website URL
   baseUrl: '/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:

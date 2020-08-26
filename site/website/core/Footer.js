@@ -69,7 +69,6 @@ class Footer extends React.Component {
             </a>
           </div>
         </section>
-
         <section className="copyright">{this.props.config.copyright}</section>
       </footer>
     );
