@@ -7,7 +7,7 @@ collections of items. This API is modelled after basic set theory concepts that
 are applicable to relational and document-based database engines alike.
 
 Using `db` you can [create a database
-session](/docs/getting-started/connect-to-a-database) and use all of the
+session](/v4/getting-started/connect-to-a-database) and use all of the
 [`db.Session`
 methods](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Session).
 

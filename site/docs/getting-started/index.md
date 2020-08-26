@@ -165,14 +165,14 @@ $$
 
 ## Getting started
 
-* [Key concepts](/docs/getting-started/key-concepts)
-* [Connect to a database](/docs/getting-started/connect-to-a-database)
-* [Mapping database records to Go structs](/docs/getting-started/struct-mapping)
-* [Using the agnostic `db` API](/docs/getting-started/agnostic-db-api)
-* [Using the SQL builder API](/docs/getting-started/sql-builder-api)
-* [Transactions](/docs/getting-started/transactions)
-* [Logger](/docs/getting-started/logger)
+* [Key concepts](/v4/getting-started/key-concepts)
+* [Connect to a database](/v4/getting-started/connect-to-a-database)
+* [Mapping database records to Go structs](/v4/getting-started/struct-mapping)
+* [Using the agnostic `db` API](/v4/getting-started/agnostic-db-api)
+* [Using the SQL builder API](/v4/getting-started/sql-builder-api)
+* [Transactions](/v4/getting-started/transactions)
+* [Logger](/v4/getting-started/logger)
 
 ## Tutorials
 
-* [ORM-like behaviour with db.Record, db.Store and hooks](/docs/tutorial/record-store-and-hooks)
+* [ORM-like behaviour with db.Record, db.Store and hooks](/v4/tutorial/record-store-and-hooks)
