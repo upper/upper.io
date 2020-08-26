@@ -5,6 +5,7 @@ title: Create a database session
 Use `go get` to grab the database adapter:
 
 ```sh
+export GO111MODULE=on
 go get -v -u github.com/upper/db/v4/adapter/$ADAPTER_NAME
 ```
 
@@ -31,6 +32,10 @@ All adapters come with a `ConnectionURL` struct that you can use to describe
 parameters to open a database:
 
 ```go
+import (
+  "github.com/upper/db/v4/adapter/postgresql"
+)
+
 // Use the `ConnectionURL` struct to create a DSN:
 var settings = postgresql.ConnectionURL{
   User:     "maria",
@@ -97,6 +102,7 @@ $$
 package main
 
 import (
+  "fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -110,19 +116,17 @@ var settings = postgresql.ConnectionURL{
 }
 
 func main() {
-	log.Printf("Connecting with DSN %q", settings)
-
 	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}
+	defer sess.Close()
 
 	if err := sess.Ping(); err != nil {
 		log.Fatal("Ping: ", err)
 	}
 
-	log.Printf("Successfully connected to database: %q", sess.Name())
-	sess.Close()
+	fmt.Printf("Successfully connected to database: %q", sess.Name())
 }
 $$
 

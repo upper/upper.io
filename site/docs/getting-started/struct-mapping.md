@@ -7,8 +7,8 @@ mapping between your Go application and the database it uses.
 
 ## Basic field-to-column mapping
 
-Fields in Go structs can be mapped to table columns by using a special `db`
-tag:
+Fields in Go structs can be mapped to table records by using a special `db`
+struct tag:
 
 ```go
 type User struct {
@@ -50,17 +50,14 @@ type Person struct {
 }
 ```
 
-Set the adapter to ignore specific fields by means of a hyphen (`-`):
+Fields that don't have a `db` struct tag will be omitted from queries:
 
 ```go
 type Person struct {
   ...
-  Token    string `db:"-"` // Field to be skipped
+  Token    string
 }
 ```
-
-> If mapping is not explicit, the adapter will perform a case-sensitive lookup
-> of field names.
 
 ## Complex cases for mapping
 
@@ -99,80 +96,92 @@ $$
 package main
 
 import (
-	"log"
+  "fmt"
+  "log"
 
-	"github.com/upper/db/v4/adapter/postgresql"
+  "github.com/upper/db/v4"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Person represents a person with a name.
 type Person struct {
-	FirstName string `db:"first_name"`
-	LastName  string `db:"last_name"`
+  FirstName string `db:"first_name"`
+  LastName  string `db:"last_name"`
 }
 
 // Author represents a person that is an author.
 type Author struct {
-	ID     int `db:"id"`
-	Person `db:",inline"`
+  ID     int `db:"id"`
+  Person `db:",inline"`
 }
 
 // Employee represents a person that is an employee.
 type Employee struct {
-	ID     int `db:"id"`
-	Person `db:",inline"`
+  ID     int `db:"id"`
+  Person `db:",inline"`
+}
+
+func Authors(sess db.Session) db.Collection {
+  return sess.Collection("authors")
+}
+
+func Employees(sess db.Session) db.Collection {
+  return sess.Collection("employees")
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`,
-	Host:     `demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+  Database: `booktown`,
+  Host:     `demo.upper.io`,
+  User:     `demouser`,
+  Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := postgresql.Open(settings)
-	if err != nil {
-		log.Fatal("Open: ", err)
-	}
-	defer sess.Close()
+  sess, err := postgresql.Open(settings)
+  if err != nil {
+    log.Fatal("Open: ", err)
+  }
+  defer sess.Close()
 
-	// Get and print the first 5 authors ordered by last name
-	res := sess.Collection("authors").Find().
-		OrderBy("last_name").
-		Limit(5)
+  // Get and print the first 5 authors ordered by last name
+  res := Authors(sess).Find().
+    OrderBy("last_name").
+    Limit(5)
 
-	var authors []Author
-	if err := res.All(&authors); err != nil {
-		log.Fatal("All: ", err)
-	}
+  var authors []Author
+  if err := res.All(&authors); err != nil {
+    log.Fatal("All: ", err)
+  }
 
-	log.Println("Authors (5):")
-	for _, author := range authors {
-		log.Printf(
-			"Last Name: %s\tID: %d\n",
-			author.LastName,
-			author.ID,
-		)
-	}
+  fmt.Println("Authors (5):")
+  for _, author := range authors {
+    fmt.Printf(
+      "Last Name: %s\tID: %d\n",
+      author.LastName,
+      author.ID,
+    )
+  }
 
-	// Get and print the first 5 employees ordered by last name
-	res = sess.Collection("employees").Find().
-		OrderBy("last_name").
-		Limit(5)
+  fmt.Println("")
 
-	var employees []Author
-	if err := res.All(&employees); err != nil {
-		log.Fatal("All: ", err)
-	}
+  // Get and print the first 5 employees ordered by last name
+  res = Employees(sess).Find().
+    OrderBy("last_name").
+    Limit(5)
 
-	log.Println("Employees (5):")
-	for _, employee := range employees {
-		log.Printf(
-			"Last Name: %s\tID: %d\n",
-			employee.LastName,
-			employee.ID,
-		)
-	}
+  var employees []Author
+  if err := res.All(&employees); err != nil {
+    log.Fatal("All: ", err)
+  }
+
+  fmt.Println("Employees (5):")
+  for _, employee := range employees {
+    fmt.Printf(
+      "Last Name: %s\tID: %d\n",
+      employee.LastName,
+      employee.ID,
+    )
+  }
 }
 $$
 
@@ -219,71 +228,73 @@ $$
 package main
 
 import (
-	"log"
+  "fmt"
+  "log"
 
-	"github.com/upper/db"
-	"github.com/upper/db/v4/adapter/postgresql"
+  "github.com/upper/db/v4"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Book represents a book.
 type Book struct {
-	ID        int    `db:"id"`
-	Title     string `db:"title"`
-	AuthorID  int    `db:"author_id"`
-	SubjectID int    `db:"subject_id"`
+  ID        int    `db:"id"`
+  Title     string `db:"title"`
+  AuthorID  int    `db:"author_id"`
+  SubjectID int    `db:"subject_id"`
 }
 
 // Author represents the author of a book.
 type Author struct {
-	ID        int    `db:"id"`
-	LastName  string `db:"last_name"`
-	FirstName string `db:"first_name"`
+  ID        int    `db:"id"`
+  LastName  string `db:"last_name"`
+  FirstName string `db:"first_name"`
 }
 
 // BookAuthor represents join data from books and authors.
 type BookAuthor struct {
-	// Both Author and Book have and ID column, we need this to tell the ID of
-	// the book from the ID of the author.
-	BookID int `db:"book_id"`
+  // Both Author and Book have and ID column, we need this to tell the ID of
+  // the book from the ID of the author.
+  BookID int `db:"book_id"`
 
-	Author `db:",inline"`
-	Book   `db:",inline"`
+  Author `db:",inline"`
+  Book   `db:",inline"`
 }
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`,
-	Host:     `demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+  Database: `booktown`,
+  Host:     `demo.upper.io`,
+  User:     `demouser`,
+  Password: `demop4ss`,
 }
 
 func main() {
-	sess, err := postgresql.Open(settings)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer sess.Close()
+  sess, err := postgresql.Open(settings)
+  if err != nil {
+    log.Fatal(err)
+  }
+  defer sess.Close()
 
-	req := sess.Select(
-		"b.id AS book_id",
-		db.Raw("b.*"),
-		db.Raw("a.*"),
-	).From("books b").
-		Join("authors a").On("b.author_id = a.id").
-		OrderBy("b.title")
+  req := sess.SQL().
+    Select(
+    "b.id AS book_id",
+    db.Raw("b.*"),
+    db.Raw("a.*"),
+  ).From("books b").
+    Join("authors a").On("b.author_id = a.id").
+    OrderBy("b.title")
 
-	var books []BookAuthor
-	if err := req.All(&books); err != nil {
-		log.Fatal(err)
-	}
+  var books []BookAuthor
+  if err := req.All(&books); err != nil {
+    log.Fatal(err)
+  }
 
-	for _, book := range books {
-		log.Printf(
-			"ID: %d\tAuthor: %s\t\tBook: %q\n",
-			book.BookID,
-			book.Author.LastName,
-			book.Book.Title,
-		)
-	}
+  for _, book := range books {
+    fmt.Printf(
+      "ID: %d\tAuthor: %s\t\tBook: %q\n",
+      book.BookID,
+      book.Author.LastName,
+      book.Book.Title,
+    )
+  }
 }
 $$

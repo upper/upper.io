@@ -12,16 +12,14 @@ You can create and use transaction blocks with the `Tx` method:
 
 ```go
 import (
-  "context"
   "log"
 
   "github.com/upper/db/v4"
-  "github.com/upper/db/v4/sqlbuilder"
 )
 
 func main() {
   ...
-  err := sess.Tx(func(tx sqlbuilder.Tx) error {
+  err := sess.Tx(func(tx db.Session) error {
     // Use `tx` like you would normally use `sess`.
     ...
     id, err := tx.Collection("accounts").Insert(...)
@@ -38,7 +36,7 @@ func main() {
     }
     ...
 
-    rows, err := tx.Query(...)
+    rows, err := tx.SQL().Query(...)
     ...
 
     ...
@@ -51,38 +49,4 @@ func main() {
 }
 ```
 
-### Manual transactions
-
-Alternatively, you can also request a transaction context and manage it
-yourself using the `NewTx` method:
-
-```go
-tx, err := sess.NewTx(ctx)
-...
-```
-
-Use `tx` as you would normally use `sess`:
-
-```go
-id, err = tx.Collection("accounts").Insert(...)
-...
-
-res = tx.Collection("accounts").Find(...)
-
-err = res.Update(...)
-...
-
-```
-
-Remember that in order for your changes to be permanent, you'll have to use the
-`Commit()` method:
-
-```go
-err = tx.Commit() // or tx.Rollback()
-...
-```
-
-If you want to cancel the whole operation, use `Rollback()`.
-
-There is no need to `Close()` the transaction, after commiting or rolling back
-the transaction gets closed and it's no longer valid.
+See the tour example on [how to use transactions](//tour.upper.io/transactions/01).

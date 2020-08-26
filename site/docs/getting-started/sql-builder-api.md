@@ -1,34 +1,37 @@
 ---
-title: upper/db sqlbuilder tutorial
+title: SQL builder API
 ---
 
-The `sqlbuilder` package provides tools to represent SQL expressions with Go
-code. This gives you some additional advantages over regular string queries:
+The SQL builder API provides tools to represent SQL expressions with Go code.
+This gives you some additional advantages over regular string queries:
 
 * We can benefit from the Go compiler syntax check.
 * It is easier to compose and reuse queries.
 
-When you need more power than what `upper/db` gives you.
+When you need more power than what the agnostic data API gives you.
 
-Using `upper/db` alone or `sqlbuilder` depends on the specific needs of your
-application.
+Using the agnostic data API or the SQL API depends on the specific needs of
+your application.
 
 ## Database session
 
-The `sqlbuilder` methods are available on all SQL adapters:
+The SQL builder methods are available on all SQL adapters:
 
 ```go
 sess, err := postgresql.Open(settings)
 ...
+
+sqlbuilder := sess.SQL()
 ```
 
 ## Select statement
 
 Use the `Select()` method on a session to begin a SELECT statement (a
-`sqlbuilder.Selector`):
+[`db.Selector`](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Selector)).
 
 ```go
-q = sess.Select("id", "name")
+q = sess.SQL().
+  Select("id", "name")
 ```
 
 If you compiled the select statement at this point it would look like `SELECT
@@ -36,14 +39,16 @@ If you compiled the select statement at this point it would look like `SELECT
 which table to select from, chain the `From()` method to do that:
 
 ```go
-q = sess.Select("id", "name").From("accounts")
+q = sess.SQL().
+  Select("id", "name").From("accounts")
 ```
 
 Now you have a complete query that can be compiled into valid SQL:
 
-```
+```go
 var accounts []Account
-q = sess.Select("id", "name").From("accounts")
+q = sess.SQL().
+  Select("id", "name").From("accounts")
 
 fmt.Println(q) // SELECT id, name FROM accounts
 ```
@@ -78,14 +83,16 @@ To select all the columns instead of specific ones, you can use the
 
 ```go
 // SELECT * FROM accounts
-q = sess.SelectFrom("accounts")
+q = sess.SQL().
+  SelectFrom("accounts")
 ...
 
 err = q.All(&accounts)
 ...
 
 // Which is basically equivalent to:
-q = sess.Select().From("accounts")
+q = sess.SQL().
+  Select().From("accounts")
 ```
 
 
@@ -129,12 +136,14 @@ The `Join()` method is part of a `Selector`, you can use it to represent SELECT
 statements that use JOINs.
 
 ```go
-q = sess.Select("a.name").From("accounts AS a").
+q = sess.SQL().
+  Select("a.name").From("accounts AS a").
   Join("profiles AS p").
   On("p.account_id = a.id")
 ...
 
-q = sess.Select("name").From("accounts").
+q = sess.SQL().
+  Select("name").From("accounts").
   Join("owners").
   Using("employee_id")
 ...
@@ -145,10 +154,13 @@ In addition to `Join()` you can also use `FullJoin()`, `CrossJoin()`,
 
 ## INSERT statement
 
-The `InsertInto()` method begins an INSERT statement (a `sqlbuilder.Inserter`).
+The `InsertInto()` method begins an INSERT statement (a
+[`db.Inserter`](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Inserter)
+).
 
 ```go
-q = sess.InsertInto("people").
+q = sess.SQL().
+  InsertInto("people").
   Columns("name").
   Values("John")
 
@@ -164,7 +176,8 @@ account := Account{
   ...
 }
 
-q = sess.InsertInto("people").Values(account)
+q = sess.SQL().
+  InsertInto("people").Values(account)
 
 res, err = q.Exec() // res is a sql.Result
 ...
@@ -173,10 +186,12 @@ res, err = q.Exec() // res is a sql.Result
 ## UPDATE statement
 
 The `Update()` method takes a table name and begins an UPDATE statement (an
-`sqlbuilder.Updater`):
+[`db.Updater`](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Updater)
+):
 
 ```go
-q = sess.Update("people").
+q = sess.SQL().
+  Update("people").
   Set("name", "John").
   Where("id = ?", 5)
 
@@ -188,10 +203,12 @@ You can update many columns at once by providing column-value pairs to `Set()`:
 
 
 ```go
-q = sess.Update("people").Set(
-  "name", "John",
-  "last_name", "Smith",
-).Where("id = ?", 5)
+q = sess.SQL().
+  Update("people").
+  Set(
+    "name", "John",
+    "last_name", "Smith",
+  ).Where("id = ?", 5)
 
 res, err = q.Exec()
 ...
@@ -201,10 +218,12 @@ You don't always have to provide column-value pairs, `Set()` also accepts maps
 or structs:
 
 ```go
-q = sess.Update("people").Set(map[string]interface{}{
-  "name": "John",
-  "last_name": "Smith",
-}).Where("id = ?", 5)
+q = sess.SQL().
+  Update("people").
+  Set(map[string]interface{}{
+    "name": "John",
+    "last_name": "Smith",
+  }).Where("id = ?", 5)
 
 res, err = q.Exec()
 ...
@@ -213,10 +232,12 @@ res, err = q.Exec()
 ## DELETE statement
 
 You can begin a DELETE statement with the `DeleteFrom()` method (a
-`sqlbuilder.Deleter`):
+[`db.Deleter`](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Deleter)
+):
 
 ```go
-q = sess.DeleteFrom("accounts").Where("id", 5)
+q = sess.SQL().
+  DeleteFrom("accounts").Where("id", 5)
 
 res, err = q.Exec()
 ...
@@ -224,13 +245,14 @@ res, err = q.Exec()
 
 ## WHERE clause
 
-The `Where()` method can be used to define conditions on a `sqlbuilder.Selector`,
-`sqlbuilder.Deleter` or `sqlbuilder.Updater` interfaces.
+The `Where()` method can be used to define conditions on a `db.Selector`,
+`db.Deleter` or `db.Updater` interfaces.
 
-For instance, let's suppose we have a `sqlbuilder.Selector`:
+For instance, let's suppose we have a `db.Selector`:
 
 ```go
-q = sess.SelectFrom("accounts")
+q = sess.SQL().
+  SelectFrom("accounts")
 ```
 
 We can use the `Where()` method to add conditions to the above query. How about
@@ -312,13 +334,16 @@ If the builder does not provide you with enough flexibility to create complex
 SQL queries, you can always use plain SQL:
 
 ```go
-rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+rows, err = sess.SQL().
+  Query(`SELECT * FROM accounts WHERE id = ?`, 5)
 ...
 
-row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+row, err = sess.SQL().
+  QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
 ...
 
-res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+res, err = sess.SQL().
+  Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
@@ -334,17 +359,12 @@ If you don't want to use `Scan` directly, you could always create an iterator
 using any `*sql.Rows` value:
 
 ```go
-import "github.com/upper/db/v4/sqlbuilder"
-...
-
-rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+rows, err = sess.SQL().
+  Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
-iter := sqlbuilder.NewIterator(rows)
+iter := sess.SQL().NewIterator(rows)
 err = iter.All(&accounts)
 ...
 ```
-
-[1]: https://golang.org
-[2]: https://upper.io/db.v3

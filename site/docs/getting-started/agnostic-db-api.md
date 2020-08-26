@@ -1,5 +1,5 @@
 ---
-title: Using the db package
+title: Agnostic data API
 ---
 
 The `db` package provides an **agnostic Go API** focused on working with
@@ -8,10 +8,10 @@ are applicable to relational and document-based database engines alike.
 
 Using `db` you can [create a database
 session](/docs/getting-started/connect-to-a-database) and use all of the
-[`db.Database`
-methods](https://pkg.go.dev/github.com/upper/db?tab=doc#Database).
+[`db.Session`
+methods](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#Session).
 
-The `Collection()` method of `db.Database` takes a collection name and returns
+The `Collection()` method of `db.Session` takes a collection name and returns
 an reference that you can use to do simple operations on that collection:
 
 ```go
@@ -33,6 +33,7 @@ $$
 package main
 
 import (
+  "fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -60,8 +61,8 @@ func main() {
 
 	// Iterate over the names of all the collections and get collection
 	// references.
-	for _, collectionName := range collections {
-		log.Printf("Collection: %s", sess.Collection(collectionName).Name())
+	for _, collection := range collections {
+		fmt.Printf("Collection: %q\n", collection.Name())
 	}
 }
 $$
@@ -71,7 +72,7 @@ $$
 ### Find
 
 A result-set is a subset of items from a collection. If you have a collection
-reference, you can create a result set by using the `Find()` method:
+reference you can create a result set by using the `Find()` method:
 
 ```go
 // Collection reference
@@ -156,6 +157,7 @@ $$
 package main
 
 import (
+  "fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -193,7 +195,7 @@ func main() {
 
 	// Print all mapped items.
 	for i := range books {
-		log.Printf("book[%d]: %#v", i, books[i])
+		fmt.Printf("book[%d]: %#v\n", i, books[i])
 	}
 }
 $$
@@ -427,16 +429,17 @@ $$
 package main
 
 import (
+  "fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`,
-	Host:     `demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+	Database: "booktown",
+	Host:     "demo.upper.io",
+	User:     "demouser",
+	Password: "demop4ss",
 }
 
 // Customer represents a customer.
@@ -456,11 +459,11 @@ func main() {
 	res := sess.Collection("customers").Find().OrderBy("last_name")
 	defer res.Close() // Make sure to close the result set.
 
-	log.Println("Our customers:")
+	fmt.Println("Our customers:")
 	var customer Customer
 	// Use Next to iterate through all items on the result-set one by one.
 	for res.Next(&customer) {
-		log.Printf("%d: %s, %s\n", customer.ID, customer.LastName, customer.FirstName)
+		fmt.Printf("%d:\t%q, %q\n", customer.ID, customer.LastName, customer.FirstName)
 	}
 }
 $$
@@ -487,7 +490,7 @@ pass a struct value:
 
 ```go
 account := Account{
-  Name: "Eliza",
+  Name:     "Eliza",
   LastName: "Smith",
   ...
 }
@@ -508,14 +511,15 @@ _, err := col.Insert(map[string]interface{}{
 ```
 
 If the table or collection is set to generate a unique ID for every inserted
-item, that ID will be returned by `Insert` (as an `interface{}`) as first
-return value:
+item, that ID will be returned by `Insert` as a
+[`db.InsertResult`](https://pkg.go.dev/github.com/upper/db/v4?tab=doc#InsertResult)
+value:
 
 ```go
-newID, err := col.Insert(account)
+res, err := col.Insert(account)
 ...
 
-log.Printf("Created element with ID %v", newID)
+log.Printf("Created element with ID %v", res.ID())
 ```
 
 Keep in mind that some databases won't work correctly if they're provided with
@@ -550,7 +554,8 @@ Use `InsertInto` on a session to insert a new item using the SQL builder:
 
 ```go
 // INSERT INTO people COLUMNS(name) VALUES('John')
-q = sess.InsertInto("people").
+q = sess.SQL().
+  InsertInto("people").
   Columns("name").
   Values("John")
 
@@ -620,15 +625,16 @@ err = res.Update(map[string]interface{}{
 ...
 ```
 
-That gives you total control on which values are going to be updated.
+that gives you total control on which values are going to be updated.
 
 #### Updating with the SQL builder
 
 This SQLish syntax is only available on SQL adapters. See [UPDATE
-statement](https://pkg.go.dev/github.com/upper/db/sqlbuilder/#Updater).
+statement](https://pkg.go.dev/github.com/upper/db/v4/#Updater).
 
 ```go
-q = sess.Update("people").Set("name", "John").Where("id = ?", 5)
+q = sess.SQL().
+  Update("people").Set("name", "John").Where("id = ?", 5)
 
 res, err = q.Exec()
 ...
@@ -658,10 +664,11 @@ err = res.Delete()
 #### Deleting with the SQL builder
 
 This SQLish syntax is only available on SQL adapters. See [DELETE
-statement](https://pkg.go.dev/github.com/upper/db/sqlbuilder/#Deleter).
+statement](https://pkg.go.dev/github.com/upper/db/v4/#Deleter).
 
 ```go
-q = sess.DeleteFrom("accounts").Where("id", 5)
+q = sess.SQL().
+  DeleteFrom("accounts").Where("id", 5)
 
 res, err = q.Exec()
 ...
@@ -677,13 +684,16 @@ This is how you would create a query reference using the SQL builder on a
 session:
 
 ```go
-q := sess.SelectAllFrom("accounts")
+q := sess.SQL().
+  SelectAllFrom("accounts")
 ...
 
-q := sess.Select("id", "last_name").From("accounts")
+q := sess.SQL().
+  Select("id", "last_name").From("accounts")
 ...
 
-q := sess.SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
+q := sess.SQL().
+  SelectAllFrom("accounts").Where("last_name LIKE ?", "Smi%")
 ...
 ```
 
@@ -698,7 +708,8 @@ err = q.All(&accounts)
 Using the query builder you can express simple queries:
 
 ```go
-q = sess.Select("id", "name").From("accounts").
+q = sess.SQL().
+  Select("id", "name").From("accounts").
   Where("last_name = ?", "Smith").
   OrderBy("name").Limit(10)
 ```
@@ -707,11 +718,13 @@ But even SQL-specific features, like joins, are supported (still depends on the
 database, though):
 
 ```go
-q = sess.Select("a.name").From("accounts AS a").
+q = sess.SQL().
+  Select("a.name").From("accounts AS a").
   Join("profiles AS p").
   On("p.account_id = a.id")
 
-q = sess.Select("name").From("accounts").
+q = sess.SQL().
+  Select("name").From("accounts").
   Join("owners").
   Using("employee_id")
 ```
@@ -720,24 +733,28 @@ Sometimes the builder won't be able to represent complex queries, if this
 happens it may be more effective to use plain SQL:
 
 ```go
-rows, err = sess.Query(`SELECT * FROM accounts WHERE id = ?`, 5)
+rows, err = sess.SQL().
+  Query(`SELECT * FROM accounts WHERE id = ?`, 5)
 ...
 
-row, err = sess.QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
+row, err = sess.SQL().
+  QueryRow(`SELECT * FROM accounts WHERE id = ? LIMIT ?`, 5, 1)
 ...
 
-res, err = sess.Exec(`DELETE FROM accounts WHERE id = ?`, 5)
+res, err = sess.SQL().
+  Exec(`DELETE FROM accounts WHERE id = ?`, 5)
 ...
 ```
 
 Mapping results from raw queries is also straightforward:
 
 ```go
-rows, err = sess.Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
+rows, err = sess.SQL().
+  Query(`SELECT * FROM accounts WHERE last_name = ?`, "Smith")
 ...
 
 var accounts []Account
-iter := sqlbuilder.NewIterator(rows)
+iter := sess.SQL().NewIterator(rows)
 iter.All(&accounts)
 ...
 ```
@@ -748,8 +765,3 @@ iter.All(&accounts)
 To get the full picture on how to perform all CRUD tasks (starting right from
 the installation and setup steps), take the `upper/.db`
 [tour](https://tour.upper.io/welcome/01).
-
-> The methods related to sessions, collections, and result sets are exemplified
-> using the approaches 'SQL/NoSQL' and 'SQL only'. For further reference about
-> what applies in each case, click [here](https://upper.io/db.v3/examples).
-
