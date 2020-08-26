@@ -1,0 +1,29 @@
+- hosts: "{{ host }}"
+
+  tasks:
+
+    - name: run go-playground
+      docker_container:
+        image: xiam/go-playground:{{ image_tag }}
+        name: go-playground
+        restart_policy: always
+        recreate: yes
+        volumes:
+          - /data/go-playground:/data
+        ports:
+          - 127.0.0.1:3000:3000
+        command:
+          [
+            "webapp",
+            "-allow-share",
+            "-db", "/data/playground.db",
+            "-c", "http://upper-unsafebox:8080/compile?output=json"
+          ]
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - go-playground

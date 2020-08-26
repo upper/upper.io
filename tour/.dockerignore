@@ -1,0 +1,6 @@
+*
+!tutorials/*
+!static/*
+!vendor
+!cmd
+!certs

@@ -1,0 +1,75 @@
+- hosts: "{{ host }}"
+
+  tasks:
+
+    - name: pull image
+      docker_image:
+        name: upper/vanity:{{ image_tag }}
+        source: pull
+        force: yes
+        state: present
+
+    - name: run vanity
+      docker_container:
+        image: upper/vanity:{{ image_tag }}
+        name: upper-vanity
+        restart_policy: always
+        recreate: yes
+        ports:
+          - 127.0.0.1:9001:9001
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - upper-vanity
+
+    - name: test vanity
+      uri:
+        url: http://127.0.0.1/db.v3?go-get=1
+        method: GET
+        status_code:
+          - 200
+        headers:
+          Host: upper.io
+        return_content: yes
+      register: this
+      failed_when: "'tree/3' not in this.content"
+
+    - name: test vanity
+      uri:
+        url: http://127.0.0.1/db.v2?go-get=1
+        method: GET
+        status_code:
+          - 200
+        headers:
+          Host: upper.io
+        return_content: yes
+      register: this
+      failed_when: "'tree/2' not in this.content"
+
+    - name: test vanity
+      uri:
+        url: http://127.0.0.1/db.v1?go-get=1
+        method: GET
+        status_code:
+          - 200
+        headers:
+          Host: upper.io
+        return_content: yes
+      register: this
+      failed_when: "'tree/1' not in this.content"
+
+    - name: test vanity
+      uri:
+        url: http://127.0.0.1/db?go-get=1
+        method: GET
+        status_code:
+          - 200
+        headers:
+          Host: upper.io
+        return_content: yes
+      register: this
+      failed_when: "'tree/master' not in this.content"

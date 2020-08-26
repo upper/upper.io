@@ -1,7 +1,6 @@
-- hosts: upper
+- hosts: "{{ host }}"
 
   tasks:
-
     - name: update apt
       apt:
         autoclean: yes
@@ -25,9 +24,9 @@
         - curl
         - docker-ce
         - libpq-dev
-        - python
-        - python-pip
-        - python-setuptools
+        - python3
+        - python3-pip
+        - python3-setuptools
         - software-properties-common
         state: present
         update_cache: yes
@@ -35,7 +34,7 @@
     - name: install python packages
       pip:
         name:
-          - docker
+          - docker-py
           - psycopg2
 
     - name: /data directory
@@ -55,6 +54,7 @@
         ports:
           - 0.0.0.0:80:80
         recreate: yes
+        restart_policy: always
         volumes:
           - /data/nginx/sites:/etc/nginx/conf.d/default.conf
         state: started
