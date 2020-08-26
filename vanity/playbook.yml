@@ -1,4 +1,4 @@
-- hosts: upper
+- hosts: "{{ host }}"
 
   tasks:
 

@@ -3,11 +3,14 @@ IMAGE_TAG           ?= latest
 IMAGE_VERSION       ?=
 
 GIT_SHORTHASH       ?= $(shell git rev-parse --short HEAD)
+IMAGE_TAG           ?= $(GIT_SHORTHASH)
 
 CONTAINER_PORT      ?= 9001
 HOST_PORT           ?= 9001
 
 CONTAINER_NAME      ?= upper-vanity
+
+DEPLOY_TARGET       ?= staging
 
 docker-build:
 	docker build -t $(IMAGE_NAME):$(GIT_SHORTHASH) .
@@ -29,5 +32,6 @@ docker-push: docker-build
 deploy:
 	ansible-playbook \
 		-i ../conf/ansible.hosts \
+		-e host="$(DEPLOY_TARGET)" \
 		-e image_tag=$(IMAGE_TAG) \
 		playbook.yml

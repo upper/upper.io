@@ -1,16 +1,16 @@
-- hosts: upper
+- hosts: "{{ host }}"
 
   tasks:
-    - name: get docs
+    - name: get legacy-docs
       docker_image:
-        name: upper/docs:{{ image_tag }}
+        name: "upper/legacy-docs:{{ image_tag }}"
         force: yes
         state: present
 
-    - name: run docs
+    - name: run legacy-docs
       docker_container:
-        image: upper/docs:{{ image_tag }}
-        name: upper-docs
+        image: "upper/legacy-docs:{{ image_tag }}"
+        name: upper-legacy-docs
         recreate: yes
         ports:
           - 127.0.0.1:9000:9000
@@ -21,9 +21,9 @@
         state: present
         appends: yes
         connected:
-          - upper-docs
+          - upper-legacy-docs
 
-    - name: test docs
+    - name: test legacy-docs
       uri:
         url: http://127.0.0.1/db.v3
         method: GET
@@ -35,7 +35,7 @@
       register: this
       failed_when: "'DOCTYPE' not in this.content"
 
-    - name: test docs
+    - name: test legacy-docs
       uri:
         url: http://127.0.0.1/db.v2
         method: GET
@@ -47,7 +47,7 @@
       register: this
       failed_when: "'DOCTYPE' not in this.content"
 
-    - name: test docs
+    - name: test legacy-docs
       uri:
         url: http://127.0.0.1/db.v1
         method: GET
