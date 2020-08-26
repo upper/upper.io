@@ -3,47 +3,47 @@ server {
   
   set $vanity http://upper-vanity:9001;
   set $legacy_docs http://upper-legacy-docs:9000;
-	set $docs http://upper-docusaurus:80;
+  set $docs http://upper-docusaurus:80;
 
   resolver 127.0.0.11 valid=5s;
 
   root /var/www;
-	
-	location /css {
+  
+  location /css {
     proxy_pass $docs;
-	}
+  }
 
-	location /js {
+  location /js {
     proxy_pass $docs;
-	}
-	
-	location /img {
+  }
+  
+  location /img {
     proxy_pass $docs;
-	}
+  }
 
-	location = /v4 {
-		return 302 /v4/;
-	}
-	
-	location = / {
-		return 302 /v4/;
-	}
-	
-	location = /v4/ {
+  location = /v4 {
+    return 302 /v4/;
+  }
+  
+  location = / {
+    return 302 /v4/;
+  }
+  
+  location = /v4/ {
     proxy_set_header X-Real-IP  $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     proxy_pass $docs/;
-	}
-	
-	location /v4/ {
+  }
+  
+  location /v4/ {
     proxy_set_header X-Real-IP  $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     proxy_pass $docs;
-	}
+  }
 
   location / {
     set $pass 0;
