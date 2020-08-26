@@ -175,4 +175,4 @@ $$
 
 ## Tutorials
 
-* [db.Record, db.Store and hooks](/docs/tutorial/record-store-and-hooks)
+* [ORM-like behaviour with db.Record, db.Store and hooks](/docs/tutorial/record-store-and-hooks)

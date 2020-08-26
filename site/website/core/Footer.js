@@ -40,8 +40,8 @@ class Footer extends React.Component {
             <a href={this.docUrl('getting-started', this.props.language)}>
               Getting started
             </a>
-            <a href={this.docUrl('examples', this.props.language)}>
-              Examples
+            <a href="//tour.upper.io">
+              Tour
             </a>
             <a href="https://pkg.go.dev/github.com/upper/db/v4">
               API Reference
@@ -55,7 +55,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
+            <a style={{display: 'none'}} href={`${this.props.config.baseUrl}blog`}>Blog</a>
             <a href="https://github.com/upper/db">GitHub</a>
             <a
               className="github-button"
