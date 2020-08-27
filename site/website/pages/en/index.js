@@ -64,7 +64,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle tagline={siteConfig.tagline} title={siteConfig.title} />
           <PromoSection>
-            <Button href="//tour.dev.upper.io" target="_blank">Take the tour</Button>
+            <Button href="//tour.upper.io" target="_blank">Take the tour</Button>
           </PromoSection>
         </div>
       </SplashContainer>

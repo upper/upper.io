@@ -34,6 +34,9 @@ deploy:
 		-e image_tag="$(IMAGE_TAG)" \
 		playbook.yml
 
+deploy-prod:
+	DEPLOY_TARGET=prod $(MAKE) deploy
+
 run:
 	cd website && \
 		yarn start
