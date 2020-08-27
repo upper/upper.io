@@ -144,7 +144,7 @@ class Index extends React.Component {
               'advanced cases. If you feel like writing tons of simple '+
               '`SELECT *` statements by hand is not the best use of your time, '+
               'then `upper/db` is the library for you.',
-            image: `${baseUrl}img/undraw_note_list.svg`,
+            image: `${baseUrl}img/undraw_shared_workspace_hwky.svg`,
             imageAlign: 'right',
             title: "Made for productivity",
           },
@@ -159,7 +159,7 @@ class Index extends React.Component {
             content:
               "We've prepared a learning playground with useful tips for you to try out `upper/db`. "+
               "Take the [tour](//tour.upper.io)! :-)",
-            image: `${baseUrl}img/undraw_youtube_tutorial.svg`,
+            image: `${baseUrl}img/undraw_through_the_park_lxnl.svg`,
             imageAlign: 'right',
             title: 'Quick start: take the tour',
           },
@@ -172,19 +172,19 @@ class Index extends React.Component {
         {[
           {
             content: 'Our agnostic API is compatible with SQL and NoSQL databases',
-            image: `${baseUrl}img/undraw_react.svg`,
+            image: `${baseUrl}img/undraw_friends_r511.svg`,
             imageAlign: 'top',
             title: 'Agnostic API',
           },
           {
             content: 'Use the SQL builder or raw SQL statements for advanced cases',
-            image: `${baseUrl}img/undraw_react.svg`,
+            image: `${baseUrl}img/undraw_server_status_5pbv.svg`,
             imageAlign: 'top',
             title: 'SQL friendly',
           },
           {
             content: 'An (optional) ORM-like layer is available for all your data modelling needs',
-            image: `${baseUrl}img/undraw_react.svg`,
+            image: `${baseUrl}img/undraw_elements_cipa.svg`,
             imageAlign: 'top',
             title: 'ORM-like layer',
           },
