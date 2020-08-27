@@ -9,8 +9,10 @@ reasonable compromise between productivity, development speed and computing
 resources.
 
 Through the use of well-known database drivers, `upper/db` communicates with
-the most popular database engines (PostgreSQL, MySQL, CockroachDB, Microsoft
-SQLServer, SQLite and MongoDB).
+the most popular database engines ([PostgreSQL](/v4/adapter/postgresql),
+[MySQL](/v4/adapter/mysql), [CockroachDB](/v4/adapter/cockroachdb), [Microsoft
+SQL Server](/v4/adapter/mssql), [SQLite](/v4/adapter/sqlite),
+[QL](/v4/adapter/ql) and [MongoDB](/v4/adapter/mongo)).
 
 ## Packages
 
@@ -176,3 +178,18 @@ $$
 ## Tutorials
 
 * [ORM-like behaviour with db.Record, db.Store and hooks](/v4/tutorial/record-store-and-hooks)
+
+## Supported adapters
+
+* [PostgreSQL](/v4/adapter/postgresql)
+* [MySQL](/v4/adapter/mysql)
+* [CockroachDB](/v4/adapter/cockroachdb)
+* [Microsoft SQL Server](/v4/adapter/mssql)
+* [SQLite](/v4/adapter/sqlite)
+* [QL](/v4/adapter/ql)
+* [MongoDB](/v4/adapter/mongo)
+
+## Old versions
+
+* [db.v3](/db.v3)
+* [db.v2](/db.v2)

@@ -138,8 +138,8 @@ $$
 ## Underlying driver
 
 In case you require methods that are only available from the underlying driver,
-you can use the `db.Database.Driver()` method, which returns an `interface{}`.
-For instance, if you need the
+you can use the `Driver()` method, which returns an `interface{}`.  For
+instance, if you need the
 [mgo.Session.Ping](http://godoc.org/labix.org/v2/mgo#Session.Ping) method, you
 can retrieve the underlying `*mgo.Session` as an `interface{}`, cast it into
 the appropriate type, and use `Ping()`, as shown below:

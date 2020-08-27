@@ -1,10 +1,11 @@
-# MongoDB
+---
+title: MongoDB adapter
+---
 
 The `mongo` adapter for [MongoDB][3] wraps the `labix.org/v2/mgo` driver
 written by [Gustavo Niemeyer][1].
 
-![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
-> Please note that MongoDB:
+Please note that MongoDB:
 
 * Does not support transactions.
 * Does not support query builder.
@@ -18,23 +19,26 @@ To use the package, you'll need the [bazaar][2] version control system:
 sudo apt-get install bzr -y
 ```
 
-Once this requirement is met, you can use `go get` to download and install the adapter:
+Once this requirement is met, you can use `go get` to download and install the
+adapter:
 
 ```
-go get upper.io/db.v3/mongo
+go get github.com/upper/db/v4/adapter/mongodb
 ```
 
 ## Setup
+
 ### Database Session
 
-Import the `upper.io/db.v3/mongo` package into your application:
+Import the `github.com/upper/db/v4/adapter/mongodb` package into your
+application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v3/mongo"
+  "github.com/upper/db/v4/adapter/mongodb"
 )
 ```
 
@@ -51,7 +55,8 @@ type ConnectionURL struct {
 }
 ```
 
-Pass the `mongo.ConnectionURL` value as argument to `mongo.Open()` so the `mongo.Database` session is created.
+Pass the `mongo.ConnectionURL` value as argument to `mongo.Open()` so the
+`mongo.Database` session is created.
 
 ```go
 settings = mongo.ConnectionURL{
@@ -62,8 +67,8 @@ sess, err = mongo.Open(settings)
 ...
 ```
 
-![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
-> The `mongo.ParseURL()` function is also provided in case you need to convert a DSN into a `mongo.ConnectionURL`:
+> The `mongo.ParseURL()` function is also provided in case you need to convert
+> a DSN into a `mongo.ConnectionURL`:
 
 ```go
 // ParseURL parses s into a ConnectionURL struct.
@@ -71,15 +76,21 @@ mongo.ParseURL(s string) (ConnectionURL, error)
 ```
 
 ## Common Database Operations
-Once the connection is established, you can start performing operations on the database.
+
+Once the connection is established, you can start performing operations on the
+database.
 
 ### Example
-In the following example, a table named 'birthday' consisting of two columns ('name' and 'born') will be created. Before starting, the table will be searched in the database and, in the event it already exists, it will be removed. Then, three rows will be inserted into the table and checked for accuracy. To this end, the database will be queried and the matches (insertions) will be printed to standard output. 
 
-![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
-> The database operations described above refer to an advanced use of upper-db, hence they do not follow the exact same patterns of the [tour](https://tour.upper.io/welcome/01) and [getting started](https://upper.io/db.v3/getting-started) page.
+In the following example, a table named 'birthday' consisting of two columns
+('name' and 'born') will be created. Before starting, the table will be
+searched in the database and, in the event it already exists, it will be
+removed. Then, three rows will be inserted into the table and checked for
+accuracy. To this end, the database will be queried and the matches
+(insertions) will be printed to standard output.
 
-The rows are inserted into the `birthday` table. The database is queried for the insertions and is set to print them to standard output.
+The rows are inserted into the `birthday` table. The database is queried for
+the insertions and is set to print them to standard output.
 
 ```go
 // example.go
@@ -91,7 +102,7 @@ import (
   "log"
   "time"
 
-  "upper.io/db.v3/mongo"
+  "github.com/upper/db/v4/adapter/mongodb"
 )
 
 var settings = mongo.ConnectionURL{
@@ -179,12 +190,11 @@ Nobuo Uematsu was born in March 21, 1959.
 Hironobu Sakaguchi was born in November 25, 1962.
 ```
 
-![Note](https://github.com/LizGoro90/db-tour/tree/master/static/img)
-> Click [here](https://upper.io/db.v3/examples) to keep learning about different database operations that can be executed with upper-db. 
+## Take the tour
+
+Get the real `upper/db` experience, take the [tour](//tour.upper.io).
 
 [1]: http://labix.org/v2/mgo
 [2]: http://bazaar.canonical.com/en/
 [3]: http://www.mongodb.org/
 [4]: http://labix.org/gobson
-[5]: http://godoc.org/upper.io/db.v3#IDSetter
-[6]: http://godoc.org/upper.io/db.v3/mongo#ObjectIdIDSetter

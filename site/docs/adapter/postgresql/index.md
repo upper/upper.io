@@ -1,34 +1,35 @@
-# PostgreSQL
+---
+title: PostgreSQL adapter
+---
 
 The `postgresql` adapter for [PostgreSQL][2] wraps the `github.com/lib/pq`
 driver written by [Blake Mizerany][1].
 
 > Here you'll learn about the particularities of the [PostgreSQL][2] adapter.
 > Before starting to read this detailed information, it is advisable that you
-> take a look at the [getting started](https://upper.io/db.v3/getting-started)
-> page so you become acquainted with the basics of upper-db and you can grasp
-> concepts better.
+> take a look at the [getting started](/v4/getting-started) page so you become
+> acquainted with the basics of `upper/db` and you can grasp concepts better.
 
 ## Installation
 
 Use `go get` to download and install the adapter:
 
 ```
-go get upper.io/db.v3/postgresql
+go get github.com/upper/db/v4/adapter/postgresql
 ```
 
 ## Setup
 
 ### Database Session
 
-Import the `upper.io/db.v3/postgresql` package into your application:
+Import the `postgresql` package into your application:
 
 ```go
 // main.go
 package main
 
 import (
-  "upper.io/db.v3/postgresql"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 ```
 
@@ -46,7 +47,7 @@ type ConnectionURL struct {
 ```
 
 Pass the `postgresql.ConnectionURL` value as argument to `postgresql.Open()` so
-the `postgresql.Database` session is created.
+the session is created.
 
 ```go
 settings = postgresql.ConnectionURL{
@@ -66,7 +67,8 @@ postgresql.ParseURL(dsn string) (ConnectionURL, error)
 ```
 ## Common Database Operations
 
-Once the connection is established, you can start performing operations on the database.
+Once the connection is established, you can start performing operations on the
+database.
 
 ### Example
 
@@ -76,11 +78,6 @@ searched in the database and, in the event it already exists, it will be
 removed. Then, three rows will be inserted into the table and checked for
 accuracy. To this end, the database will be queried and the matches
 (insertions) will be printed to standard output.
-
-> The database operations described above refer to an advanced use of upper-db,
-> hence they do not follow the exact same patterns of the
-> [tour](https://tour.upper.io/welcome/01) and [getting
-> started](https://upper.io/db.v3/getting-started) page.
 
 The `birthday` table with the `name` and `born` columns is created with these
 SQL statements:
@@ -115,7 +112,7 @@ import (
   "log"
   "time"
 
-  "upper.io/db.v3/postgresql"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{
@@ -216,9 +213,9 @@ is `postgresql.JSONB`:
 
 ```
 import (
-  ...
-  "upper.io/db.v3/postgresql"
-  ...
+  // ...
+  "github.com/upper/db/v4/adapter/postgresql"
+  // ...
 )
 
 type Person struct {
@@ -234,11 +231,10 @@ type Person struct {
 
 ### SQL builder
 
-You can use the [query builder](/db.v3/lib/sqlbuilder) for any complex SQL
-query:
+You can use the SQL builder for any complex SQL query:
 
 ```go
-q := sess.Select(
+q := sess.SQL().Select(
     "p.id",
     "p.title AD publication_title",
     "a.name AS artist_name",
@@ -299,11 +295,9 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 > `db.Raw` can also be used as a condition argument, similarly to `db.Cond`.
 
-> Click [here](https://upper.io/db.v3/examples) to keep learning about
-> different database operations that can be executed with upper-db.
+## Take the tour
 
+Get the real `upper/db` experience, take the [tour](//tour.upper.io).
 
 [1]: https://github.com/lib/pq
-[2]: http://www.postgresql.org/
-[3]: /db.v3/getting-started
-[4]: /db.v3/examples
+[2]: https://www.postgresql.org/
