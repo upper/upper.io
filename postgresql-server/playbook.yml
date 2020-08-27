@@ -1,4 +1,4 @@
-- hosts: demo
+- hosts: "{{ host }}"
 
   tasks:
 
@@ -30,7 +30,7 @@
           POSTGRES_USER: "{{ postgres_user }}"
           POSTGRES_PASSWORD: "{{ postgres_password }}"
         ports:
-          - 0.0.0.0:5432:5432
+          - 127.0.0.1:5432:5432
 
     - name: wait a few seconds for postgresql to start...
       pause:

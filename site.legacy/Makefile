@@ -31,3 +31,6 @@ deploy:
 		-e host="$(DEPLOY_TARGET)" \
 		-e image_tag=$(IMAGE_TAG) \
 		playbook.yml
+
+deploy-prod:
+	DEPLOY_TARGET=prod make deploy

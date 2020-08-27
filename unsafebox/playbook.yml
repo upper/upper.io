@@ -45,3 +45,24 @@
       retries: 10
       delay: 5
       until: result.status == 200
+
+    - name: pull image
+      docker_image:
+        name: "xiam/go-playground:latest"
+        source: pull
+        force_source: yes
+        state: present
+
+    - name: run playground
+      docker_container:
+        image: "xiam/go-playground:latest"
+        name: upper-playground-webapp
+        restart_policy: always
+
+    - name: add to docker network
+      docker_network:
+        name: upper-network
+        state: present
+        appends: yes
+        connected:
+          - upper-playground-webapp

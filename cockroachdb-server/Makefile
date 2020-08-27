@@ -15,3 +15,6 @@ deploy:
 		-e host="$(DEPLOY_TARGET)" \
 		-i ../conf/ansible.hosts \
 		playbook.yml
+
+deploy-prod:
+	DEPLOY_TARGET=unsafebox $(MAKE) deploy
