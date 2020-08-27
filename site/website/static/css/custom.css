@@ -32,3 +32,9 @@
 .mainContainer a:hover, article a:hover {
   text-decoration: underline;
 }
+.CodeMirror {
+  height: 100%;
+}
+.toggleVisible {
+  margin-bottom: 48px;
+}
