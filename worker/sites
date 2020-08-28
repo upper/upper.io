@@ -116,7 +116,8 @@ server {
 server {
   server_name demo.upper.io demo.dev.upper.io;
 
-  set $demo http://upper-unsafebox:8080;
+  set $playground http://upper-playground-webapp:3000;
+  set $compiler   http://upper-unsafebox:8080;
 
   resolver 127.0.0.11 valid=5s;
 
@@ -124,8 +125,7 @@ server {
     return 302 https://tour.upper.io;
   }
 
-  location / {
-
+  location /compile {
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'POST, OPTIONS';
@@ -144,6 +144,14 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    proxy_pass $demo;
+    proxy_pass $compiler;
+  }
+
+  location / {
+    proxy_set_header X-Real-IP  $remote_addr;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    proxy_pass $playground;
   }
 }

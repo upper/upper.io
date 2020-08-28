@@ -58,6 +58,9 @@
         image: "xiam/go-playground:latest"
         name: upper-playground-webapp
         restart_policy: always
+        ports:
+          - 127.0.0.1:3000:3000
+        command: 'webapp -allow-share -c http://upper-unsafebox:8080/compile?output=json'
 
     - name: add to docker network
       docker_network:
