@@ -45,6 +45,8 @@ const siteConfig = {
   footerIcon: 'img/gopher.svg',
   favicon: 'img/gopher.svg',
 
+  gaTrackingId: 'UA-72848615-1',
+
   /* Colors for website */
   colors: {
     primaryColor: '#373d40',
