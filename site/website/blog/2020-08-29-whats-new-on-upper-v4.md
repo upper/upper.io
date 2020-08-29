@@ -103,6 +103,11 @@ this!
 * [GitHub issues](https://github.com/upper/db/issues)
 * [upper.io Slack](http://upper-io.slack.com/)
 
+## Tour
+
+You can get a tease of `upper/db` from your browser, see the
+[tour](https://tour.upper.io/welcome/01).
+
 ## Special thanks
 
 To [Peter Kieltyka](https://github.com/pkieltyka) Co-Founder of [Horizon
