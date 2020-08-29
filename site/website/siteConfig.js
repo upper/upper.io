@@ -33,7 +33,7 @@ const siteConfig = {
   headerLinks: [
     {doc: 'getting-started/index', label: 'Getting started'},
     {href: 'https://tour.upper.io', label: 'Tour'},
-    //{blog: true, label: 'Blog'},
+    {blog: true, label: 'Blog'},
     {href: 'https://github.com/upper/db', label: 'Github'},
   ],
 
