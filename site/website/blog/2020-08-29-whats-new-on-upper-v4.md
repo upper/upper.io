@@ -5,8 +5,8 @@ authorURL: https://github.com/xiam
 ---
 
 We're happy to announce the release of `upper/db` v4. This release is the
-culmination of several years of experience (and emotional breakdowns and
-breakthroughs) using Go, SQL databases and APIs of different kinds in
+culmination of several years of experience (and emotional breakdowns 😜 and
+breakthroughs 😎) using Go, SQL databases and APIs of different kinds in
 production. We hope you enjoy using `upper/db` as we also enjoy using it,
 developing it, and improving it over time.
 

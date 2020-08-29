@@ -20,6 +20,10 @@ server {
   location /img {
     proxy_pass $docs;
   }
+  
+  location /blog {
+    proxy_pass $docs;
+  }
 
   location = /v4 {
     return 302 /v4/;
