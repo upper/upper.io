@@ -120,6 +120,6 @@ To the [CockroachLabs](https://www.cockroachlabs.com/) team for their
 sponsorship and feedback on `upper/db`'s development around the CockroachDB
 adapter. We're going to have more news on this pretty soon, thank you!
 
-Software development requires love, time and effort, please consider sponsoring
-[xiam](https://github.com/sponsors/xiam), the current maintainer, for more
-`upper/db`-related work.
+Software development requires love, time and effort, if you'd like to help keep
+me more focused on developing software please consider sponsoring [me
+(xiam)](https://github.com/sponsors/xiam) on GitHub. Thank you!
