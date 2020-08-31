@@ -23,10 +23,10 @@ help](https://github.com/upper/upper.io)!
 Now that we have a [clear and widely accepted solution around versioning in
 Go](https://blog.golang.org/using-go-modules) we can leave the vanity import
 paths behind (e.g.: `upper.io/db.v3`). We moved to a a more familiar
-`github.com/upper/db/v4` path, by doing that we are removed the dependency we
+`github.com/upper/db/v4` path, by doing that we also removed the dependency we
 had on the `upper.io` domain.
 
-Besides changing the import path we also made a lot of backwards incompatible
+Besides changing the import path, we also made a lot of backwards incompatible
 changes to the API. Most of these changes were around `db.Session` (before
 `db.Database`). Most changes should be relatively easy to implement, if you're
 unsure about how to upgrade a particular method feel free to join our [slack
