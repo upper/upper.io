@@ -100,7 +100,7 @@ this!
 
 ## Support and community channels
 
-See our available [community channels](/v4/community)
+See our available [community channels](/v4/community/)
 
 ## Tour
 
