@@ -35,6 +35,7 @@ const siteConfig = {
     {href: 'https://tour.upper.io', label: 'Tour'},
     {blog: true, label: 'Blog'},
     {href: 'https://github.com/upper/db', label: 'Github'},
+    {href: '/v4/community/index', label: 'Community'}
   ],
 
   // If you have users set above, you add it here:

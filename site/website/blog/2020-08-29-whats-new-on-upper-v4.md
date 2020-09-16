@@ -98,10 +98,9 @@ this adapter is still in testing phase, we're still working the
 shipping a quality adapter with great documentation. We'll keep you posted on
 this!
 
-## Support channels
+## Support and community channels
 
-* [GitHub issues](https://github.com/upper/db/issues)
-* [upper.io Slack](http://upper-io.slack.com/)
+See our available [community channels](/v4/community)
 
 ## Tour
 
