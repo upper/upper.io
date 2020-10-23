@@ -9,7 +9,7 @@ Number-based pagination splits the results into a fixed number of pages:
 
 ```go
 // Create a result-set
-res = sess.Collection("posts")
+res = sess.Collection("posts").Find()
 
 // Set the amount of records by chunk
 p := res.Paginate(20)
@@ -35,6 +35,7 @@ where you want to begin and the results you want to fetch thereon:
 
 ```go
 res = sess.Collection("posts").
+  Find().
   Paginate(20).
   Cursor("id")
 
