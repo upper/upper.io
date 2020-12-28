@@ -58,10 +58,9 @@ res, err := q.Exec()
 ```
 
 Take a look at the
-[sqlbuilder.SQLBuilder](https://godoc.org/upper.io/db.v3/lib/sqlbuilder#SQLBuilder)
+[db.SQL](https://pkg.go.dev/github.com/upper/db/v4#SQL)
 interface to learn about all available methods for building and executing SQL
 statements.
-
 
 ## b) Raw SQL
 
@@ -76,8 +75,8 @@ res, err := sess.SQL().Exec(`INSERT INTO authors VALUES`)
 res, err := sess.SQL().Exec(`DELETE authors WHERE id = ?`, "Edgar Allan", eaPoe.ID)
 ```
 
-[1]: https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Selector
-[2]: https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Updater
-[3]: https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Inserter
-[4]: https://godoc.org/upper.io/db.v3/lib/sqlbuilder#Deleter
+[1]: https://pkg.go.dev/github.com/upper/db/v4#Selector
+[2]: https://pkg.go.dev/github.com/upper/db/v4#Updater
+[3]: https://pkg.go.dev/github.com/upper/db/v4#Inserter
+[4]: https://pkg.go.dev/github.com/upper/db/v4#Deleter
 

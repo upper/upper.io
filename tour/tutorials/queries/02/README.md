@@ -57,7 +57,7 @@ total, err := res.Count()
 
 There are many options for you to define queries depending on your database
 type. Take a look
-[here](https://upper.io/db.v3/getting-started#defining-a-result-set-with-code-find-code).
+[here](https://upper.io/v4/getting-started/agnostic-db-api/).
 
 ## Query builder and raw SQL
 
@@ -81,5 +81,5 @@ rows, err := sess.SQL().Query("SELECT * FROM books")
 Given that the example in this tour is based on a SQL database, we'll elaborate
 hereunder on the use of both a) the SQL builder and b) raw SQL.
 
-[1]: https://godoc.org/upper.io/db.v3#Collection
-[2]: https://godoc.org/upper.io/db.v3#Result
+[1]: https://pkg.go.dev/github.com/upper/db/v4#Collection
+[2]: https://pkg.go.dev/github.com/upper/db/v4#Result

@@ -17,4 +17,4 @@ Happy hacking!
 This is the end of the `upper/db` tutorial! if you have any more questions feel
 free to ask on the #upper-db channel at...
 
-[1]: https://upper.io/db.v3
+[1]: https://upper.io/v4

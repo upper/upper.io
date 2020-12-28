@@ -28,4 +28,4 @@ err := iter.All(&books)
 This iterator provides well-known `upper/db` methods like `One`, `All`, and
 `Next`.
 
-[1]: https://godoc.org/upper.io/db.v3/lib/sqlbuilder#SQLBuilder
+[1]: https://pkg.go.dev/github.com/upper/db/v4#SQL
