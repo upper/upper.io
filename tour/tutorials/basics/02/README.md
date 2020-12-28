@@ -18,4 +18,4 @@ referred to as 'collections' and no particular distinction is made between 'SQL
 tables' and 'NoSQL collections'.
 
 
-[2]: https://godoc.org/github.com/upper/db#Session
+[2]: https://pkg.go.dev/github.com/upper/db/v4#Session

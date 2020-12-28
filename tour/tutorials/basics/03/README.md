@@ -40,5 +40,5 @@ if errors.Is(err, db.ErrCollectionDoesNotExist) {
 }
 ```
 
-[1]: https://godoc.org/github.com/upper/db#Session
-[2]: https://godoc.org/github.com/upper/db#Collection
+[1]: https://pkg.go.dev/github.com/upper/db/v4#Session
+[2]: https://pkg.go.dev/github.com/upper/db/v4#Collection

@@ -15,7 +15,7 @@ Where `$ADAPTER` could be any of the following:
 * `mongo`: for [MongoDB](https://www.mongodb.com/)
 * `mysql`: for [MySQL](https://www.mysql.com/)
 * `postgresql`: for [PostgreSQL](https://www.postgresql.org/)
-* `ql`: for [QL](https://godoc.org/modernc.org/ql)
+* `ql`: for [QL](https://pkg.go.dev/modernc.org/ql)
 * `sqlite`: for [SQLite](https://www.sqlite.org/index.html)
 
 For instace, if you'd like to use the `cockroachdb` adapter you'd first run:
@@ -75,4 +75,4 @@ Use `Close` and `defer`:
 defer sess.Close()
 ```
 
-[1]: https://godoc.org/github.com/upper/db#ConnectionURL
+[1]: https://pkg.go.dev/github.com/upper/db/v4#ConnectionURL
