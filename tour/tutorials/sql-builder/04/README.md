@@ -19,7 +19,7 @@ Using raw SQL does not mean you'll have to map Go fields manually. You can use
 the `NewIterator` method to make mapping easier:
 
 ```go
-iter := sess.NewIterator(rows)
+iter := sess.SQL().NewIterator(rows)
 
 var books []Book
 err := iter.All(&books)
