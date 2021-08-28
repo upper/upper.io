@@ -57,7 +57,7 @@ or
 
 ```go
 var book Book
-err := q.All(&book)
+err := q.One(&book)
 ```
 
 The `Selector` interface also features a special `Iterator` method to create an
