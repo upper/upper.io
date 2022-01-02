@@ -48,14 +48,14 @@
 
     - name: pull image
       docker_image:
-        name: "xiam/go-playground:latest"
+        name: "xiam/go-playground:{{ playground_image_tag }}"
         source: pull
         force_source: yes
         state: present
 
     - name: run playground
       docker_container:
-        image: "xiam/go-playground:latest"
+        image: "xiam/go-playground:{{ playground_image_tag }}"
         name: upper-playground-webapp
         restart_policy: always
         ports:
