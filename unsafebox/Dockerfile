@@ -57,25 +57,25 @@ RUN git clone https://github.com/upper/db.git $SRC_DIR
 RUN cp -r $SRC_DIR $LEGACY_ROOT/db.v2 && \
   cd $LEGACY_ROOT/db.v2 && \
   git checkout $TAG_V2 && \
-  go get -v ./...
+  GO111MODULE=off go get -v ./...
 
 RUN cp -r $SRC_DIR $LEGACY_ROOT/db.v3 && \
   cd $LEGACY_ROOT/db.v3 && \
   git checkout $TAG_V3 && \
-  go get -v ./...
+  GO111MODULE=off go get -v ./...
 
 RUN cp -r $SRC_DIR $UPPER_ROOT/v4 && \
   cd $UPPER_ROOT/v4 && \
   git checkout $TAG_V4 && \
-  go get -v ./...
+  GO111MODULE=off go get -v ./...
 
 RUN cd ./_tests.no-modules/v2 && \
-  go build -v
+  GO111MODULE=off go build -v
 
 RUN cd ./_tests.no-modules/v3 && \
-  go build -v
+  GO111MODULE=off go build -v
 
 RUN cd ./_tests.no-modules/v4 && \
-  go build -v
+  GO111MODULE=off go build -v
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
