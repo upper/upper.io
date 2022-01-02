@@ -4,7 +4,7 @@ COCKROACHDB_DB       ?= booktown
 
 IMAGE_TAG            ?= v21.2.3
 
-DEPLOY_TARGET        ?= demo
+DEPLOY_TARGET        ?= staging
 
 deploy:
 	ansible-playbook \

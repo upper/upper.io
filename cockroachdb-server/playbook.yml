@@ -103,7 +103,7 @@
               "
 
     - name: load database dump
-      shell: "PGPASSWORD={{ cockroachdb_password }} psql -hcockroachdb.demo.upper.io -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
+      shell: "PGPASSWORD={{ cockroachdb_password }} psql -h127.0.0.1 -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
 
     - name: remove write privileges
       docker_container:
