@@ -5,4 +5,5 @@ push:
 
 deploy:
 	$(MAKE) -C postgresql-server deploy
+	$(MAKE) -C cockroachdb-server deploy
 	$(MAKE) -C upper-docs deploy
