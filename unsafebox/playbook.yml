@@ -9,15 +9,15 @@
         force_source: yes
         state: present
 
-    - name: run sandbox
+    - name: run unsafebox
       docker_container:
         image: "upper/unsafebox:{{ image_tag }}"
         name: upper-unsafebox
         restart_policy: always
         recreate: yes
         memory: 512m
-        memory_swap: 0
-        memory_swappiness: 0
+        memory_swap: "0"
+        memory_swappiness: "0"
         ulimits:
           - nofile:256:512
           - nproc:128

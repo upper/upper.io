@@ -29,4 +29,4 @@ chmod -R 755 $WORKDIR/c/usr/local/go
 
 mount -t tmpfs -o size=800m tmpfs $WORKDIR/c/tmp
 
-chroot --userspec sandbox:sandbox $WORKDIR/c /bin/playground
+chroot --userspec unsafebox:unsafebox $WORKDIR/c /bin/playground
