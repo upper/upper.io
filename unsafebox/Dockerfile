@@ -30,7 +30,7 @@ ENV UPPER_ROOT $GOPATH/src/github.com/upper/db
 
 RUN mkdir -p $LEGACY_ROOT $UPPER_ROOT
 
-ENV GO111MODULE=auto
+ENV GO111MODULE auto
 
 COPY _tests ./_tests.modules
 
