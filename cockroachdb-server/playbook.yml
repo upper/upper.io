@@ -59,7 +59,7 @@
         networks:
           - name: upper-network
         command:
-          "start --certs-dir=/etc/certs --store=node --http-addr=localhost:8080 --listen-addr=0.0.0.0:26257 --join=localhost:26257"
+          "start-single-node --certs-dir=/etc/certs --store=node --http-addr=localhost:8080 --listen-addr=0.0.0.0:26257"
         ports:
           - 127.0.0.1:26257:26257
 
