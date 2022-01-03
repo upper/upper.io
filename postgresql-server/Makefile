@@ -1,7 +1,7 @@
 POSTGRES_USER     ?= root
 POSTGRES_PASSWORD ?=
 
-DEPLOY_TARGET     ?= demo
+DEPLOY_TARGET     ?= staging
 
 deploy:
 	ansible-playbook \

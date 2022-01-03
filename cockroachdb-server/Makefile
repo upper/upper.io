@@ -2,9 +2,9 @@ COCKROACHDB_USER     ?= demouser
 COCKROACHDB_PASSWORD ?= demop4ss
 COCKROACHDB_DB       ?= booktown
 
-IMAGE_TAG            ?= v20.1.4
+IMAGE_TAG            ?= v21.2.3
 
-DEPLOY_TARGET        ?= demo
+DEPLOY_TARGET        ?= staging
 
 deploy:
 	ansible-playbook \

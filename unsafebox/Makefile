@@ -3,6 +3,8 @@ IMAGE_NAME        ?= upper/unsafebox
 GIT_SHORTHASH     ?= $(shell git rev-parse --short HEAD)
 IMAGE_TAG         ?= $(GIT_SHORTHASH)
 
+PLAYGROUND_IMAGE_TAG ?= v0.10.0-rc1
+
 CONTAINER_PORT    ?= 8080
 HOST_PORT         ?= 8080
 
@@ -26,7 +28,7 @@ docker-run: docker-build
 		--name $(CONTAINER_NAME) \
 		--ulimit nofile=256:512 \
 		--ulimit nproc=128 \
-		-t $(IMAGE_NAME):latest
+		-t $(IMAGE_NAME):$(IMAGE_TAG)
 
 docker-push: docker-build
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
@@ -36,6 +38,7 @@ deploy: docker-push
 		-i ../conf/ansible.hosts \
 		-e host="$(DEPLOY_TARGET)" \
 		-e image_tag=$(IMAGE_TAG) \
+		-e playground_image_tag=$(PLAYGROUND_IMAGE_TAG) \
 		playbook.yml
 
 deploy-prod:

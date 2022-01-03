@@ -4,7 +4,7 @@
 
     - name: run go-playground
       docker_container:
-        image: xiam/go-playground:{{ image_tag }}
+        image: xiam/go-playground:{{ playground_image_tag }}
         name: go-playground
         restart_policy: always
         recreate: yes

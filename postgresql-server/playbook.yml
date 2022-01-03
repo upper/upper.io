@@ -14,7 +14,7 @@
 
     - name: run postgresql
       docker_container:
-        image: postgres:11
+        image: postgres:13
         name: demo.upper.io
         restart_policy: always
         recreate: yes

@@ -4,12 +4,10 @@ WORKDIR /go/src/github.com/upper/tour
 
 COPY . .
 
-ENV GO111MODULE=on
-
 RUN cd cmd/tour \
   && go build -o /go/bin/tour .
 
-FROM debian:buster
+FROM debian:bullseye
 
 COPY --from=builder /go/src/github.com/upper/tour/tutorials /app/tutorials
 COPY --from=builder /go/src/github.com/upper/tour/static /app/static

@@ -59,7 +59,7 @@
         networks:
           - name: upper-network
         command:
-          "start --certs-dir=/etc/certs --store=node --http-addr=localhost:8080 --listen-addr=0.0.0.0:26257 --join=localhost:26257"
+          "start-single-node --certs-dir=/etc/certs --store=node --http-addr=localhost:8080 --listen-addr=0.0.0.0:26257"
         ports:
           - 127.0.0.1:26257:26257
 
@@ -103,7 +103,7 @@
               "
 
     - name: load database dump
-      shell: "PGPASSWORD={{ cockroachdb_password }} psql -hcockroachdb.demo.upper.io -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
+      shell: "PGPASSWORD={{ cockroachdb_password }} psql -h127.0.0.1 -p26257 -U{{ cockroachdb_user }} -d {{cockroachdb_db}} 'sslmode=require sslrootcert=/data/cockroachdb/certs/ca.crt' < /data/cockroachdb/booktown.sql"
 
     - name: remove write privileges
       docker_container:

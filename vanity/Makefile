@@ -1,5 +1,4 @@
 IMAGE_NAME          ?= upper/vanity
-IMAGE_TAG           ?= latest
 IMAGE_VERSION       ?=
 
 GIT_SHORTHASH       ?= $(shell git rev-parse --short HEAD)
