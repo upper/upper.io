@@ -97,6 +97,8 @@
           - --host=cockroachdb.demo.upper.io:26257
           - |
               -e "
+                DROP USER IF EXISTS {{ cockroachdb_user }};
+                DROP DATABASE IF EXISTS {{ cockroachdb_db }};
                 CREATE USER {{ cockroachdb_user }} WITH PASSWORD '{{ cockroachdb_password }}';
                 CREATE DATABASE {{ cockroachdb_db }};
                 GRANT ALL ON DATABASE {{ cockroachdb_db }} TO {{ cockroachdb_user }};

@@ -1,861 +1,1124 @@
 --
--- Selected TOC Entries:
---
---
--- TOC Entry ID 1 (OID 0)
---
--- Name: booktown Type: DATABASE Owner: postgres
+-- PostgreSQL database dump
 --
 
+-- Dumped from database version 13.5 (Debian 13.5-1.pgdg110+1)
+-- Dumped by pg_dump version 13.5 (Ubuntu 13.5-1.pgdg18.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+DROP DATABASE booktown;
 --
--- TOC Entry ID 2 (OID 2991542)
---
--- Name: DATABASE "booktown" Type: COMMENT Owner:
+-- Name: booktown; Type: DATABASE; Schema: -; Owner: demouser
 --
 
-COMMENT ON DATABASE "booktown" IS 'The Book Town Database.';
+ALTER DATABASE booktown OWNER TO demouser;
+
+\connect booktown
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
 
 --
--- TOC Entry ID 33 (OID 3629264)
---
--- Name: books Type: TABLE Owner: manager
+-- Name: DATABASE booktown; Type: COMMENT; Schema: -; Owner: demouser
 --
 
-CREATE TABLE "books" (
-	"id" integer NOT NULL,
-	"title" text NOT NULL,
-	"author_id" integer,
-	"subject_id" integer,
-	Constraint "books_id_pkey" Primary Key ("id")
+COMMENT ON DATABASE booktown IS 'The Book Town Database.';
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: alternate_stock; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.alternate_stock (
+    isbn text,
+    cost numeric(5,2),
+    retail numeric(5,2),
+    stock integer
 );
 
+
+ALTER TABLE public.alternate_stock OWNER TO demouser;
+
 --
--- TOC Entry ID 12 (OID 3117548)
---
--- Name: publishers Type: TABLE Owner: postgres
+-- Name: author_ids; Type: SEQUENCE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "publishers" (
-	"id" integer NOT NULL,
-	"name" text,
-	"address" text,
-	Constraint "publishers_pkey" Primary Key ("id")
+CREATE SEQUENCE public.author_ids
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 2147483647
+    CACHE 1;
+
+
+ALTER TABLE public.author_ids OWNER TO demouser;
+
+--
+-- Name: authors; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.authors (
+    id integer NOT NULL,
+    last_name text,
+    first_name text
 );
 
+
+ALTER TABLE public.authors OWNER TO demouser;
+
 --
--- TOC Entry ID 14 (OID 3389594)
---
--- Name: authors Type: TABLE Owner: manager
+-- Name: book_backup; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "authors" (
-	"id" integer NOT NULL,
-	"last_name" text,
-	"first_name" text,
-	Constraint "authors_pkey" Primary Key ("id")
+CREATE TABLE public.book_backup (
+    id integer,
+    title text,
+    author_id integer,
+    subject_id integer
 );
 
+
+ALTER TABLE public.book_backup OWNER TO demouser;
+
 --
--- TOC Entry ID 15 (OID 3389632)
---
--- Name: states Type: TABLE Owner: postgres
+-- Name: book_ids; Type: SEQUENCE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "states" (
-	"id" integer NOT NULL,
-	"name" text,
-	"abbreviation" character(2),
-	Constraint "state_pkey" Primary Key ("id")
+CREATE SEQUENCE public.book_ids
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 2147483647
+    CACHE 1;
+
+
+ALTER TABLE public.book_ids OWNER TO demouser;
+
+--
+-- Name: book_queue; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.book_queue (
+    title text NOT NULL,
+    author_id integer,
+    subject_id integer,
+    approved boolean
 );
 
+
+ALTER TABLE public.book_queue OWNER TO demouser;
+
 --
--- TOC Entry ID 16 (OID 3389702)
---
--- Name: my_list Type: TABLE Owner: postgres
+-- Name: books; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "my_list" (
-	"todos" text
+CREATE TABLE public.books (
+    id integer NOT NULL,
+    title text NOT NULL,
+    author_id integer,
+    subject_id integer
 );
 
+
+ALTER TABLE public.books OWNER TO demouser;
+
 --
--- TOC Entry ID 17 (OID 3390348)
---
--- Name: stock Type: TABLE Owner: postgres
+-- Name: customers; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "stock" (
-	"isbn" text NOT NULL,
-	"cost" numeric(5,2),
-	"retail" numeric(5,2),
-	"stock" integer,
-	Constraint "stock_pkey" Primary Key ("isbn")
+CREATE TABLE public.customers (
+    id integer NOT NULL,
+    last_name text,
+    first_name text
 );
 
---
--- TOC Entry ID 4 (OID 3390416)
---
--- Name: subject_ids Type: SEQUENCE Owner: postgres
---
 
-CREATE SEQUENCE "subject_ids" start 0 increment 1 maxvalue 2147483647 minvalue 0  cache 1 ;
+ALTER TABLE public.customers OWNER TO demouser;
 
 --
--- TOC Entry ID 19 (OID 3390653)
---
--- Name: numeric_values Type: TABLE Owner: postgres
+-- Name: daily_inventory; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "numeric_values" (
-	"num" numeric(30,6)
+CREATE TABLE public.daily_inventory (
+    isbn text,
+    is_stocked boolean
 );
 
+
+ALTER TABLE public.daily_inventory OWNER TO demouser;
+
+
 --
--- TOC Entry ID 20 (OID 3390866)
---
--- Name: daily_inventory Type: TABLE Owner: postgres
+-- Name: editions; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "daily_inventory" (
-	"isbn" text,
-	"is_stocked" boolean
+CREATE TABLE public.editions (
+    isbn text NOT NULL,
+    book_id integer,
+    edition integer,
+    publisher_id integer,
+    publication date,
+    type character(1),
+    CONSTRAINT integrity CHECK (((book_id IS NOT NULL) AND (edition IS NOT NULL)))
 );
 
+
+ALTER TABLE public.editions OWNER TO demouser;
+
 --
--- TOC Entry ID 22 (OID 3391184)
---
--- Name: shipments Type: TABLE Owner: postgres
+-- Name: employees; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "shipments" (
-	"id" integer DEFAULT nextval('"shipments_ship_id_seq"'::text) NOT NULL,
-	"customer_id" integer,
-	"isbn" text,
-	"ship_date" timestamp with time zone
+CREATE TABLE public.employees (
+    id integer NOT NULL,
+    last_name text NOT NULL,
+    first_name text,
+    CONSTRAINT employees_id CHECK ((id > 100))
 );
 
+
+ALTER TABLE public.employees OWNER TO demouser;
+
 --
--- TOC Entry ID 24 (OID 3391454)
---
--- Name: customers Type: TABLE Owner: manager
+-- Name: favorite_authors; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "customers" (
-	"id" integer NOT NULL,
-	"last_name" text,
-	"first_name" text,
-	Constraint "customers_pkey" Primary Key ("id")
+CREATE TABLE public.favorite_authors (
+    employee_id integer,
+    authors_and_titles text[]
 );
 
---
--- TOC Entry ID 6 (OID 3574018)
---
--- Name: book_ids Type: SEQUENCE Owner: postgres
---
 
-CREATE SEQUENCE "book_ids" start 0 increment 1 maxvalue 2147483647 minvalue 0  cache 1 ;
+ALTER TABLE public.favorite_authors OWNER TO demouser;
 
 --
--- TOC Entry ID 26 (OID 3574043)
---
--- Name: book_queue Type: TABLE Owner: postgres
+-- Name: favorite_books; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "book_queue" (
-	"title" text NOT NULL,
-	"author_id" integer,
-	"subject_id" integer,
-	"approved" boolean
+CREATE TABLE public.favorite_books (
+    employee_id integer,
+    books text[]
 );
 
+
+ALTER TABLE public.favorite_books OWNER TO demouser;
+
 --
--- TOC Entry ID 27 (OID 3574983)
---
--- Name: stock_backup Type: TABLE Owner: postgres
+-- Name: my_list; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "stock_backup" (
-	"isbn" text,
-	"cost" numeric(5,2),
-	"retail" numeric(5,2),
-	"stock" integer
+CREATE TABLE public.my_list (
+    todos text
 );
 
---
--- TOC Entry ID 28 (OID 3628246)
---
--- Name: stock_view Type: VIEW Owner: postgres
---
 
-CREATE VIEW "stock_view" as SELECT stock.isbn, stock.retail, stock.stock FROM stock;
+ALTER TABLE public.my_list OWNER TO demouser;
 
 --
--- TOC Entry ID 30 (OID 3628247)
---
--- Name: favorite_books Type: TABLE Owner: manager
+-- Name: numeric_values; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "favorite_books" (
-	"employee_id" integer,
-	"books" text[]
+CREATE TABLE public.numeric_values (
+    num numeric(30,6)
 );
 
---
--- TOC Entry ID 8 (OID 3628626)
---
--- Name: shipments_ship_id_seq Type: SEQUENCE Owner: manager
---
 
-CREATE SEQUENCE "shipments_ship_id_seq" start 0 increment 1 maxvalue 2147483647 minvalue 0  cache 1 ;
+ALTER TABLE public.numeric_values OWNER TO demouser;
 
 --
--- TOC Entry ID 31 (OID 3628899)
---
--- Name: employees Type: TABLE Owner: postgres
+-- Name: publishers; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "employees" (
-	"id" integer NOT NULL,
-	"last_name" text NOT NULL,
-	"first_name" text,
-	CONSTRAINT "employees_id" CHECK ((id > 100)),
-	Constraint "employees_pkey" Primary Key ("id")
+CREATE TABLE public.publishers (
+    id integer NOT NULL,
+    name text,
+    address text
 );
 
+
+ALTER TABLE public.publishers OWNER TO demouser;
+
 --
--- TOC Entry ID 32 (OID 3629174)
---
--- Name: editions Type: TABLE Owner: manager
+-- Name: shipments; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "editions" (
-	"isbn" text NOT NULL,
-	"book_id" integer,
-	"edition" integer,
-	"publisher_id" integer,
-	"publication" date,
-	"type" character(1),
-	CONSTRAINT "integrity" CHECK (((book_id NOTNULL) AND (edition NOTNULL))),
-	Constraint "pkey" Primary Key ("isbn")
+CREATE TABLE public.shipments (
+    id integer DEFAULT nextval(('"shipments_ship_id_seq"'::text)::regclass) NOT NULL,
+    customer_id integer,
+    isbn text,
+    ship_date timestamp with time zone
 );
 
---
--- TOC Entry ID 10 (OID 3629402)
---
--- Name: author_ids Type: SEQUENCE Owner: manager
---
 
-CREATE SEQUENCE "author_ids" start 0 increment 1 maxvalue 2147483647 minvalue 0  cache 1 ;
+ALTER TABLE public.shipments OWNER TO demouser;
 
 --
--- TOC Entry ID 36 (OID 3727889)
---
--- Name: favorite_authors Type: TABLE Owner: manager
+-- Name: recent_shipments; Type: VIEW; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "favorite_authors" (
-	"employee_id" integer,
-	"authors_and_titles" text[]
+CREATE VIEW public.recent_shipments AS
+ SELECT count(*) AS num_shipped,
+    max(shipments.ship_date) AS max,
+    b.title
+   FROM ((public.shipments
+     JOIN public.editions USING (isbn))
+     JOIN public.books b(book_id, title, author_id, subject_id) USING (book_id))
+  GROUP BY b.title
+  ORDER BY (count(*)) DESC;
+
+
+ALTER TABLE public.recent_shipments OWNER TO demouser;
+
+--
+-- Name: schedules; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.schedules (
+    employee_id integer NOT NULL,
+    schedule text
 );
 
+
+ALTER TABLE public.schedules OWNER TO demouser;
+
 --
--- TOC Entry ID 37 (OID 3751599)
---
--- Name: text_sorting Type: TABLE Owner: postgres
+-- Name: shipments_ship_id_seq; Type: SEQUENCE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "text_sorting" (
-	"letter" character(1)
+CREATE SEQUENCE public.shipments_ship_id_seq
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 2147483647
+    CACHE 1;
+
+
+ALTER TABLE public.shipments_ship_id_seq OWNER TO demouser;
+
+--
+-- Name: states; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.states (
+    id integer NOT NULL,
+    name text,
+    abbreviation character(2)
 );
 
+
+ALTER TABLE public.states OWNER TO demouser;
+
 --
--- TOC Entry ID 38 (OID 3751882)
---
--- Name: subjects Type: TABLE Owner: postgres
+-- Name: stock; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "subjects" (
-	"id" integer NOT NULL,
-	"subject" text,
-	"location" text,
-	Constraint "subjects_pkey" Primary Key ("id")
+CREATE TABLE public.stock (
+    isbn text NOT NULL,
+    cost numeric(5,2),
+    retail numeric(5,2),
+    stock integer
 );
 
+
+ALTER TABLE public.stock OWNER TO demouser;
+
 --
--- TOC Entry ID 39 (OID 3751975)
---
--- Name: alternate_stock Type: TABLE Owner: postgres
+-- Name: stock_backup; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "alternate_stock" (
-	"isbn" text,
-	"cost" numeric(5,2),
-	"retail" numeric(5,2),
-	"stock" integer
+CREATE TABLE public.stock_backup (
+    isbn text,
+    cost numeric(5,2),
+    retail numeric(5,2),
+    stock integer
 );
 
+
+ALTER TABLE public.stock_backup OWNER TO demouser;
+
 --
--- TOC Entry ID 40 (OID 3752020)
---
--- Name: book_backup Type: TABLE Owner: postgres
+-- Name: stock_view; Type: VIEW; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "book_backup" (
-	"id" integer,
-	"title" text,
-	"author_id" integer,
-	"subject_id" integer
+CREATE VIEW public.stock_view AS
+ SELECT stock.isbn,
+    stock.retail,
+    stock.stock
+   FROM public.stock;
+
+
+ALTER TABLE public.stock_view OWNER TO demouser;
+
+--
+-- Name: subject_ids; Type: SEQUENCE; Schema: public; Owner: demouser
+--
+
+CREATE SEQUENCE public.subject_ids
+    START WITH 0
+    INCREMENT BY 1
+    MINVALUE 0
+    MAXVALUE 2147483647
+    CACHE 1;
+
+
+ALTER TABLE public.subject_ids OWNER TO demouser;
+
+--
+-- Name: subjects; Type: TABLE; Schema: public; Owner: demouser
+--
+
+CREATE TABLE public.subjects (
+    id integer NOT NULL,
+    subject text,
+    location text
 );
 
+
+ALTER TABLE public.subjects OWNER TO demouser;
+
 --
--- TOC Entry ID 41 (OID 4063343)
---
--- Name: schedules Type: TABLE Owner: postgres
+-- Name: text_sorting; Type: TABLE; Schema: public; Owner: demouser
 --
 
-CREATE TABLE "schedules" (
-        "employee_id" integer NOT NULL,
-        "schedule" text,
-        Constraint "schedules_pkey" Primary Key ("employee_id")
+CREATE TABLE public.text_sorting (
+    letter character(1)
 );
 
---
--- TOC Entry ID 42 (OID 4063653)
---
--- Name: recent_shipments Type: VIEW Owner: postgres
---
 
-CREATE VIEW "recent_shipments" as SELECT count(*) AS num_shipped, max(shipments.ship_date) AS max, b.title FROM ((shipments JOIN editions USING (isbn)) NATURAL JOIN books b(book_id)) GROUP BY b.title ORDER BY count(*) DESC;
+ALTER TABLE public.text_sorting OWNER TO demouser;
 
 --
--- Data for TOC Entry ID 112 (OID 3117548)
---
--- Name: publishers Type: TABLE DATA Owner: postgres
+-- Data for Name: alternate_stock; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "publishers"  FROM stdin;
-150	Kids Can Press	Kids Can Press, 29 Birch Ave. Toronto,ON M4V 1E2
-91	Henry Holt & Company, Inc.	Henry Holt & Company, Inc. 115 West 18th Street New York, NY 10011
-113	O'Reilly & Associates	O'Reilly & Associates, Inc. 101 Morris St, Sebastopol, CA 95472
-62	Watson-Guptill Publications	1515 Boradway, New York, NY 10036
-105	Noonday Press	Farrar Straus & Giroux Inc, 19 Union Square W, New York, NY 10003
-99	Ace Books	The Berkley Publishing Group, Penguin Putnam Inc, 375 Hudson St, New York, NY 10014
-101	Roc	Penguin Putnam Inc, 375 Hudson St, New York, NY 10014
-163	Mojo Press	Mojo Press, PO Box 1215, Dripping Springs, TX 78720
-171	Books of Wonder	Books of Wonder, 16 W. 18th St. New York, NY, 10011
-102	Penguin	Penguin Putnam Inc, 375 Hudson St, New York, NY 10014
-75	Doubleday	Random House, Inc, 1540 Broadway, New York, NY 10036
-65	HarperCollins	HarperCollins Publishers, 10 E 53rd St, New York, NY 10022
-59	Random House	Random House, Inc, 1540 Broadway, New York, NY 10036
-\.
---
--- Data for TOC Entry ID 113 (OID 3389594)
---
--- Name: authors Type: TABLE DATA Owner: manager
---
+INSERT INTO public.alternate_stock VALUES ('0385121679', 29.00, 36.95, 65);
+INSERT INTO public.alternate_stock VALUES ('039480001X', 30.00, 32.95, 31);
+INSERT INTO public.alternate_stock VALUES ('0394900014', 23.00, 23.95, 0);
+INSERT INTO public.alternate_stock VALUES ('044100590X', 36.00, 45.95, 89);
+INSERT INTO public.alternate_stock VALUES ('0441172717', 17.00, 21.95, 77);
+INSERT INTO public.alternate_stock VALUES ('0451160916', 24.00, 28.95, 22);
+INSERT INTO public.alternate_stock VALUES ('0451198492', 36.00, 46.95, 0);
+INSERT INTO public.alternate_stock VALUES ('0451457994', 17.00, 22.95, 0);
+INSERT INTO public.alternate_stock VALUES ('0590445065', 23.00, 23.95, 10);
+INSERT INTO public.alternate_stock VALUES ('0679803335', 20.00, 24.95, 18);
+INSERT INTO public.alternate_stock VALUES ('0694003611', 25.00, 28.95, 50);
+INSERT INTO public.alternate_stock VALUES ('0760720002', 18.00, 23.95, 28);
+INSERT INTO public.alternate_stock VALUES ('0823015505', 26.00, 28.95, 16);
+INSERT INTO public.alternate_stock VALUES ('0929605942', 19.00, 21.95, 25);
+INSERT INTO public.alternate_stock VALUES ('1885418035', 23.00, 24.95, 77);
+INSERT INTO public.alternate_stock VALUES ('0394800753', 16.00, 16.95, 4);
 
 
-COPY "authors"  FROM stdin;
-1111	Denham	Ariel
-1212	Worsley	John
-15990	Bourgeois	Paulette
-25041	Bianco	Margery Williams
-16	Alcott	Louisa May
-4156	King	Stephen
-1866	Herbert	Frank
-1644	Hogarth	Burne
-2031	Brown	Margaret Wise
-115	Poe	Edgar Allen
-7805	Lutz	Mark
-7806	Christiansen	Tom
-1533	Brautigan	Richard
-1717	Brite	Poppy Z.
-2112	Gorey	Edward
-2001	Clarke	Arthur C.
-1213	Brookins	Andrew
-\.
 --
--- Data for TOC Entry ID 114 (OID 3389632)
---
--- Name: states Type: TABLE DATA Owner: postgres
+-- Data for Name: authors; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "states"  FROM stdin;
-42	Washington	WA
-51	Oregon	OR
-\.
---
--- Data for TOC Entry ID 115 (OID 3389702)
---
--- Name: my_list Type: TABLE DATA Owner: postgres
---
-
-
-COPY "my_list"  FROM stdin;
-Pick up laundry.
-Send out bills.
-Wrap up Grand Unifying Theory for publication.
-\.
---
--- Data for TOC Entry ID 116 (OID 3390348)
---
--- Name: stock Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.authors VALUES (1111, 'Denham', 'Ariel');
+INSERT INTO public.authors VALUES (1212, 'Worsley', 'John');
+INSERT INTO public.authors VALUES (15990, 'Bourgeois', 'Paulette');
+INSERT INTO public.authors VALUES (25041, 'Bianco', 'Margery Williams');
+INSERT INTO public.authors VALUES (16, 'Alcott', 'Louisa May');
+INSERT INTO public.authors VALUES (4156, 'King', 'Stephen');
+INSERT INTO public.authors VALUES (1866, 'Herbert', 'Frank');
+INSERT INTO public.authors VALUES (1644, 'Hogarth', 'Burne');
+INSERT INTO public.authors VALUES (2031, 'Brown', 'Margaret Wise');
+INSERT INTO public.authors VALUES (115, 'Poe', 'Edgar Allen');
+INSERT INTO public.authors VALUES (7805, 'Lutz', 'Mark');
+INSERT INTO public.authors VALUES (7806, 'Christiansen', 'Tom');
+INSERT INTO public.authors VALUES (1533, 'Brautigan', 'Richard');
+INSERT INTO public.authors VALUES (1717, 'Brite', 'Poppy Z.');
+INSERT INTO public.authors VALUES (2112, 'Gorey', 'Edward');
+INSERT INTO public.authors VALUES (2001, 'Clarke', 'Arthur C.');
+INSERT INTO public.authors VALUES (1213, 'Brookins', 'Andrew');
 
 
-COPY "stock"  FROM stdin;
-0385121679	29.00	36.95	65
-039480001X	30.00	32.95	31
-0394900014	23.00	23.95	0
-044100590X	36.00	45.95	89
-0441172717	17.00	21.95	77
-0451160916	24.00	28.95	22
-0451198492	36.00	46.95	0
-0451457994	17.00	22.95	0
-0590445065	23.00	23.95	10
-0679803335	20.00	24.95	18
-0694003611	25.00	28.95	50
-0760720002	18.00	23.95	28
-0823015505	26.00	28.95	16
-0929605942	19.00	21.95	25
-1885418035	23.00	24.95	77
-0394800753	16.00	16.95	4
-\.
 --
--- Data for TOC Entry ID 117 (OID 3390653)
---
--- Name: numeric_values Type: TABLE DATA Owner: postgres
+-- Data for Name: book_backup; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "numeric_values"  FROM stdin;
-68719476736.000000
-68719476737.000000
-6871947673778.000000
-999999999999999999999999.999900
-999999999999999999999999.999999
--999999999999999999999999.999999
--100000000000000000000000.999999
-1.999999
-2.000000
-2.000000
-999999999999999999999999.999999
-999999999999999999999999.000000
-\.
---
--- Data for TOC Entry ID 118 (OID 3390866)
---
--- Name: daily_inventory Type: TABLE DATA Owner: postgres
---
-
-
-COPY "daily_inventory"  FROM stdin;
-039480001X	t
-044100590X	t
-0451198492	f
-0394900014	f
-0441172717	t
-0451160916	f
-0385121679	\N
-\.
---
--- Data for TOC Entry ID 120 (OID 3391184)
---
--- Name: shipments Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.book_backup VALUES (7808, 'The Shining', 4156, 9);
+INSERT INTO public.book_backup VALUES (4513, 'Dune', 1866, 15);
+INSERT INTO public.book_backup VALUES (4267, '2001: A Space Odyssey', 2001, 15);
+INSERT INTO public.book_backup VALUES (1608, 'The Cat in the Hat', 1809, 2);
+INSERT INTO public.book_backup VALUES (1590, 'Bartholomew and the Oobleck', 1809, 2);
+INSERT INTO public.book_backup VALUES (25908, 'Franklin in the Dark', 15990, 2);
+INSERT INTO public.book_backup VALUES (1501, 'Goodnight Moon', 2031, 2);
+INSERT INTO public.book_backup VALUES (190, 'Little Women', 16, 6);
+INSERT INTO public.book_backup VALUES (1234, 'The Velveteen Rabbit', 25041, 3);
+INSERT INTO public.book_backup VALUES (2038, 'Dynamic Anatomy', 1644, 0);
+INSERT INTO public.book_backup VALUES (156, 'The Tell-Tale Heart', 115, 9);
+INSERT INTO public.book_backup VALUES (41472, 'Practical PostgreSQL', 1212, 4);
+INSERT INTO public.book_backup VALUES (41473, 'Programming Python', 7805, 4);
+INSERT INTO public.book_backup VALUES (41477, 'Learning Python', 7805, 4);
+INSERT INTO public.book_backup VALUES (41478, 'Perl Cookbook', 7806, 4);
+INSERT INTO public.book_backup VALUES (7808, 'The Shining', 4156, 9);
+INSERT INTO public.book_backup VALUES (4513, 'Dune', 1866, 15);
+INSERT INTO public.book_backup VALUES (4267, '2001: A Space Odyssey', 2001, 15);
+INSERT INTO public.book_backup VALUES (1608, 'The Cat in the Hat', 1809, 2);
+INSERT INTO public.book_backup VALUES (1590, 'Bartholomew and the Oobleck', 1809, 2);
+INSERT INTO public.book_backup VALUES (25908, 'Franklin in the Dark', 15990, 2);
+INSERT INTO public.book_backup VALUES (1501, 'Goodnight Moon', 2031, 2);
+INSERT INTO public.book_backup VALUES (190, 'Little Women', 16, 6);
+INSERT INTO public.book_backup VALUES (1234, 'The Velveteen Rabbit', 25041, 3);
+INSERT INTO public.book_backup VALUES (2038, 'Dynamic Anatomy', 1644, 0);
+INSERT INTO public.book_backup VALUES (156, 'The Tell-Tale Heart', 115, 9);
+INSERT INTO public.book_backup VALUES (41473, 'Programming Python', 7805, 4);
+INSERT INTO public.book_backup VALUES (41477, 'Learning Python', 7805, 4);
+INSERT INTO public.book_backup VALUES (41478, 'Perl Cookbook', 7806, 4);
+INSERT INTO public.book_backup VALUES (41472, 'Practical PostgreSQL', 1212, 4);
 
 
-COPY "shipments"  FROM stdin;
-375	142	039480001X	2001-08-06 09:29:21-07
-323	671	0451160916	2001-08-14 10:36:41-07
-998	1045	0590445065	2001-08-12 12:09:47-07
-749	172	0694003611	2001-08-11 10:52:34-07
-662	655	0679803335	2001-08-09 07:30:07-07
-806	1125	0760720002	2001-08-05 09:34:04-07
-102	146	0394900014	2001-08-11 13:34:08-07
-813	112	0385121679	2001-08-08 09:53:46-07
-652	724	1885418035	2001-08-14 13:41:39-07
-599	430	0929605942	2001-08-10 08:29:42-07
-969	488	0441172717	2001-08-14 08:42:58-07
-433	898	044100590X	2001-08-12 08:46:35-07
-660	409	0451457994	2001-08-07 11:56:42-07
-310	738	0451198492	2001-08-15 14:02:01-07
-510	860	0823015505	2001-08-14 07:33:47-07
-997	185	039480001X	2001-08-10 13:47:52-07
-999	221	0451160916	2001-08-14 13:45:51-07
-56	880	0590445065	2001-08-14 13:49:00-07
-72	574	0694003611	2001-08-06 07:49:44-07
-146	270	039480001X	2001-08-13 09:42:10-07
-981	652	0451160916	2001-08-08 08:36:44-07
-95	480	0590445065	2001-08-10 07:29:52-07
-593	476	0694003611	2001-08-15 11:57:40-07
-977	853	0679803335	2001-08-09 09:30:46-07
-117	185	0760720002	2001-08-07 13:00:48-07
-406	1123	0394900014	2001-08-13 09:47:04-07
-340	1149	0385121679	2001-08-12 13:39:22-07
-871	388	1885418035	2001-08-07 11:31:57-07
-1000	221	039480001X	2001-09-14 16:46:32-07
-1001	107	039480001X	2001-09-14 17:42:22-07
-754	107	0394800753	2001-08-11 09:55:05-07
-458	107	0394800753	2001-08-07 10:58:36-07
-189	107	0394800753	2001-08-06 11:46:36-07
-720	107	0394800753	2001-08-08 10:46:13-07
-1002	107	0394800753	2001-09-22 11:23:28-07
-2	107	0394800753	2001-09-22 20:58:56-07
-\.
 --
--- Data for TOC Entry ID 121 (OID 3391454)
---
--- Name: customers Type: TABLE DATA Owner: manager
+-- Data for Name: book_queue; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "customers"  FROM stdin;
-107	Jackson	Annie
-112	Gould	Ed
-142	Allen	Chad
-146	Williams	James
-172	Brown	Richard
-185	Morrill	Eric
-221	King	Jenny
-270	Bollman	Julie
-388	Morrill	Royce
-409	Holloway	Christine
-430	Black	Jean
-476	Clark	James
-480	Thomas	Rich
-488	Young	Trevor
-574	Bennett	Laura
-652	Anderson	Jonathan
-655	Olson	Dave
-671	Brown	Chuck
-723	Eisele	Don
-724	Holloway	Adam
-738	Gould	Shirley
-830	Robertson	Royce
-853	Black	Wendy
-860	Owens	Tim
-880	Robinson	Tammy
-898	Gerdes	Kate
-964	Gould	Ramon
-1045	Owens	Jean
-1125	Bollman	Owen
-1149	Becker	Owen
-1123	Corner	Kathy
-\.
---
--- Data for TOC Entry ID 122 (OID 3574043)
---
--- Name: book_queue Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.book_queue VALUES ('Learning Python', 7805, 4, true);
+INSERT INTO public.book_queue VALUES ('Perl Cookbook', 7806, 4, true);
 
 
-COPY "book_queue"  FROM stdin;
-Learning Python	7805	4	t
-Perl Cookbook	7806	4	t
-\.
 --
--- Data for TOC Entry ID 123 (OID 3574983)
---
--- Name: stock_backup Type: TABLE DATA Owner: postgres
+-- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "stock_backup"  FROM stdin;
-0385121679	29.00	36.95	65
-039480001X	30.00	32.95	31
-0394800753	16.00	16.95	0
-0394900014	23.00	23.95	0
-044100590X	36.00	45.95	89
-0441172717	17.00	21.95	77
-0451160916	24.00	28.95	22
-0451198492	36.00	46.95	0
-0451457994	17.00	22.95	0
-0590445065	23.00	23.95	10
-0679803335	20.00	24.95	18
-0694003611	25.00	28.95	50
-0760720002	18.00	23.95	28
-0823015505	26.00	28.95	16
-0929605942	19.00	21.95	25
-1885418035	23.00	24.95	77
-\.
---
--- Data for TOC Entry ID 124 (OID 3628247)
---
--- Name: favorite_books Type: TABLE DATA Owner: manager
---
+INSERT INTO public.books VALUES (7808, 'The Shining', 4156, 9);
+INSERT INTO public.books VALUES (4513, 'Dune', 1866, 15);
+INSERT INTO public.books VALUES (4267, '2001: A Space Odyssey', 2001, 15);
+INSERT INTO public.books VALUES (1608, 'The Cat in the Hat', 1809, 2);
+INSERT INTO public.books VALUES (1590, 'Bartholomew and the Oobleck', 1809, 2);
+INSERT INTO public.books VALUES (25908, 'Franklin in the Dark', 15990, 2);
+INSERT INTO public.books VALUES (1501, 'Goodnight Moon', 2031, 2);
+INSERT INTO public.books VALUES (190, 'Little Women', 16, 6);
+INSERT INTO public.books VALUES (1234, 'The Velveteen Rabbit', 25041, 3);
+INSERT INTO public.books VALUES (2038, 'Dynamic Anatomy', 1644, 0);
+INSERT INTO public.books VALUES (156, 'The Tell-Tale Heart', 115, 9);
+INSERT INTO public.books VALUES (41473, 'Programming Python', 7805, 4);
+INSERT INTO public.books VALUES (41477, 'Learning Python', 7805, 4);
+INSERT INTO public.books VALUES (41478, 'Perl Cookbook', 7806, 4);
+INSERT INTO public.books VALUES (41472, 'Practical PostgreSQL', 1212, 4);
 
 
-COPY "favorite_books"  FROM stdin;
-102	{"The Hitchhiker's Guide to the Galaxy","The Restauraunt at the End of the Universe"}
-103	{"There and Back Again: A Hobbit's Holiday","Kittens Squared"}
-\.
 --
--- Data for TOC Entry ID 125 (OID 3628899)
---
--- Name: employees Type: TABLE DATA Owner: postgres
+-- Data for Name: customers; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "employees"  FROM stdin;
-101	Appel	Vincent
-102	Holloway	Michael
-105	Connoly	Sarah
-104	Noble	Ben
-103	Joble	David
-106	Hall	Timothy
-1008	Williams	\N
-\.
---
--- Data for TOC Entry ID 126 (OID 3629174)
---
--- Name: editions Type: TABLE DATA Owner: manager
---
-
-
-COPY "editions"  FROM stdin;
-039480001X	1608	1	59	1957-03-01	h
-0451160916	7808	1	75	1981-08-01	p
-0394800753	1590	1	59	1949-03-01	p
-0590445065	25908	1	150	1987-03-01	p
-0694003611	1501	1	65	1947-03-04	p
-0679803335	1234	1	102	1922-01-01	p
-0760720002	190	1	91	1868-01-01	p
-0394900014	1608	1	59	1957-01-01	p
-0385121679	7808	2	75	1993-10-01	h
-1885418035	156	1	163	1995-03-28	p
-0929605942	156	2	171	1998-12-01	p
-0441172717	4513	2	99	1998-09-01	p
-044100590X	4513	3	99	1999-10-01	h
-0451457994	4267	3	101	2000-09-12	p
-0451198492	4267	3	101	1999-10-01	h
-0823015505	2038	1	62	1958-01-01	p
-0596000855	41473	2	113	2001-03-01	p
-\.
---
--- Data for TOC Entry ID 127 (OID 3629264)
---
--- Name: books Type: TABLE DATA Owner: manager
---
+INSERT INTO public.customers VALUES (107, 'Jackson', 'Annie');
+INSERT INTO public.customers VALUES (112, 'Gould', 'Ed');
+INSERT INTO public.customers VALUES (142, 'Allen', 'Chad');
+INSERT INTO public.customers VALUES (146, 'Williams', 'James');
+INSERT INTO public.customers VALUES (172, 'Brown', 'Richard');
+INSERT INTO public.customers VALUES (185, 'Morrill', 'Eric');
+INSERT INTO public.customers VALUES (221, 'King', 'Jenny');
+INSERT INTO public.customers VALUES (270, 'Bollman', 'Julie');
+INSERT INTO public.customers VALUES (388, 'Morrill', 'Royce');
+INSERT INTO public.customers VALUES (409, 'Holloway', 'Christine');
+INSERT INTO public.customers VALUES (430, 'Black', 'Jean');
+INSERT INTO public.customers VALUES (476, 'Clark', 'James');
+INSERT INTO public.customers VALUES (480, 'Thomas', 'Rich');
+INSERT INTO public.customers VALUES (488, 'Young', 'Trevor');
+INSERT INTO public.customers VALUES (574, 'Bennett', 'Laura');
+INSERT INTO public.customers VALUES (652, 'Anderson', 'Jonathan');
+INSERT INTO public.customers VALUES (655, 'Olson', 'Dave');
+INSERT INTO public.customers VALUES (671, 'Brown', 'Chuck');
+INSERT INTO public.customers VALUES (723, 'Eisele', 'Don');
+INSERT INTO public.customers VALUES (724, 'Holloway', 'Adam');
+INSERT INTO public.customers VALUES (738, 'Gould', 'Shirley');
+INSERT INTO public.customers VALUES (830, 'Robertson', 'Royce');
+INSERT INTO public.customers VALUES (853, 'Black', 'Wendy');
+INSERT INTO public.customers VALUES (860, 'Owens', 'Tim');
+INSERT INTO public.customers VALUES (880, 'Robinson', 'Tammy');
+INSERT INTO public.customers VALUES (898, 'Gerdes', 'Kate');
+INSERT INTO public.customers VALUES (964, 'Gould', 'Ramon');
+INSERT INTO public.customers VALUES (1045, 'Owens', 'Jean');
+INSERT INTO public.customers VALUES (1125, 'Bollman', 'Owen');
+INSERT INTO public.customers VALUES (1149, 'Becker', 'Owen');
+INSERT INTO public.customers VALUES (1123, 'Corner', 'Kathy');
 
 
-COPY "books"  FROM stdin;
-7808	The Shining	4156	9
-4513	Dune	1866	15
-4267	2001: A Space Odyssey	2001	15
-1608	The Cat in the Hat	1809	2
-1590	Bartholomew and the Oobleck	1809	2
-25908	Franklin in the Dark	15990	2
-1501	Goodnight Moon	2031	2
-190	Little Women	16	6
-1234	The Velveteen Rabbit	25041	3
-2038	Dynamic Anatomy	1644	0
-156	The Tell-Tale Heart	115	9
-41473	Programming Python	7805	4
-41477	Learning Python	7805	4
-41478	Perl Cookbook	7806	4
-41472	Practical PostgreSQL	1212	4
-\.
 --
--- Data for TOC Entry ID 129 (OID 3727889)
---
--- Name: favorite_authors Type: TABLE DATA Owner: manager
+-- Data for Name: daily_inventory; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "favorite_authors"  FROM stdin;
-102	{{"J.R.R. Tolkien","The Silmarillion"},{"Charles Dickens","Great Expectations"},{"Ariel Denham","Attic Lives"}}
-\.
---
--- Data for TOC Entry ID 130 (OID 3751599)
---
--- Name: text_sorting Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.daily_inventory VALUES ('039480001X', true);
+INSERT INTO public.daily_inventory VALUES ('044100590X', true);
+INSERT INTO public.daily_inventory VALUES ('0451198492', false);
+INSERT INTO public.daily_inventory VALUES ('0394900014', false);
+INSERT INTO public.daily_inventory VALUES ('0441172717', true);
+INSERT INTO public.daily_inventory VALUES ('0451160916', false);
+INSERT INTO public.daily_inventory VALUES ('0385121679', NULL);
 
 
-COPY "text_sorting"  FROM stdin;
-0
-1
-2
-3
-A
-B
-C
-D
-a
-b
-c
-d
-\.
 --
--- Data for TOC Entry ID 131 (OID 3751882)
---
--- Name: subjects Type: TABLE DATA Owner: postgres
+-- Data for Name: editions; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "subjects"  FROM stdin;
-0	Arts	Creativity St
-1	Business	Productivity Ave
-2	Children's Books	Kids Ct
-3	Classics	Academic Rd
-4	Computers	Productivity Ave
-5	Cooking	Creativity St
-6	Drama	Main St
-7	Entertainment	Main St
-8	History	Academic Rd
-9	Horror	Black Raven Dr
-10	Mystery	Black Raven Dr
-11	Poetry	Sunset Dr
-12	Religion	\N
-13	Romance	Main St
-14	Science	Productivity Ave
-15	Science Fiction	Main St
-\.
---
--- Data for TOC Entry ID 132 (OID 3751975)
---
--- Name: alternate_stock Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.editions VALUES ('039480001X', 1608, 1, 59, '1957-03-01', 'h');
+INSERT INTO public.editions VALUES ('0451160916', 7808, 1, 75, '1981-08-01', 'p');
+INSERT INTO public.editions VALUES ('0394800753', 1590, 1, 59, '1949-03-01', 'p');
+INSERT INTO public.editions VALUES ('0590445065', 25908, 1, 150, '1987-03-01', 'p');
+INSERT INTO public.editions VALUES ('0694003611', 1501, 1, 65, '1947-03-04', 'p');
+INSERT INTO public.editions VALUES ('0679803335', 1234, 1, 102, '1922-01-01', 'p');
+INSERT INTO public.editions VALUES ('0760720002', 190, 1, 91, '1868-01-01', 'p');
+INSERT INTO public.editions VALUES ('0394900014', 1608, 1, 59, '1957-01-01', 'p');
+INSERT INTO public.editions VALUES ('0385121679', 7808, 2, 75, '1993-10-01', 'h');
+INSERT INTO public.editions VALUES ('1885418035', 156, 1, 163, '1995-03-28', 'p');
+INSERT INTO public.editions VALUES ('0929605942', 156, 2, 171, '1998-12-01', 'p');
+INSERT INTO public.editions VALUES ('0441172717', 4513, 2, 99, '1998-09-01', 'p');
+INSERT INTO public.editions VALUES ('044100590X', 4513, 3, 99, '1999-10-01', 'h');
+INSERT INTO public.editions VALUES ('0451457994', 4267, 3, 101, '2000-09-12', 'p');
+INSERT INTO public.editions VALUES ('0451198492', 4267, 3, 101, '1999-10-01', 'h');
+INSERT INTO public.editions VALUES ('0823015505', 2038, 1, 62, '1958-01-01', 'p');
+INSERT INTO public.editions VALUES ('0596000855', 41473, 2, 113, '2001-03-01', 'p');
 
 
-COPY "alternate_stock"  FROM stdin;
-0385121679	29.00	36.95	65
-039480001X	30.00	32.95	31
-0394900014	23.00	23.95	0
-044100590X	36.00	45.95	89
-0441172717	17.00	21.95	77
-0451160916	24.00	28.95	22
-0451198492	36.00	46.95	0
-0451457994	17.00	22.95	0
-0590445065	23.00	23.95	10
-0679803335	20.00	24.95	18
-0694003611	25.00	28.95	50
-0760720002	18.00	23.95	28
-0823015505	26.00	28.95	16
-0929605942	19.00	21.95	25
-1885418035	23.00	24.95	77
-0394800753	16.00	16.95	4
-\.
 --
--- Data for TOC Entry ID 133 (OID 3752020)
---
--- Name: book_backup Type: TABLE DATA Owner: postgres
+-- Data for Name: employees; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-
-COPY "book_backup"  FROM stdin;
-7808	The Shining	4156	9
-4513	Dune	1866	15
-4267	2001: A Space Odyssey	2001	15
-1608	The Cat in the Hat	1809	2
-1590	Bartholomew and the Oobleck	1809	2
-25908	Franklin in the Dark	15990	2
-1501	Goodnight Moon	2031	2
-190	Little Women	16	6
-1234	The Velveteen Rabbit	25041	3
-2038	Dynamic Anatomy	1644	0
-156	The Tell-Tale Heart	115	9
-41472	Practical PostgreSQL	1212	4
-41473	Programming Python	7805	4
-41477	Learning Python	7805	4
-41478	Perl Cookbook	7806	4
-7808	The Shining	4156	9
-4513	Dune	1866	15
-4267	2001: A Space Odyssey	2001	15
-1608	The Cat in the Hat	1809	2
-1590	Bartholomew and the Oobleck	1809	2
-25908	Franklin in the Dark	15990	2
-1501	Goodnight Moon	2031	2
-190	Little Women	16	6
-1234	The Velveteen Rabbit	25041	3
-2038	Dynamic Anatomy	1644	0
-156	The Tell-Tale Heart	115	9
-41473	Programming Python	7805	4
-41477	Learning Python	7805	4
-41478	Perl Cookbook	7806	4
-41472	Practical PostgreSQL	1212	4
-\.
---
--- Data for TOC Entry ID 134 (OID 4063343)
---
--- Name: schedules Type: TABLE DATA Owner: postgres
---
+INSERT INTO public.employees VALUES (101, 'Appel', 'Vincent');
+INSERT INTO public.employees VALUES (102, 'Holloway', 'Michael');
+INSERT INTO public.employees VALUES (105, 'Connoly', 'Sarah');
+INSERT INTO public.employees VALUES (104, 'Noble', 'Ben');
+INSERT INTO public.employees VALUES (103, 'Joble', 'David');
+INSERT INTO public.employees VALUES (106, 'Hall', 'Timothy');
+INSERT INTO public.employees VALUES (1008, 'Williams', NULL);
 
 
-COPY "schedules"  FROM stdin;
-102	Mon - Fri, 9am - 5pm
-\.
 --
--- TOC Entry ID 45 (OID 3117548)
---
--- Name: "unique_publisher_idx" Type: INDEX Owner: postgres
+-- Data for Name: favorite_books; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-CREATE UNIQUE INDEX "unique_publisher_idx" on "publishers" using btree ( "name" "text_ops" );
+INSERT INTO public.favorite_books VALUES (102, '{"The Hitchhiker''s Guide to the Galaxy","The Restauraunt at the End of the Universe"}');
+INSERT INTO public.favorite_books VALUES (103, '{"There and Back Again: A Hobbit''s Holiday","Kittens Squared"}');
+
 
 --
--- TOC Entry ID 43 (OID 3391184)
---
--- Name: "shipments_ship_id_key" Type: INDEX Owner: postgres
+-- Data for Name: my_list; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-CREATE UNIQUE INDEX "shipments_ship_id_key" on "shipments" using btree ( "id" "int4_ops" );
+INSERT INTO public.my_list VALUES ('Pick up laundry.');
+INSERT INTO public.my_list VALUES ('Send out bills.');
+INSERT INTO public.my_list VALUES ('Wrap up Grand Unifying Theory for publication.');
+
 
 --
--- TOC Entry ID 44 (OID 3629264)
---
--- Name: "books_title_idx" Type: INDEX Owner: manager
+-- Data for Name: numeric_values; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-CREATE  INDEX "books_title_idx" on "books" using btree ( "title" "text_ops" );
+INSERT INTO public.numeric_values VALUES (68719476736.000000);
+INSERT INTO public.numeric_values VALUES (68719476737.000000);
+INSERT INTO public.numeric_values VALUES (6871947673778.000000);
+INSERT INTO public.numeric_values VALUES (999999999999999999999999.999900);
+INSERT INTO public.numeric_values VALUES (999999999999999999999999.999999);
+INSERT INTO public.numeric_values VALUES (-999999999999999999999999.999999);
+INSERT INTO public.numeric_values VALUES (-100000000000000000000000.999999);
+INSERT INTO public.numeric_values VALUES (1.999999);
+INSERT INTO public.numeric_values VALUES (2.000000);
+INSERT INTO public.numeric_values VALUES (2.000000);
+INSERT INTO public.numeric_values VALUES (999999999999999999999999.999999);
+INSERT INTO public.numeric_values VALUES (999999999999999999999999.000000);
+
 
 --
--- TOC Entry ID 46 (OID 3751599)
---
--- Name: "text_idx" Type: INDEX Owner: postgres
+-- Data for Name: publishers; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-CREATE  INDEX "text_idx" on "text_sorting" using btree ( "letter" "bpchar_ops" );
+INSERT INTO public.publishers VALUES (150, 'Kids Can Press', 'Kids Can Press, 29 Birch Ave. Toronto,ON M4V 1E2');
+INSERT INTO public.publishers VALUES (91, 'Henry Holt & Company, Inc.', 'Henry Holt & Company, Inc. 115 West 18th Street New York, NY 10011');
+INSERT INTO public.publishers VALUES (113, 'O''Reilly & Associates', 'O''Reilly & Associates, Inc. 101 Morris St, Sebastopol, CA 95472');
+INSERT INTO public.publishers VALUES (62, 'Watson-Guptill Publications', '1515 Boradway, New York, NY 10036');
+INSERT INTO public.publishers VALUES (105, 'Noonday Press', 'Farrar Straus & Giroux Inc, 19 Union Square W, New York, NY 10003');
+INSERT INTO public.publishers VALUES (99, 'Ace Books', 'The Berkley Publishing Group, Penguin Putnam Inc, 375 Hudson St, New York, NY 10014');
+INSERT INTO public.publishers VALUES (101, 'Roc', 'Penguin Putnam Inc, 375 Hudson St, New York, NY 10014');
+INSERT INTO public.publishers VALUES (163, 'Mojo Press', 'Mojo Press, PO Box 1215, Dripping Springs, TX 78720');
+INSERT INTO public.publishers VALUES (171, 'Books of Wonder', 'Books of Wonder, 16 W. 18th St. New York, NY, 10011');
+INSERT INTO public.publishers VALUES (102, 'Penguin', 'Penguin Putnam Inc, 375 Hudson St, New York, NY 10014');
+INSERT INTO public.publishers VALUES (75, 'Doubleday', 'Random House, Inc, 1540 Broadway, New York, NY 10036');
+INSERT INTO public.publishers VALUES (65, 'HarperCollins', 'HarperCollins Publishers, 10 E 53rd St, New York, NY 10022');
+INSERT INTO public.publishers VALUES (59, 'Random House', 'Random House, Inc, 1540 Broadway, New York, NY 10036');
+
 
 --
--- TOC Entry ID 140 (OID 3752079)
---
--- Name: sync_stock_with_editions Type: RULE Owner: manager
+-- Data for Name: schedules; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-CREATE RULE sync_stock_with_editions AS ON UPDATE TO editions DO UPDATE stock SET isbn = new.isbn WHERE (stock.isbn = old.isbn);
---
--- TOC Entry ID 5 (OID 3390416)
---
--- Name: subject_ids Type: SEQUENCE SET Owner:
---
+INSERT INTO public.schedules VALUES (102, 'Mon - Fri, 9am - 5pm');
 
-SELECT setval ('"subject_ids"', 15, 't');
 
 --
--- TOC Entry ID 7 (OID 3574018)
---
--- Name: book_ids Type: SEQUENCE SET Owner:
+-- Data for Name: shipments; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-SELECT setval ('"book_ids"', 41478, 't');
+INSERT INTO public.shipments VALUES (375, 142, '039480001X', '2001-08-06 16:29:21+00');
+INSERT INTO public.shipments VALUES (323, 671, '0451160916', '2001-08-14 17:36:41+00');
+INSERT INTO public.shipments VALUES (998, 1045, '0590445065', '2001-08-12 19:09:47+00');
+INSERT INTO public.shipments VALUES (749, 172, '0694003611', '2001-08-11 17:52:34+00');
+INSERT INTO public.shipments VALUES (662, 655, '0679803335', '2001-08-09 14:30:07+00');
+INSERT INTO public.shipments VALUES (806, 1125, '0760720002', '2001-08-05 16:34:04+00');
+INSERT INTO public.shipments VALUES (102, 146, '0394900014', '2001-08-11 20:34:08+00');
+INSERT INTO public.shipments VALUES (813, 112, '0385121679', '2001-08-08 16:53:46+00');
+INSERT INTO public.shipments VALUES (652, 724, '1885418035', '2001-08-14 20:41:39+00');
+INSERT INTO public.shipments VALUES (599, 430, '0929605942', '2001-08-10 15:29:42+00');
+INSERT INTO public.shipments VALUES (969, 488, '0441172717', '2001-08-14 15:42:58+00');
+INSERT INTO public.shipments VALUES (433, 898, '044100590X', '2001-08-12 15:46:35+00');
+INSERT INTO public.shipments VALUES (660, 409, '0451457994', '2001-08-07 18:56:42+00');
+INSERT INTO public.shipments VALUES (310, 738, '0451198492', '2001-08-15 21:02:01+00');
+INSERT INTO public.shipments VALUES (510, 860, '0823015505', '2001-08-14 14:33:47+00');
+INSERT INTO public.shipments VALUES (997, 185, '039480001X', '2001-08-10 20:47:52+00');
+INSERT INTO public.shipments VALUES (999, 221, '0451160916', '2001-08-14 20:45:51+00');
+INSERT INTO public.shipments VALUES (56, 880, '0590445065', '2001-08-14 20:49:00+00');
+INSERT INTO public.shipments VALUES (72, 574, '0694003611', '2001-08-06 14:49:44+00');
+INSERT INTO public.shipments VALUES (146, 270, '039480001X', '2001-08-13 16:42:10+00');
+INSERT INTO public.shipments VALUES (981, 652, '0451160916', '2001-08-08 15:36:44+00');
+INSERT INTO public.shipments VALUES (95, 480, '0590445065', '2001-08-10 14:29:52+00');
+INSERT INTO public.shipments VALUES (593, 476, '0694003611', '2001-08-15 18:57:40+00');
+INSERT INTO public.shipments VALUES (977, 853, '0679803335', '2001-08-09 16:30:46+00');
+INSERT INTO public.shipments VALUES (117, 185, '0760720002', '2001-08-07 20:00:48+00');
+INSERT INTO public.shipments VALUES (406, 1123, '0394900014', '2001-08-13 16:47:04+00');
+INSERT INTO public.shipments VALUES (340, 1149, '0385121679', '2001-08-12 20:39:22+00');
+INSERT INTO public.shipments VALUES (871, 388, '1885418035', '2001-08-07 18:31:57+00');
+INSERT INTO public.shipments VALUES (1000, 221, '039480001X', '2001-09-14 23:46:32+00');
+INSERT INTO public.shipments VALUES (1001, 107, '039480001X', '2001-09-15 00:42:22+00');
+INSERT INTO public.shipments VALUES (754, 107, '0394800753', '2001-08-11 16:55:05+00');
+INSERT INTO public.shipments VALUES (458, 107, '0394800753', '2001-08-07 17:58:36+00');
+INSERT INTO public.shipments VALUES (189, 107, '0394800753', '2001-08-06 18:46:36+00');
+INSERT INTO public.shipments VALUES (720, 107, '0394800753', '2001-08-08 17:46:13+00');
+INSERT INTO public.shipments VALUES (1002, 107, '0394800753', '2001-09-22 18:23:28+00');
+INSERT INTO public.shipments VALUES (2, 107, '0394800753', '2001-09-23 03:58:56+00');
+
 
 --
--- TOC Entry ID 9 (OID 3628626)
---
--- Name: shipments_ship_id_seq Type: SEQUENCE SET Owner:
+-- Data for Name: states; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-SELECT setval ('"shipments_ship_id_seq"', 1011, 't');
+INSERT INTO public.states VALUES (42, 'Washington', 'WA');
+INSERT INTO public.states VALUES (51, 'Oregon', 'OR');
+
 
 --
--- TOC Entry ID 11 (OID 3629402)
---
--- Name: author_ids Type: SEQUENCE SET Owner:
+-- Data for Name: stock; Type: TABLE DATA; Schema: public; Owner: demouser
 --
 
-SELECT setval ('"author_ids"', 25044, 't');
+INSERT INTO public.stock VALUES ('0385121679', 29.00, 36.95, 65);
+INSERT INTO public.stock VALUES ('039480001X', 30.00, 32.95, 31);
+INSERT INTO public.stock VALUES ('0394900014', 23.00, 23.95, 0);
+INSERT INTO public.stock VALUES ('044100590X', 36.00, 45.95, 89);
+INSERT INTO public.stock VALUES ('0441172717', 17.00, 21.95, 77);
+INSERT INTO public.stock VALUES ('0451160916', 24.00, 28.95, 22);
+INSERT INTO public.stock VALUES ('0451198492', 36.00, 46.95, 0);
+INSERT INTO public.stock VALUES ('0451457994', 17.00, 22.95, 0);
+INSERT INTO public.stock VALUES ('0590445065', 23.00, 23.95, 10);
+INSERT INTO public.stock VALUES ('0679803335', 20.00, 24.95, 18);
+INSERT INTO public.stock VALUES ('0694003611', 25.00, 28.95, 50);
+INSERT INTO public.stock VALUES ('0760720002', 18.00, 23.95, 28);
+INSERT INTO public.stock VALUES ('0823015505', 26.00, 28.95, 16);
+INSERT INTO public.stock VALUES ('0929605942', 19.00, 21.95, 25);
+INSERT INTO public.stock VALUES ('1885418035', 23.00, 24.95, 77);
+INSERT INTO public.stock VALUES ('0394800753', 16.00, 16.95, 4);
+
+
+--
+-- Data for Name: stock_backup; Type: TABLE DATA; Schema: public; Owner: demouser
+--
+
+INSERT INTO public.stock_backup VALUES ('0385121679', 29.00, 36.95, 65);
+INSERT INTO public.stock_backup VALUES ('039480001X', 30.00, 32.95, 31);
+INSERT INTO public.stock_backup VALUES ('0394800753', 16.00, 16.95, 0);
+INSERT INTO public.stock_backup VALUES ('0394900014', 23.00, 23.95, 0);
+INSERT INTO public.stock_backup VALUES ('044100590X', 36.00, 45.95, 89);
+INSERT INTO public.stock_backup VALUES ('0441172717', 17.00, 21.95, 77);
+INSERT INTO public.stock_backup VALUES ('0451160916', 24.00, 28.95, 22);
+INSERT INTO public.stock_backup VALUES ('0451198492', 36.00, 46.95, 0);
+INSERT INTO public.stock_backup VALUES ('0451457994', 17.00, 22.95, 0);
+INSERT INTO public.stock_backup VALUES ('0590445065', 23.00, 23.95, 10);
+INSERT INTO public.stock_backup VALUES ('0679803335', 20.00, 24.95, 18);
+INSERT INTO public.stock_backup VALUES ('0694003611', 25.00, 28.95, 50);
+INSERT INTO public.stock_backup VALUES ('0760720002', 18.00, 23.95, 28);
+INSERT INTO public.stock_backup VALUES ('0823015505', 26.00, 28.95, 16);
+INSERT INTO public.stock_backup VALUES ('0929605942', 19.00, 21.95, 25);
+INSERT INTO public.stock_backup VALUES ('1885418035', 23.00, 24.95, 77);
+
+
+--
+-- Data for Name: subjects; Type: TABLE DATA; Schema: public; Owner: demouser
+--
+
+INSERT INTO public.subjects VALUES (0, 'Arts', 'Creativity St');
+INSERT INTO public.subjects VALUES (1, 'Business', 'Productivity Ave');
+INSERT INTO public.subjects VALUES (2, 'Children''s Books', 'Kids Ct');
+INSERT INTO public.subjects VALUES (3, 'Classics', 'Academic Rd');
+INSERT INTO public.subjects VALUES (4, 'Computers', 'Productivity Ave');
+INSERT INTO public.subjects VALUES (5, 'Cooking', 'Creativity St');
+INSERT INTO public.subjects VALUES (6, 'Drama', 'Main St');
+INSERT INTO public.subjects VALUES (7, 'Entertainment', 'Main St');
+INSERT INTO public.subjects VALUES (8, 'History', 'Academic Rd');
+INSERT INTO public.subjects VALUES (9, 'Horror', 'Black Raven Dr');
+INSERT INTO public.subjects VALUES (10, 'Mystery', 'Black Raven Dr');
+INSERT INTO public.subjects VALUES (11, 'Poetry', 'Sunset Dr');
+INSERT INTO public.subjects VALUES (12, 'Religion', NULL);
+INSERT INTO public.subjects VALUES (13, 'Romance', 'Main St');
+INSERT INTO public.subjects VALUES (14, 'Science', 'Productivity Ave');
+INSERT INTO public.subjects VALUES (15, 'Science Fiction', 'Main St');
+
+
+--
+-- Data for Name: text_sorting; Type: TABLE DATA; Schema: public; Owner: demouser
+--
+
+INSERT INTO public.text_sorting VALUES ('0');
+INSERT INTO public.text_sorting VALUES ('1');
+INSERT INTO public.text_sorting VALUES ('2');
+INSERT INTO public.text_sorting VALUES ('3');
+INSERT INTO public.text_sorting VALUES ('A');
+INSERT INTO public.text_sorting VALUES ('B');
+INSERT INTO public.text_sorting VALUES ('C');
+INSERT INTO public.text_sorting VALUES ('D');
+INSERT INTO public.text_sorting VALUES ('a');
+INSERT INTO public.text_sorting VALUES ('b');
+INSERT INTO public.text_sorting VALUES ('c');
+INSERT INTO public.text_sorting VALUES ('d');
+
+
+--
+-- Name: author_ids; Type: SEQUENCE SET; Schema: public; Owner: demouser
+--
+
+SELECT pg_catalog.setval('public.author_ids', 25044, true);
+
+
+--
+-- Name: book_ids; Type: SEQUENCE SET; Schema: public; Owner: demouser
+--
+
+SELECT pg_catalog.setval('public.book_ids', 41478, true);
+
+
+--
+-- Name: shipments_ship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: demouser
+--
+
+SELECT pg_catalog.setval('public.shipments_ship_id_seq', 1011, true);
+
+
+--
+-- Name: subject_ids; Type: SEQUENCE SET; Schema: public; Owner: demouser
+--
+
+SELECT pg_catalog.setval('public.subject_ids', 15, true);
+
+
+--
+-- Name: authors authors_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.authors
+    ADD CONSTRAINT authors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: books books_id_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.books
+    ADD CONSTRAINT books_id_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: customers customers_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.customers
+    ADD CONSTRAINT customers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: employees employees_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.employees
+    ADD CONSTRAINT employees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: editions pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.editions
+    ADD CONSTRAINT pkey PRIMARY KEY (isbn);
+
+
+--
+-- Name: publishers publishers_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.publishers
+    ADD CONSTRAINT publishers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schedules schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.schedules
+    ADD CONSTRAINT schedules_pkey PRIMARY KEY (employee_id);
+
+
+--
+-- Name: states state_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.states
+    ADD CONSTRAINT state_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stock stock_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.stock
+    ADD CONSTRAINT stock_pkey PRIMARY KEY (isbn);
+
+
+--
+-- Name: subjects subjects_pkey; Type: CONSTRAINT; Schema: public; Owner: demouser
+--
+
+ALTER TABLE ONLY public.subjects
+    ADD CONSTRAINT subjects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: books_title_idx; Type: INDEX; Schema: public; Owner: demouser
+--
+
+CREATE INDEX books_title_idx ON public.books USING btree (title);
+
+
+--
+-- Name: shipments_ship_id_key; Type: INDEX; Schema: public; Owner: demouser
+--
+
+CREATE UNIQUE INDEX shipments_ship_id_key ON public.shipments USING btree (id);
+
+
+--
+-- Name: text_idx; Type: INDEX; Schema: public; Owner: demouser
+--
+
+CREATE INDEX text_idx ON public.text_sorting USING btree (letter);
+
+
+--
+-- Name: unique_publisher_idx; Type: INDEX; Schema: public; Owner: demouser
+--
+
+CREATE UNIQUE INDEX unique_publisher_idx ON public.publishers USING btree (name);
+
+
+--
+-- Name: TABLE alternate_stock; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.alternate_stock FROM demouser;
+GRANT SELECT ON TABLE public.alternate_stock TO demouser;
+
+
+--
+-- Name: TABLE authors; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.authors FROM demouser;
+GRANT SELECT ON TABLE public.authors TO demouser;
+
+
+--
+-- Name: TABLE book_backup; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.book_backup FROM demouser;
+GRANT SELECT ON TABLE public.book_backup TO demouser;
+
+
+--
+-- Name: TABLE book_queue; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.book_queue FROM demouser;
+GRANT SELECT ON TABLE public.book_queue TO demouser;
+
+
+--
+-- Name: TABLE books; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.books FROM demouser;
+GRANT SELECT ON TABLE public.books TO demouser;
+
+
+--
+-- Name: TABLE customers; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.customers FROM demouser;
+GRANT SELECT ON TABLE public.customers TO demouser;
+
+
+--
+-- Name: TABLE daily_inventory; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.daily_inventory FROM demouser;
+GRANT SELECT ON TABLE public.daily_inventory TO demouser;
+
+--
+-- Name: TABLE editions; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.editions FROM demouser;
+GRANT SELECT ON TABLE public.editions TO demouser;
+
+
+--
+-- Name: TABLE employees; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.employees FROM demouser;
+GRANT SELECT ON TABLE public.employees TO demouser;
+
+
+--
+-- Name: TABLE favorite_authors; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.favorite_authors FROM demouser;
+GRANT SELECT ON TABLE public.favorite_authors TO demouser;
+
+
+--
+-- Name: TABLE favorite_books; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.favorite_books FROM demouser;
+GRANT SELECT ON TABLE public.favorite_books TO demouser;
+
+
+--
+-- Name: TABLE my_list; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.my_list FROM demouser;
+GRANT SELECT ON TABLE public.my_list TO demouser;
+
+
+--
+-- Name: TABLE numeric_values; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.numeric_values FROM demouser;
+GRANT SELECT ON TABLE public.numeric_values TO demouser;
+
+
+--
+-- Name: TABLE publishers; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.publishers FROM demouser;
+GRANT SELECT ON TABLE public.publishers TO demouser;
+
+
+--
+-- Name: TABLE shipments; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.shipments FROM demouser;
+GRANT SELECT ON TABLE public.shipments TO demouser;
+
+
+--
+-- Name: TABLE recent_shipments; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.recent_shipments FROM demouser;
+GRANT SELECT ON TABLE public.recent_shipments TO demouser;
+
+
+--
+-- Name: TABLE schedules; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.schedules FROM demouser;
+GRANT SELECT ON TABLE public.schedules TO demouser;
+
+
+--
+-- Name: TABLE states; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.states FROM demouser;
+GRANT SELECT ON TABLE public.states TO demouser;
+
+
+--
+-- Name: TABLE stock; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.stock FROM demouser;
+GRANT SELECT ON TABLE public.stock TO demouser;
+
+
+--
+-- Name: TABLE stock_backup; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.stock_backup FROM demouser;
+GRANT SELECT ON TABLE public.stock_backup TO demouser;
+
+
+--
+-- Name: TABLE stock_view; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.stock_view FROM demouser;
+GRANT SELECT ON TABLE public.stock_view TO demouser;
+
+
+--
+-- Name: TABLE subjects; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.subjects FROM demouser;
+GRANT SELECT ON TABLE public.subjects TO demouser;
+
+
+--
+-- Name: TABLE text_sorting; Type: ACL; Schema: public; Owner: demouser
+--
+
+REVOKE ALL ON TABLE public.text_sorting FROM demouser;
+GRANT SELECT ON TABLE public.text_sorting TO demouser;
+
+
+--
+-- PostgreSQL database dump complete
+--
 
