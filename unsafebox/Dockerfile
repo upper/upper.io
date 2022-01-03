@@ -1,4 +1,4 @@
-FROM xiam/go-playground-unsafebox:v0.10.0-rc1
+FROM xiam/go-playground-unsafebox:v0.10.0-rc2
 
 RUN apt-get update && \
   apt-get install -y \
