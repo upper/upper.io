@@ -7,7 +7,7 @@ push:
 		$(MAKE) -C $$MODULE docker-push || exit 1; \
 	done
 
-deploy:
+deploy: push
 	$(MAKE) -C postgresql-server deploy && \
 	$(MAKE) -C cockroachdb-server deploy && \
 	$(MAKE) -C vanity deploy && \
