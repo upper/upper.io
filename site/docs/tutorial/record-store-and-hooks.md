@@ -69,7 +69,7 @@ Let's suppose we want to create a `db.Store` for `Book` records, we'd name it
 
 ```go
 type BooksStore struct {
-  Collection db.Collection
+  db.Collection
 }
 
 var _ = db.Store(&BooksStore{})
